@@ -1,13 +1,14 @@
 import NetInfo from "@react-native-community/netinfo";
-import { ResizeMode, Video } from "expo-av";
-import * as Brightness from 'expo-brightness';
+import Slider from '@react-native-community/slider';
+
 import * as NavigationBar from "expo-navigation-bar";
 import * as ScreenOrientation from "expo-screen-orientation";
-import React, { useCallback, useEffect, useRef, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import {
   ActivityIndicator,
   BackHandler,
   Dimensions,
+  NativeModules,
   StatusBar,
   StyleSheet,
   Text,
@@ -15,239 +16,255 @@ import {
   TouchableWithoutFeedback,
   View
 } from "react-native";
-import FontAwesomeIcon from "react-native-vector-icons/Feather";
 import MaterialIcon from "react-native-vector-icons/MaterialIcons";
+import Video from "react-native-video";
 const windowWidth = Dimensions.get("window").width;
 const windowHeight = Dimensions.get("window").height;
-
+const {ExpoPictureInPicture  } = NativeModules;
 const MoviePlayer = ({ route }) => {
   const videoRef = useRef(null);
-  const [isConnected, setIsConnected] = useState(false);
-  const [isLoading, setIsLoading] = useState(false);
-  const [isPlaying, setIsPlaying] = useState(false);
+  const [isConnected, setIsConnected] = useState(true);
+  const [isLoading, setIsLoading] = useState(true);
+  const [videoLoaded, setVideoLoaded] = useState(false);
+  const [buffering, setBuffering] = useState(true);
+
+   const [isPlaying, setIsPlaying] = useState(false);
   const [islockScreen, setIsLockScreen] = useState(false);
+  const [isSwitching, setIsSwitching] = useState(false);
   const [currentTime, setCurrentTime] = useState(0);
-  const [isLoaded, setIsLoaded] = useState(false);
   const [duration, setDuration] = useState(0);
+  const [isSeeking, setIsSeeking] = useState(false);
   const [orientation, setOrientation] = useState("portrait");
-  const [sliderValue, setSliderValue] = useState(0);
-  const [status, setStatus] = useState({});
-  const [videoStatus, setVideoStatus] = useState({});
-  const [videoDuration, setVideoDuration] = useState(0);
+  const [controlsVisible, setControlsVisible] = useState(false);
+  const hideTimer = useRef(null);
+  
+   useEffect(() => {
+    const unsub = NetInfo.addEventListener(state => {
+      setIsConnected(state.isConnected);
 
-  const [showControls, setShowControls] = useState(true);
-  const [brightness, setBrightness] = useState(1);
-  const sliderValueRef = useRef(0);
-
-  useEffect(() => {
-    const unsubscribe = NetInfo.addEventListener(status => {
-
-      setIsConnected(status.isConnected);
-      setIsLoading(status.isConnected ? false : true);
+      if (!state.isConnected) {
+        setIsLoading(true); // Show loader if offline
+      }
     });
-    return () => unsubscribe();
-  })
-  const handleVideoStatusUpdate = (status) => {
-    setVideoStatus(status);
-    if (status.isLoaded) {
-      setIsLoaded(true);
-      setStatus(status.durationMillis);
-      setCurrentTime(status.positionMillis);
-      setVideoDuration(status.durationMillis / 1000);
-      setSliderValue(status.positionMillis / 1000);
+
+    return unsub;
+  }, []);
+
+  // 🔥 Loader logic: Hide only when fully loaded AND not buffering
+  useEffect(() => {
+    if (videoLoaded && !buffering) {
+      setIsLoading(false);
+    } else {
+      setIsLoading(true);
     }
-  };
-  const handleSliderChange = (value) => {
-    if (videoRef.current) {
-      videoRef.current.setPositionAsync(value * 1000);
-    }
-  };
+  }, [videoLoaded, buffering]);
 
   const movieLink = route.params;
   const { videoLink } = route.params;
   const videoSource = require(`../../assets/video/bhojpuri/kalamchaba-gaini.mp4`)// Require the video
 
   const handlePlayPause = () => {
-    if (isPlaying) {
-      videoRef.current.pauseAsync();
-    } else {
-      videoRef.current.pauseAsync();
-    }
     setIsPlaying(!isPlaying);
   };
   const moveVideoBack = async () => {
-    const currentPosition = await videoRef.current.getStatusAsync();
-    videoRef.current.setPositionAsync(currentPosition.positionMillis - 10000);
+    const newTime = Math.max(currentTime - 10, 0);
+    videoRef.current.seek(newTime);
+    setCurrentTime(newTime);
   }
   const moveVideoForward = async () => {
-    const currentPosition = await videoRef.current.getStatusAsync();
-    videoRef.current.setPositionAsync(currentPosition.positionMillis + 10000);
+    const newTime = Math.min(currentTime + 10, duration);
+    videoRef.current.seek(newTime);
+    setCurrentTime(newTime);
   }
    useEffect(() => {
-    const backHandle = BackHandler.addEventListener("hardwareBackPress", () => {
-      if (orientation === "landscape") {
-        ScreenOrientation.unlockAsync();
-        ScreenOrientation.lockAsync(ScreenOrientation.OrientationLock.PORTRAIT_UP);
-        setOrientation("portrait");
-        setTimeout(async () => {
-         await NavigationBar.setVisibilityAsync("visible");
-         await NavigationBar.setBehaviorAsync("inset-swipe");
-         StatusBar.setHidden(false);
-        },150)
-        return true;
-      }
-      return false;
-    });
-    return () => {
-      backHandle.remove();
-    };
-  }, [orientation]);
+  const backHandle = BackHandler.addEventListener("hardwareBackPress", () => {
+    if (orientation === "landscape") {
 
-  useEffect(() => {
-    const setVideoDuration = async () => {
-      if (videoRef.current) {
-        const status = await videoRef.current.getStatusAsync();
-        setDuration(status.durationMillis);
-      }
-    };
-    setVideoDuration();
-  }, [videoRef]);
+      setIsSwitching(true);     // ⬅️ HIDE CONTENT
 
-  const formatTime = (status) => {
-    const totalSeconds = Math.floor(status / 1000);
-    const hours = Math.floor(totalSeconds / 3600);
-    const minutes = Math.floor((totalSeconds % 3600) / 60);
-    const seconds = totalSeconds % 60;
+      ScreenOrientation.unlockAsync();
+      ScreenOrientation.lockAsync(ScreenOrientation.OrientationLock.PORTRAIT_UP);
 
-    return `${hours > 59 ? hours + ":" : ""}${minutes < 10 ? "0" : ""
-      }${minutes}:${seconds < 10 ? "0" : ""}${seconds}`;
-  };
-  const toggleScreen = async () => {
-    if (orientation === "portrait") {
-      await ScreenOrientation.lockAsync(
-        ScreenOrientation.OrientationLock.LANDSCAPE
-      );
+      setOrientation("portrait");
+
       setTimeout(async () => {
-         await NavigationBar.setVisibilityAsync("hidden");
+        await NavigationBar.setVisibilityAsync("visible");
+        await NavigationBar.setBehaviorAsync("inset-swipe");
+        StatusBar.setHidden(false);
+
+        setIsSwitching(false);  // ⬅️ SHOW CONTENT AGAIN (after animation)
+      }, 250);                  // 200–300ms works best
+
+      return true;
+    }
+    return false;
+  });
+
+  return () => backHandle.remove();
+}, [orientation]);
+
+
+const formatTime = (t) => {
+  const m = Math.floor(t / 60);
+  const s = Math.floor(t % 60);
+  return `${m}:${s < 10 ? "0" : ""}${s}`;
+};
+
+  const toggleScreen = async () => {
+  if (orientation === "portrait") {
+    await ScreenOrientation.lockAsync(ScreenOrientation.OrientationLock.LANDSCAPE);
+    setOrientation("landscape");
+    setIsSwitching(true);
+    // Force layout refresh
+    setTimeout(async () => {
+        await NavigationBar.setVisibilityAsync("hidden");
          await NavigationBar.setBehaviorAsync("overlay-swipe");
          StatusBar.setHidden(true);
-      },150);
-      setOrientation("landscape");
-    } else {
-      await ScreenOrientation.lockAsync(
-        ScreenOrientation.OrientationLock.PORTRAIT_UP
-      );
+    }, 200);
+  } else {
+    await ScreenOrientation.lockAsync(ScreenOrientation.OrientationLock.PORTRAIT_UP);
+      setOrientation("portrait");
+      setIsSwitching(false);
       NavigationBar.setVisibilityAsync("visible");
       await NavigationBar.setBehaviorAsync("inset-swipe");
       StatusBar.setHidden(false);
-      setOrientation("portrait");
-    }
-  };
+
+  }
+};
+
   useEffect(() => {
     setTimeout(() => {
-      setShowControls(false);
+      setControlsVisible(false);
     }, 4500);
   }, []);
+
   const lockScreen = async () => {
     if (islockScreen == false) {
-      setShowControls(false);
+      setControlsVisible(false);
       setIsLockScreen(true)
     } else {
       setIsLockScreen(false);
-      if (isConnected) {
-        setShowControls(true);
-      }
+      setControlsVisible(true);
     }
   }
-  const handleControls = async () => {
   
-    if (!isLoading) {
-      if (orientation == "landscape") {
-        islockScreen != true ? setShowControls(true) : setShowControls(false);
-      } else {
-        showControls == true ? setShowControls(false) : setShowControls(true);
-      }
-    }
-     setTimeout(() => {
-      setShowControls(false);
-  },4500);
+  const startHideTimer = () => {
+  // Clear previous timer
+  if (hideTimer.current) {
+    clearTimeout(hideTimer.current);
   }
 
-  const getCurrentBrightness = async () => {
-    const currentBrightness = await Brightness.getBrightnessAsync();
-    setBrightness(currentBrightness);
-  };
+  // Hide after 4 seconds
+  hideTimer.current = setTimeout(() => {
+    setControlsVisible(false);
+  }, 4000);
+};
 
-  const setSystemBrightness = async (value) => {
-    await Brightness.setBrightnessAsync(value);
-  };
+const onVideoPress = () => {
+  if(controlsVisible){
+   setControlsVisible(false);
+  }else{
+    setControlsVisible(true);
+  }
+  startHideTimer();
+};
 
-  const handleBrightnessSliderChange = useCallback((value) => {
-    sliderValueRef.current = value;
-    setBrightness(value);
-    setSystemBrightness(value);
-  }, []);
 
-  useEffect(() => {
-    getCurrentBrightness();
-  }, []);
   return (
     <>
-    <TouchableWithoutFeedback onPress={handleControls}>
-      <View style={{ flex: 1}}>
+       <View style={{zIndex:-1, flex: 1}}>
         <View>
-          {!isConnected && isLoading ? (
-            <View style={orientation == "portrait" ?
-              { width: Dimensions.get("window").width, position: "fixed", height: 200, alignContent: "center", justifyContent: "center" } :
-              { width: Dimensions.get("window").width, position: "fixed", height: "100%", justifyContent: "center" }
-            }>
-              <ActivityIndicator size="large" color="red" />
-            </View>
-          ) : (
+          <Video
+            ref={videoRef}
+            source={videoSource}
+            paused={!isPlaying}
 
-            <Video
-              style={
-                orientation == "portrait" ?
-                  {marginTop: 35, width: Dimensions.get("window").width, height: 200 } :
-                  { width: "100%", height: "100%" }
-              }
-              ref={videoRef}
-              onPlaybackStatusUpdate={handleVideoStatusUpdate}
-              source={videoSource}              
-              shouldPlay={!isPlaying}
-              resizeMode={ResizeMode.COVER}
-              isLooping
+            onLoadStart={() => {
+              setIsLoading(true);
+              setVideoLoaded(false);
+            }}
+
+            onLoad={(data) => {
+              setDuration(data.duration);
+              setVideoLoaded(true);
+              setIsPlaying(true);
+            }}
+
+            onBuffer={({ isBuffering }) => {
+              setBuffering(isBuffering);
+            }}
+
+            onProgress={(data) => setCurrentTime(data.currentTime)}
+
+            onEnd={() => videoRef.current.seek(0)}
+
+            resizeMode="cover"
+            repeat={true}
+
+            style={
+              orientation === "portrait"
+                ? {marginTop: 35, width: "100%", height: 200 }
+                : {width: "100%", height: "100%" }
+            }
+          />
+            
+         {isLoading && (
+        <View
+          style={{
+            position: "absolute",
+            top: 0,
+            left: 0,
+            right: 0,
+            bottom: 0,
+            justifyContent: "center",
+            alignItems: "center",
+            backgroundColor:"#0D0E10"
+          }}
+        >
+          <ActivityIndicator size="large" color="red" />
+        </View>
+      )}
+          <TouchableWithoutFeedback onPress={onVideoPress}>
+            <View
+              style={{
+                position: "absolute",
+                top: 0,
+                bottom: 0,
+                left: 0,
+                right: 0,
+              }}
             />
-          )}
+          </TouchableWithoutFeedback>
              {orientation == "landscape" && (
                   <View style={styles.screenLockUnlock}>
                   <TouchableOpacity onPress={lockScreen}>                 
-                    <MaterialIcon style={styles.screenLUIcon} name={islockScreen ? "lock" : "lock-open"} size={42} color="white"
+                    <MaterialIcon style={styles.screenLUIcon} name={islockScreen ? "lock" : "lock-open"} size={40} color="white"
                     ></MaterialIcon>
                   </TouchableOpacity>
                 </View>
                )} 
           
-            {isConnected && !isLoading && showControls && (
-              <View style={orientation == "portrait" ? styles.controls : styles.lscontrols}>
-                 
+            {isConnected && !islockScreen && controlsVisible && (
+              
+              <View style={styles.controlsOverlay}>
                 <View style={orientation == "portrait" ? styles.potraitControle : styles.lsControle}>
                   <TouchableOpacity onPress={moveVideoBack}>
-                    <FontAwesomeIcon style={styles.Rotate} name="rotate-ccw" size={16} color="white"
-                    ></FontAwesomeIcon>
-                    <Text style={styles.fifteenSecond}>10</Text>
+                    <MaterialIcon name="replay-10" size={36} color="white"
+                    ></MaterialIcon>
                   </TouchableOpacity>
                   <TouchableOpacity onPress={handlePlayPause}>
-                    <MaterialIcon
-                      name={isPlaying ? "play-circle-outline" : "pause-circle-outline"} size={56} color="white"
+                    <View>
+                      <MaterialIcon
+                      name={!isPlaying ? "play-circle-outline" : "pause-circle-outline"} size={60} color="white"
                     />
+                    </View>
                   </TouchableOpacity>
                   <TouchableOpacity onPress={moveVideoForward}>
-                    <FontAwesomeIcon style={styles.Rotate} name="rotate-cw" size={16} color="white"
-                    ></FontAwesomeIcon>
-                    <Text style={styles.fifteenSecond}>10</Text>
+                    <MaterialIcon name="forward-10" size={36} color="white"
+                    ></MaterialIcon>
                   </TouchableOpacity>
                 </View>
+                
                 <View style={orientation == "portrait" ? styles.bottomController : styles.lsbottomController}>
                   <View style={orientation == "portrait" ? styles.potraitDuration : styles.lsDuration}>
                     <Text style={styles.potraitDurationTxt}>
@@ -256,99 +273,140 @@ const MoviePlayer = ({ route }) => {
                    </View>
                    <View style={orientation == "portrait" ? styles.potraitFullscreen : styles.lsFullscreen}>
                     <TouchableOpacity onPress={toggleScreen}>
-                      <MaterialIcon style={styles.fsRotate} name={"fullscreen"} size={24} color="white"
+                      <MaterialIcon style={styles.fsRotate} name={orientation == "portrait" ? "fullscreen" : "fullscreen-exit"} size={24} color="white"
                       ></MaterialIcon>
                     </TouchableOpacity>                  
                   </View>
+                    
                 </View>
-              </View>
+                <View style={orientation == "portrait" ? styles.sliderController : styles.lsSliderController}>
+                    <Slider
+                      value={currentTime}
+                      minimumValue={0}
+                      maximumValue={duration}
+                      minimumTrackTintColor="#b41313ff"
+                      maximumTrackTintColor="#b6b3b3ff"
+                      thumbTintColor="#b41313ff"
+                      // when user starts dragging
+                      onSlidingStart={() => setIsSeeking(true)}
+
+                      onValueChange={(time) => setCurrentTime(time)}
+
+                      onSlidingComplete={(time) => {
+                        setIsSeeking(false);
+                        videoRef.current.seek(time);
+                      }}
+                    />
+                </View>
+                </View> 
             )}
         </View>
-        {orientation == "portrait" ?
+        {!isSwitching && (
           <View style={styles.container}>
             <View style={styles.contentMain}>
               <Text style={styles.mtitle}>{movieLink.seo.page}</Text>
               <Text style={styles.mline}>{movieLink.line2}</Text>
-            </View>
-            <View>
               <Text style={styles.contentDes}>{movieLink.seo.description}</Text>
-            </View>
-          </View> : ""}
+            </View> 
+          </View>)}
       </View>
-      </TouchableWithoutFeedback>
+      
     </>
   )
 };
 
 
 const styles = StyleSheet.create({
-  controls: {
-    position: "absolute",
-    justifyContent: "center",
-    flexDirection: "row",
-    flexWrap: "wrap",
-    height: 200,
-    width: "100%"
-  },
-  potraitControle: {
-    marginTop: "10%",
-    height: 160,
-    width: "90%",
-    justifyContent: "center",
-    alignContent: "center",
-    textAlign: "center",
-    flexDirection: "row",
-    flexWrap: "wrap",
-    alignItems: "center"
-  },
+controlsOverlay: {
+  position: "absolute",
+  top: 0,
+  bottom: 0,
+  left: 0,
+  right: 0,
+  justifyContent: "center",
+},
 
-  lscontrols: {
-    position: "absolute",
-    marginLeft: "10%",
-    marginTop:"1%",
-    justifyContent: "center",
-    alignContent: "center",
-    width: "80%",
-    height: "100%"
-  },
+// CENTER CONTROLS
+potraitControle: {
+ flexDirection: "row",
+    alignItems: "center",
+    justifyContent: "space-evenly",
+    width: "100%",
+    height:"50%",
+    paddingVertical: 30
+},
+
+lsControle: {
+  position: "absolute",
+  left: 25,
+  right: 25,
+  flexDirection: "row",
+  justifyContent: "space-between",
+  alignItems: "center",
+},
+
+// BOTTOM CONTROLS (time + fullscreen)
+bottomController: {
+  position: "absolute",
+  bottom: 40,
+  left: 15,
+  right: 15,
+  marginBottom:-25,
+  flexDirection: "row",
+  justifyContent: "space-between",
+  alignItems: "center",
+},
+
+lsbottomController: {
+  position: "absolute",
+  bottom: 50,
+  left: 25,
+  right: 25,
+  flexDirection: "row",
+  justifyContent: "space-between",
+  alignItems: "center",
+},
+
+potraitDurationTxt: {
+  backgroundColor: "rgba(0,0,0,0.4)",
+  color: "white",
+  padding:5,
+  borderRadius:12,
+  fontSize: 14,
+},
+
+// SLIDER
+sliderController: {
+  position: "absolute",
+  bottom: 10,
+  left: 10,
+  right: 10,
+  marginBottom:-20,
+},
+
+lsSliderController: {
+  position: "absolute",
+  bottom: 30,
+  left: 25,
+  right: 25,
+},
+
+
   screenLockUnlock: {
-   zIndex:1,
-   top:"4%",
-   padding:5, 
-   justifyContent:"center",
-   alignItems:"flex-end",
-   width:"80%",
-   marginLeft:"10%",
-   position:"absolute",
-   height:"auto",
+  position: "absolute",
+  left: 20,
+  right: 20,
+  top:20,
+  flexDirection: "row",
+  justifyContent:"flex-end",
+  alignItems: "center",
   },
   screenLUIcon: {
-    position: "relative",
+    justifyContent:"flex-end",
+    end:"auto",
     fontSize: 32,
     padding:5,
     fontWeight: "700"
-  },
-  lsControle: {
-    height: "58%",
-    width: "100%",
-    justifyContent: "space-around",
-    alignContent: "center",
-    textAlign: "center",
-    flexDirection: "row",
-    flexWrap: "wrap",
-    alignItems: "center"
-  },
-  bottomController: {
-    display: "flex",
-    width: "90%",
-    color: "#fff",
-    flexWrap: "nowrap",
-    flexDirection: "row",
-  },
-  lsbottomController: {
-    width: "100%",
-    flexDirection:"row",
-    height:"auto",
   },
   potraitDuration: {
     width: "90%",
@@ -357,36 +415,16 @@ const styles = StyleSheet.create({
     justifyContent: "flex-start"
   },
   lsDuration: {
-    width:"93%",
     padding:5,
   },
 
-  potraitDurationTxt: {
-    color: "#fff"
-  },
   potraitFullscreen: {
     justifyContent: "flex-end",
     position: "relative"
   },
   lsFullscreen : {
     end:"auto"
-  },
-
-  Rotate: {
-    justifyContent: "space-between",
-    fontSize: 32,
-    padding: 50,
-    fontWeight: "100",
-  },
-  fifteenSecond: {
-    fontSize: 8,
-    color: "#fff",
-    marginLeft: "47%",
-    marginTop: "48%",
-    fontWeight: "600",
-    justifyContent: "center",
-    position: "absolute",
-  },
+  },  
 
   fsRotate: {
     fontSize: 36,
@@ -399,39 +437,31 @@ const styles = StyleSheet.create({
     flexDirection: "row",
     transform: [{ rotate: '-90deg' }],
   },
-  slider: {
-    width: windowWidth,
-    color: "#fff",
-    position: "relative",
-  },
-
+  
   container: {
-    backgroundColor: "#0D0E10",
     height: windowHeight,
     width: windowWidth,
-    padding: 2,
+    padding:20,
   },
   contentMain: {
-    margin: 4,
+    textAlign:"center",
+    justifyContent:"space-between",
   },
   mtitle: {
     color: "#FFF",
     fontWeight: "700",
-    fontSize: 18,
-    padding: 6,
+    fontSize: 18
   },
   mline: {
     color: "#dcdcdc",
     fontWeight: "700",
     fontSize: 13,
-    padding: 6,
+    paddingVertical:10
   },
   contentDes: {
-    padding: 10,
     color: "#dcdcdc",
     fontWeight: "700",
-    fontSize: 10,
-    width: windowWidth,
+    fontSize: 10
   },
 });
 
