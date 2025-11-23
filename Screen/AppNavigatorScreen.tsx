@@ -81,8 +81,12 @@ export default function AppNavigatorScreen({route}){
       headerTitle:() => null,  headerTintColor: "#FFF", 
       headerStyle: {backgroundColor:"#0D0E10", height:windowHeight/10},
     }}/>
-    <Stack.Screen name="MoviePlayer" component={MoviePlayer} options={{
-      headerShown:false, cardStyle: {width:"100%", height:"100%", backgroundColor:"#0D0E10"}
+    <Stack.Screen name="MoviePlayer" component={MoviePlayer} 
+       options={{
+         animation: 'slide_from_bottom',
+         gestureEnabled: true,
+          gestureDirection: 'vertical',
+         headerShown:false, cardStyle: {backgroundColor:"#0D0E10", width:"100%", height:"100%"}
           }}/>
     </Stack.Navigator>
      </>

@@ -1,10 +1,9 @@
 import NetInfo from "@react-native-community/netinfo";
 import Slider from '@react-native-community/slider';
-import * as Brightness from 'expo-brightness';
 
 import * as NavigationBar from "expo-navigation-bar";
 import * as ScreenOrientation from "expo-screen-orientation";
-import React, { useCallback, useEffect, useRef, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import {
   ActivityIndicator,
   BackHandler,
@@ -24,59 +23,42 @@ const windowHeight = Dimensions.get("window").height;
 const {ExpoPictureInPicture  } = NativeModules;
 const MoviePlayer = ({ route }) => {
   const videoRef = useRef(null);
-  const [isLoading, setIsLoading] = useState(true);     // default: loader ON
-  const [isConnected, setIsConnected] = useState(true); // network status
-  const [isPlaying, setIsPlaying] = useState(false);
+  const [isConnected, setIsConnected] = useState(true);
+  const [isLoading, setIsLoading] = useState(true);
+  const [videoLoaded, setVideoLoaded] = useState(false);
+  const [buffering, setBuffering] = useState(true);
+
+   const [isPlaying, setIsPlaying] = useState(false);
   const [islockScreen, setIsLockScreen] = useState(false);
   const [isSwitching, setIsSwitching] = useState(false);
   const [currentTime, setCurrentTime] = useState(0);
   const [duration, setDuration] = useState(0);
   const [isSeeking, setIsSeeking] = useState(false);
   const [orientation, setOrientation] = useState("portrait");
-const [controlsVisible, setControlsVisible] = useState(true);
-const hideTimer = useRef(null);
-  const [showControls, setShowControls] = useState(true);
-  const [brightness, setBrightness] = useState(1);
-  const sliderValueRef = useRef(0);
+  const [controlsVisible, setControlsVisible] = useState(false);
+  const hideTimer = useRef(null);
+  
+   useEffect(() => {
+    const unsub = NetInfo.addEventListener(state => {
+      setIsConnected(state.isConnected);
 
+      if (!state.isConnected) {
+        setIsLoading(true); // Show loader if offline
+      }
+    });
+
+    return unsub;
+  }, []);
+
+  // 🔥 Loader logic: Hide only when fully loaded AND not buffering
   useEffect(() => {
-  const unsub = NetInfo.addEventListener(state => {
-    if (state.isConnected) {
-      setIsConnected(true);
-
-      // If video is already loaded, remove loader
-      if (duration > 0) setIsLoading(false);
+    if (videoLoaded && !buffering) {
+      setIsLoading(false);
     } else {
-      setIsConnected(false);
-      setIsLoading(true); // show loader again
+      setIsLoading(true);
     }
-  });
+  }, [videoLoaded, buffering]);
 
-  return () => unsub();
-}, [duration]);
-
-// useEffect(() => {
-//   const subscription = BackHandler.addEventListener(
-//     "hardwareBackPress",
-//     () => {
-//       enterPipMode();   // <-- Trigger PIP
-//       return true;      // <-- Block normal back navigation
-//     }
-//   );
-
-//   return () => subscription.remove();
-// }, []);
-
-// const enterPipMode = () => {
-//     if (Platform.OS === "android") {
-//       try {
-//         console.log("Calling." + NativeModules.ExpoPictureInPicture)
-//         ExpoPictureInPicture?.enterPictureInPictureMode();
-//       } catch (err) {
-//         console.log("PiP Error:", err);
-//       }
-//     }
-//   };
   const movieLink = route.params;
   const { videoLink } = route.params;
   const videoSource = require(`../../assets/video/bhojpuri/kalamchaba-gaini.mp4`)// Require the video
@@ -152,20 +134,17 @@ const formatTime = (t) => {
 
   useEffect(() => {
     setTimeout(() => {
-      console.log("caliing");
       setControlsVisible(false);
     }, 4500);
   }, []);
 
   const lockScreen = async () => {
     if (islockScreen == false) {
-      setShowControls(false);
+      setControlsVisible(false);
       setIsLockScreen(true)
     } else {
       setIsLockScreen(false);
-      if (isConnected) {
-        setShowControls(true);
-      }
+      setControlsVisible(true);
     }
   }
   
@@ -190,73 +169,61 @@ const onVideoPress = () => {
   startHideTimer();
 };
 
-  const getCurrentBrightness = async () => {
-    const currentBrightness = await Brightness.getBrightnessAsync();
-    setBrightness(currentBrightness);
-  };
 
-  const setSystemBrightness = async (value) => {
-    await Brightness.setBrightnessAsync(value);
-  };
-
-  const handleBrightnessSliderChange = useCallback((value) => {
-    sliderValueRef.current = value;
-    setBrightness(value);
-    setSystemBrightness(value);
-  }, []);
-
-
-  useEffect(() => {
-    getCurrentBrightness();
-  }, []);
   return (
     <>
        <View style={{ flex: 1}}>
         <View>
-          {!isConnected && isLoading ? (
-            <View style={orientation == "portrait" ?
-              { width: Dimensions.get("window").width, position: "fixed", height: 200, alignContent: "center", justifyContent: "center" } :
-              { width: Dimensions.get("window").width, position: "fixed", height: "100%", justifyContent: "center" }
-            }>
-              <ActivityIndicator size="large" color="red" />
-            </View>
-          ) : (
-            <Video
-                ref={videoRef}
-                source={videoSource}
-                paused={!isPlaying}
-                onLoad={data => {
-                setDuration(data.duration);
-                setIsLoading(false);
-                setIsPlaying(true);
-              }}
+          <Video
+            ref={videoRef}
+            source={videoSource}
+            paused={!isPlaying}
 
-              // if buffering → show loader
-              onBuffer={({ isBuffering }) => {
-                if (isConnected) setIsLoading(isBuffering);
-              }}
-                onProgress={(data) => {
-                  setCurrentTime(data.currentTime);
-                }}
-                onEnd={() => {
-                  videoRef.current.seek(0);
-                }}
-                resizeMode="cover"
-                repeat={true}
-                style={
-                  orientation === "portrait"
-                    ? {
-                        marginTop: 35,
-                        width: "100%",
-                        height: 200,
-                      }
-                    : {
-                        width: "100%",
-                        height: "100%",
-                      }
-                }
-              />
-          )}
+            onLoadStart={() => {
+              setIsLoading(true);
+              setVideoLoaded(false);
+            }}
+
+            onLoad={(data) => {
+              setDuration(data.duration);
+              setVideoLoaded(true);
+              setIsPlaying(true);
+            }}
+
+            onBuffer={({ isBuffering }) => {
+              setBuffering(isBuffering);
+            }}
+
+            onProgress={(data) => setCurrentTime(data.currentTime)}
+
+            onEnd={() => videoRef.current.seek(0)}
+
+            resizeMode="cover"
+            repeat={true}
+
+            style={
+              orientation === "portrait"
+                ? { marginTop: 35, width: "100%", height: 200 }
+                : { width: "100%", height: "100%" }
+            }
+          />
+            
+         {isLoading && (
+        <View
+          style={{
+            position: "absolute",
+            top: 0,
+            left: 0,
+            right: 0,
+            bottom: 0,
+            justifyContent: "center",
+            alignItems: "center",
+            backgroundColor: "black",
+          }}
+        >
+          <ActivityIndicator size="large" color="red" />
+        </View>
+      )}
           <TouchableWithoutFeedback onPress={onVideoPress}>
             <View
               style={{
@@ -277,8 +244,7 @@ const onVideoPress = () => {
                 </View>
                )} 
           
-            {isConnected 
-             && !islockScreen && controlsVisible && (
+            {isConnected && !islockScreen && controlsVisible && (
               
               <View style={styles.controlsOverlay}>
                 <View style={orientation == "portrait" ? styles.potraitControle : styles.lsControle}>
@@ -318,10 +284,9 @@ const onVideoPress = () => {
                       value={currentTime}
                       minimumValue={0}
                       maximumValue={duration}
-                      minimumTrackTintColor="#fff"
-                      maximumTrackTintColor="#888"
-                      thumbTintColor="#fff"
-
+                      minimumTrackTintColor="#a11212ff"
+                      maximumTrackTintColor="#9c9898ff"
+                      thumbTintColor="#a11212ff"
                       // when user starts dragging
                       onSlidingStart={() => setIsSeeking(true)}
 
@@ -425,7 +390,7 @@ sliderController: {
 
 lsSliderController: {
   position: "absolute",
-  bottom: 25,
+  bottom: 30,
   left: 25,
   right: 25,
 },
