@@ -57,35 +57,52 @@ export default function AppNavigatorScreen({route}){
       headerTintColor:"#ffffff"
     }}/> 
     <Stack.Screen name="Action Movies" component={ActionMovies} options={{
+      presentation:"transparentModal",
+      animation: 'fade',
+      gestureEnabled: true,
       headerTitle:() => null, headerTintColor:"#FFF", 
       headerStyle: {backgroundColor:"#0D0E10", height:windowHeight/10},
     }}/>
     <Stack.Screen name="Global Hits Movies" component={GlobalHitsMovies} options={{
+      presentation:"transparentModal",
+      animation: 'fade',
+      gestureEnabled: true,
       headerTitle:() => null, headerTintColor: "#FFF", 
       headerStyle: {backgroundColor:"#0D0E10", height:windowHeight/10},
     }}/>
     <Stack.Screen name="Romantic Movies" component={RomanticMovies} options={{
+      presentation:"transparentModal",
+      animation: 'fade',
+      gestureEnabled: true,
       headerTitle:() => null, headerTintColor: "#FFF", 
       headerStyle: {backgroundColor:"#0D0E10", height:windowHeight/10},
     }}/>      
     <Stack.Screen name="South Dubbed Movies" component={SouthDubbedMovies} options={{
+      presentation:"transparentModal",
+      animation: 'fade',
+      gestureEnabled: true,
       headerTitle:() => null,  headerTintColor: "#FFF", 
       headerStyle: {backgroundColor:"#0D0E10", height:windowHeight/10},
     }}/>
-      
       <Stack.Screen name="Bhojpuri Bhaukal" component={BhojpuriBhaukalMovies} options={{
+      presentation:"transparentModal",
+      animation: 'fade',
+      gestureEnabled: true,
       headerTitle:() => null,  headerTintColor: "#FFF", 
       headerStyle: {backgroundColor:"#0D0E10", height:windowHeight/10},
     }}/>
     <Stack.Screen name="Horror" component={HorrorMovies} options={{
+      presentation:"transparentModal",
+      animation: 'fade',
+      gestureEnabled: true,
       headerTitle:() => null,  headerTintColor: "#FFF", 
       headerStyle: {backgroundColor:"#0D0E10", height:windowHeight/10},
     }}/>
     <Stack.Screen name="MoviePlayer" component={MoviePlayer} 
        options={{
-         animation: 'slide_from_bottom',
+         presentation:"transparentModal",
+         animation: 'fade',
          gestureEnabled: true,
-          gestureDirection: 'vertical',
          headerShown:false, cardStyle: {backgroundColor:"#0D0E10", width:"100%", height:"100%"}
           }}/>
     </Stack.Navigator>

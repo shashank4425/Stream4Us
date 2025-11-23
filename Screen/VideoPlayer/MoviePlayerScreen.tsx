@@ -172,7 +172,7 @@ const onVideoPress = () => {
 
   return (
     <>
-       <View style={{ flex: 1}}>
+       <View style={{zIndex:-1, flex: 1}}>
         <View>
           <Video
             ref={videoRef}
@@ -203,8 +203,8 @@ const onVideoPress = () => {
 
             style={
               orientation === "portrait"
-                ? { marginTop: 35, width: "100%", height: 200 }
-                : { width: "100%", height: "100%" }
+                ? {marginTop: 35, width: "100%", height: 200 }
+                : {width: "100%", height: "100%" }
             }
           />
             
@@ -218,7 +218,7 @@ const onVideoPress = () => {
             bottom: 0,
             justifyContent: "center",
             alignItems: "center",
-            backgroundColor: "black",
+            backgroundColor:"#0D0E10"
           }}
         >
           <ActivityIndicator size="large" color="red" />
@@ -238,7 +238,7 @@ const onVideoPress = () => {
              {orientation == "landscape" && (
                   <View style={styles.screenLockUnlock}>
                   <TouchableOpacity onPress={lockScreen}>                 
-                    <MaterialIcon style={styles.screenLUIcon} name={islockScreen ? "lock" : "lock-open"} size={42} color="white"
+                    <MaterialIcon style={styles.screenLUIcon} name={islockScreen ? "lock" : "lock-open"} size={40} color="white"
                     ></MaterialIcon>
                   </TouchableOpacity>
                 </View>
@@ -284,16 +284,14 @@ const onVideoPress = () => {
                       value={currentTime}
                       minimumValue={0}
                       maximumValue={duration}
-                      minimumTrackTintColor="#a11212ff"
-                      maximumTrackTintColor="#9c9898ff"
-                      thumbTintColor="#a11212ff"
+                      minimumTrackTintColor="#b41313ff"
+                      maximumTrackTintColor="#b6b3b3ff"
+                      thumbTintColor="#b41313ff"
                       // when user starts dragging
                       onSlidingStart={() => setIsSeeking(true)}
 
-                      // update UI while dragging
                       onValueChange={(time) => setCurrentTime(time)}
 
-                      // when sliding ends, seek the video
                       onSlidingComplete={(time) => {
                         setIsSeeking(false);
                         videoRef.current.seek(time);
@@ -308,10 +306,8 @@ const onVideoPress = () => {
             <View style={styles.contentMain}>
               <Text style={styles.mtitle}>{movieLink.seo.page}</Text>
               <Text style={styles.mline}>{movieLink.line2}</Text>
-            </View>
-            <View>
               <Text style={styles.contentDes}>{movieLink.seo.description}</Text>
-            </View>
+            </View> 
           </View>)}
       </View>
       
@@ -443,32 +439,29 @@ lsSliderController: {
   },
   
   container: {
-    backgroundColor: "#0D0E10",
     height: windowHeight,
     width: windowWidth,
-    padding: 2,
+    padding:20,
   },
   contentMain: {
-    margin: 4,
+    textAlign:"center",
+    justifyContent:"space-between",
   },
   mtitle: {
     color: "#FFF",
     fontWeight: "700",
-    fontSize: 18,
-    padding: 6,
+    fontSize: 18
   },
   mline: {
     color: "#dcdcdc",
     fontWeight: "700",
     fontSize: 13,
-    padding: 6,
+    paddingVertical:10
   },
   contentDes: {
-    padding: 10,
     color: "#dcdcdc",
     fontWeight: "700",
-    fontSize: 10,
-    width: windowWidth,
+    fontSize: 10
   },
 });
 
