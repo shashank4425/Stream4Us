@@ -9,8 +9,9 @@ import MoviePlayer from "@/Screen/VideoPlayer/MoviePlayerScreen";
 import { DefaultTheme } from "@react-navigation/native";
 import { createStackNavigator } from '@react-navigation/stack';
 import * as NavigationBar from 'expo-navigation-bar';
-import React from 'react';
+import React, { useEffect } from 'react';
 import { Dimensions, StatusBar, StyleSheet } from "react-native";
+import SplashScreen from "./SplashScreen";
 NavigationBar.setBackgroundColorAsync("#0D0E10");  
 const Stack = createStackNavigator();
 const windowWidth = Dimensions.get('window').width;
@@ -25,32 +26,29 @@ const DarkTheme = {
      }
 }
 export default function AppNavigatorScreen({route}){
-  // useEffect(() => {
-  //   const handleAppStateChange = async (nexAppState) =>{
-  //     if(nexAppState === 'active'){
-  //       SplashScreen.preventAutoHideAsync();
-  //       setTimeout(async () => {
-  //         await SplashScreen.hideAsync();
-  //       }, 3500); 
-  //      }
-  //     }
-  //     AppState.addEventListener('change', handleAppStateChange);
-  //   return () => {
-  //     SplashScreen.preventAutoHideAsync(); 
-  //   };
-  // }, []);
+ useEffect(() => {
+    // FULL immersive mode globally
+    NavigationBar.setVisibilityAsync("visible");
+  }, []);
  
   return (
     <>
     <StatusBar translucent backgroundColor="transparent" barStyle="light-content"/>        
-     <Stack.Navigator initialRouteName="Home" screenOptions={{
+     <Stack.Navigator initialRouteName="SplashScreen" screenOptions={{
         cardStyle: {
           backgroundColor:"#0D0E10",
           width:windowWidth,
           paddingBottom:windowHeight/15
         }
       }}>
+     <Stack.Screen name="SplashScreen" component={SplashScreen} options={{
+      headerLeft:()=>null,
+      headerShown:false
+    }}/>    
     <Stack.Screen name="Home" component={Home} options={{
+      presentation:"transparentModal",
+      animation: 'fade',
+      gestureEnabled: true,
       headerLeft:()=>null,
       headerShown:false,
       headerStyle: {backgroundColor:"#0D0E10", height:windowHeight/10},
