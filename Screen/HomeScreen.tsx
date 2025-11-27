@@ -2,34 +2,27 @@ import { entertainmentList } from "@/assets/entertainmentList/entertainmentList"
 import TrendingMovies from "@/components/banner/TrendingMovies";
 import { FontAwesome } from "@expo/vector-icons";
 import Constants from "expo-constants";
-import React, { useState } from "react";
-import { Animated, Dimensions, Image, ScrollView, StatusBar, StyleSheet, Text, TouchableOpacity, View } from "react-native";
+import React, { useEffect, useState } from "react";
+import { Animated, BackHandler, Dimensions, Image, ScrollView, StatusBar, StyleSheet, Text, TouchableOpacity, View } from "react-native";
 const windowWidth = Dimensions.get('window').width;
 const windowHeight = Dimensions.get('window').height;
 
 export default function Home({ navigation }) {
-//    const lastState = useRef("top");
-    const[isNone, setIsNone] = useState(true);
-//  const handleScroll = (e) => {
-//     const y = e.nativeEvent.contentOffset.y;
+useEffect(() => {
+    const backAction = () => {
+      BackHandler.exitApp();
+      return true;
+    };
 
-//     // Android only
-//     if (Platform.OS !== "android") return;
+    const backHandler = BackHandler.addEventListener(
+      "hardwareBackPress",
+      backAction
+    );
 
-//     if (y > 100) {
-//       if (lastState.current !== "black") {
-//         setIsNone(false);
-//         StatusBar.setBackgroundColor("#0D0E10");
-//         lastState.current = "black"
-//       }
-//     } else {
-//       if (lastState.current !== "transparent") {
-//         setIsNone(true);
-//         StatusBar.setBackgroundColor("transparent", true);
-//         lastState.current = "transparent";
-//       }
-//     }
-//   };
+    return () => backHandler.remove();
+  }, []);
+
+   
 const [scrollY] = useState(new Animated.Value(0));
   const STATUS_BAR_HEIGHT = Constants.statusBarHeight;
   

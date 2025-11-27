@@ -1,43 +1,48 @@
-import react, { useEffect } from "react"
-import * as NavigationBar from 'expo-navigation-bar';
+import React, { useEffect, useRef } from "react";
+import { Animated, Dimensions, ImageBackground, StyleSheet } from "react-native";
+import { SafeAreaView } from "react-native-safe-area-context";
+const windowWidth = Dimensions.get("window").width;
+const windowHeight = Dimensions.get("window").height;
+export default function SplashScreen({ navigation }) {
 
-import { View, StyleSheet, ActivityIndicator,Image,Animated } from "react-native"
-import { StatusBar } from "expo-status-bar";
+  const fadeAnim = useRef(new Animated.Value(0)).current;
 
-export default function SplashScreen({navigation}) {
-    
-      const fadeAnim = new Animated.Value(0); 
+  useEffect(() => {
+    Animated.timing(fadeAnim, {
+      toValue: 1,
+      duration: 2000,
+      useNativeDriver: true,
+    }).start();
 
-      useEffect(() => {
-        Animated.timing(fadeAnim, {
-          toValue: 1, 
-          duration: 3000, 
-          useNativeDriver: true, 
-        }).start();
-    
-        setTimeout(() => {
-          navigation.replace('Home');
-        }, 30000); 
-      }, []);  
+    const timeout = setTimeout(() => {
+      navigation.replace("Home");
+    }, 4500); // suggested 3 seconds
+
+    return () => clearTimeout(timeout);
+  }, []);
+
     return (
-      
-        <View style={Styles.container}>
-          <StatusBar hidden={true}/>
-           {/* <Image style={Styles.imgSize} 
-            source={require('../assets/images/stream4us/logo/stream4us_splash.png')}/>
-            */}
-        </View>
-    )
+        <SafeAreaView style={{ flex: 1 }} edges={[]}> 
+        <Animated.View style={{ flex: 1, opacity: fadeAnim }}>
+          <ImageBackground
+            source={require("../assets/images/stream4us/logo/stream4us_splash.png")}
+            style={{
+              flex: 1,
+              width: "100%",
+              height: windowHeight
+            }}
+          />
+        </Animated.View>
+      </SafeAreaView>
+      );
 }
-const Styles = StyleSheet.create({
-    container: {
-        justifyContent:'center',
-        alignItems:'center',
-        flex:1
-    },
-    imgSize: {
-        height:"100%",
-        width:"100%",
-        resizeMode:"cover"
-    }
-})
+
+const styles = StyleSheet.create({
+  container: { flex: 1, backgroundColor: "#0D0E10" },
+  bg: {
+    flex: 1,
+    width: "100%",
+    height: windowHeight,
+    resizeMode: "cover",
+  }
+});
