@@ -1,28 +1,30 @@
 import { entertainmentList } from "@/assets/entertainmentList/entertainmentList";
 import TrendingMovies from "@/components/banner/TrendingMovies";
 import { FontAwesome } from "@expo/vector-icons";
+import { useFocusEffect } from "@react-navigation/native";
 import Constants from "expo-constants";
-import React, { useEffect, useState } from "react";
+import React, { useState } from "react";
 import { Animated, BackHandler, Dimensions, Image, ScrollView, StatusBar, StyleSheet, Text, TouchableOpacity, View } from "react-native";
 const windowWidth = Dimensions.get('window').width;
 const windowHeight = Dimensions.get('window').height;
 
 export default function Home({ navigation }) {
-useEffect(() => {
+ useFocusEffect(
+  React.useCallback(() => {
     const backAction = () => {
-      BackHandler.exitApp();
+      BackHandler.exitApp();     // exit ONLY when on Home
       return true;
     };
 
-    const backHandler = BackHandler.addEventListener(
+    const handler = BackHandler.addEventListener(
       "hardwareBackPress",
       backAction
     );
 
-    return () => backHandler.remove();
-  }, []);
+    return () => handler.remove(); // remove when leaving Home
+  }, [])
+);
 
-   
 const [scrollY] = useState(new Animated.Value(0));
   const STATUS_BAR_HEIGHT = Constants.statusBarHeight;
   
@@ -99,7 +101,7 @@ const [scrollY] = useState(new Animated.Value(0));
                             return (
                                 
                                 <View style={Styles.container} key={item.id}>
-                                    <TouchableOpacity onPress={() => navigation.navigate("MoviePlayer", item)}>
+                                    <TouchableOpacity activeOpacity={1} onPress={() => navigation.navigate("MoviePlayer", item)}>
                                     <View style={Styles.cards}>                                        
                                         <Image source={{ uri: item.seo.ogImage }}
                                             style={Styles.imgSize} />

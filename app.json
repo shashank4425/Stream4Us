@@ -2,7 +2,7 @@
   "expo": {
     "name": "Stream4Us",
     "slug": "Stream4Us",
-    "version": "1.0.0",
+    "version": "1.0.1",
     "orientation": "portrait",
     "icon": "./assets/images/stream4us/logo/icon-stream4us.png",
     "scheme": "com.example.streamus",
@@ -30,9 +30,6 @@
       [
         "expo-splash-screen",
         {
-          "image": "./assets/images/stream4us/logo/stream4us_icon.png",
-          "imageWidth": 200,
-          "resizeMode": "contain",
           "backgroundColor": "#0D0E10",
           "dark": {
             "backgroundColor": "#0D0E10"
