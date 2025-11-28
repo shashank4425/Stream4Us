@@ -19,7 +19,8 @@
         "monochromeImage": "./assets/images/stream4us/logo/icon-stream4us.png"
       },
       "edgeToEdgeEnabled": true,
-      "predictiveBackGestureEnabled": false
+      "predictiveBackGestureEnabled": false,
+      "package": "com.shashank4425.Stream4Us"
     },
     "web": {
       "output": "static",
