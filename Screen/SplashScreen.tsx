@@ -1,5 +1,5 @@
 import React, { useEffect, useRef } from "react";
-import { Animated, Dimensions, Image, ImageBackground, StyleSheet, View } from "react-native";
+import { Animated, Dimensions, ImageBackground, StyleSheet } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 
 const windowHeight = Dimensions.get("window").height;
@@ -28,12 +28,6 @@ export default function SplashScreen({ navigation }) {
           source={require("../assets/images/stream4us/logo/stream4us_splash.png")}
           style={styles.bg}
         >
-          <View style={styles.centerContainer}>
-            <Image
-              source={require("../assets/images/stream4us/logo/icon-stream4us.png")}
-              style={styles.centerImage}
-            />
-          </View>
         </ImageBackground>
       </Animated.View>
     </SafeAreaView>
