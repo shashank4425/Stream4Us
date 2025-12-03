@@ -1,9 +1,6 @@
 [
     {
         "id": "348001",
-        "languages": [
-            "Hindi"
-        ],
         "defaultLanguage": "Hindi",
         "line2": "Drama, Romance",
         "durationFormatted": "3h 36m",
@@ -16,9 +13,6 @@
     },
     {
         "id": "348002",
-        "languages": [
-            "Hindi"
-        ],
         "defaultLanguage": "Hindi",
         "line2": "Drama, Romance",
         "durationFormatted": "3h 12m",
@@ -31,9 +25,6 @@
     },
     {
         "id": "348003",
-        "languages": [
-            "Hindi"
-        ],
         "defaultLanguage": "Hindi",
         "line2": "Hindi ∙ Romance ∙ U/A 13+",
         "durationFormatted": "2h 7m",
@@ -46,9 +37,6 @@
     },
     {
         "id": "348004",
-        "languages": [
-            "Hindi"
-        ],
         "defaultLanguage": "Hindi",
         "line2": "Hindi ∙ Romance ∙ U/A 13+",
         "durationFormatted": "1h 54m",
@@ -61,9 +49,6 @@
     },
     {
         "id": "348005",
-        "languages": [
-            "Hindi"
-        ],
         "defaultLanguage": "Hindi",
         "line2": "Hindi ∙ Comedy, Romance ∙ U/A 13+",
         "durationFormatted": "2h 24m",
@@ -76,9 +61,6 @@
     },
     {
         "id": "348006",
-        "languages": [
-            "Hindi"
-        ],
         "defaultLanguage": "Hindi",
         "line2": "Hindi ∙ Romance ∙ U/A 13+",
         "durationFormatted": "2h 25m",
@@ -91,9 +73,6 @@
     },
     {
         "id": "348007",
-        "languages": [
-            "Hindi"
-        ],
         "defaultLanguage": "Hindi",
         "line2": "Drama, Romance",
         "durationFormatted": "2h 56m",
