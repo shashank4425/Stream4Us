@@ -5,6 +5,7 @@ import { useFocusEffect } from "@react-navigation/native";
 import Constants from "expo-constants";
 import React, { useState } from "react";
 import { Animated, BackHandler, Dimensions, Image, ScrollView, StatusBar, StyleSheet, Text, TouchableOpacity, View } from "react-native";
+import RNRstart from "react-native-restart";
 const windowWidth = Dimensions.get('window').width;
 const windowHeight = Dimensions.get('window').height;
 
@@ -12,7 +13,8 @@ export default function Home({ navigation }) {
  useFocusEffect(
   React.useCallback(() => {
     const backAction = () => {
-      BackHandler.exitApp();     // exit ONLY when on Home
+       RNRstart.Restart();
+        //BackHandler.exitApp();     // exit ONLY when on Home
       return true;
     };
 

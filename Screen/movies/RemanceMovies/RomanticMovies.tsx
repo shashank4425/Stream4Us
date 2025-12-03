@@ -1,11 +1,29 @@
 import { commonStyles } from "@/assets/commoncss/commoncss";
-import { bollywoodromanticmoviesList } from "@/assets/movies/bollywoodmovies/romanticmovies/bollywoodromancemovies";
 import { createStackNavigator } from '@react-navigation/stack';
-import { useLayoutEffect } from "react";
+import { useEffect, useLayoutEffect, useState } from "react";
 import { Image, ScrollView, StyleSheet, TouchableOpacity, View } from "react-native";
 const Stack = createStackNavigator();
 
 export default function RomanticMovies({ navigation, route }) {
+  const [data, setData] = useState([]);
+  
+     useEffect(() => {
+      fetchJSON();
+    }, []);
+  
+    const fetchJSON = async () => {
+      try {
+        const response = await fetch(
+          "https://raw.githubusercontent.com/shashank4425/Stream4Us/refs/heads/movies/bollywood/romantic/movies.json"
+        );
+  
+        const jsonData = await response.json();
+        setData(jsonData);
+      } catch (error) {
+        console.log("Error fetching JSON:", error);
+      } 
+    };
+  
   useLayoutEffect(() => {
     navigation.setOptions({
       headerTitle: route.params.title
@@ -15,7 +33,7 @@ export default function RomanticMovies({ navigation, route }) {
   return (
     <ScrollView showsVerticalScrollIndicator={false}>
       <View style={commonStyles.container}>
-        {bollywoodromanticmoviesList.map(item => {
+        {data.map(item => {
           return (
             <View key={item.id} style={commonStyles.cards}>
               <TouchableOpacity activeOpacity={1} onPress={() => navigation.navigate("MoviePlayer", item)}>
