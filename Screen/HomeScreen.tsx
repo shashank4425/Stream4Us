@@ -35,7 +35,11 @@ export default function Home({ navigation }) {
     useFocusEffect(
         React.useCallback(() => {
             const backAction = () => {
-                BackHandler.exitApp();  
+                navigation.replace("Splash");
+                setTimeout(() => {
+                    BackHandler.exitApp();
+                }, 50);
+
                 return true;
             };
 
@@ -75,7 +79,7 @@ export default function Home({ navigation }) {
                     zIndex: 10,
                 }}
             />
-           {!loading && <Animated.Image
+            {!loading && <Animated.Image
                 source={require('../assets/images/stream4us/logo/app-logo-stream4us.png')}
                 style={{
                     marginTop: windowHeight / 20,
@@ -99,7 +103,7 @@ export default function Home({ navigation }) {
                     translucent backgroundColor="transparent"
                     barStyle="light-content"
                 />
-                {loading ? <BannerPreLoaderScreen/> : <TrendingMovies />}
+                {loading ? <BannerPreLoaderScreen /> : <TrendingMovies />}
                 {loading &&
                     <PreLoaderScreen />
                 }
