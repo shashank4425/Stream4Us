@@ -1,37 +1,64 @@
 import { commonStyles } from "@/assets/commoncss/commoncss";
-import { bollywoodactionmoviesList } from "@/assets/movies/bollywoodmovies/actionmovies/bollywoodactionmovies";
+import PreLoaderScreen from "@/components/splash/PreLoaderScreen";
 import { createStackNavigator } from '@react-navigation/stack';
-import { useLayoutEffect } from "react";
+import { useEffect, useLayoutEffect, useState } from "react";
 import { Image, ScrollView, StyleSheet, TouchableOpacity, View } from "react-native";
-
 
 const Stack = createStackNavigator();
 
-export default function ActionMovies({navigation,route}) {
-    useLayoutEffect(()=>{
-        navigation.setOptions({
-           headerTitle: route.params.title
-        }) 
-   },[navigation]);
-    return (         
-                <ScrollView showsVerticalScrollIndicator={false}>
-                    <View style={commonStyles.container}>
-                        
-                        {bollywoodactionmoviesList.map(item => {
-                          return (
-                          <View key={item.id} style={commonStyles.cards}>
-                            <TouchableOpacity onPress={() => navigation.navigate("MoviePlayer",item)}>
-                             
-                                <Image source={{uri: item.seo.ogImage}} style={commonStyles.imgSize}/>
-                             
-                               </TouchableOpacity>
-                             </View>                             
-                          )
-                        })}                       
-                    </View>
-                </ScrollView>
+export default function ActionMovies({ navigation, route }) {
+  const [data, setData] = useState([]);
+  const [loading, setLoading] = useState(true);
+  useEffect(() => {
+    fetchJSON();
+  }, []);
+
+  const fetchJSON = async () => {
+    try {
+      const response = await fetch(
+        "https://raw.githubusercontent.com/shashank4425/Stream4Us/refs/heads/movies/bollywood/action/movies.json"
+      );
+
+      const jsonData = await response.json();
+      setData(jsonData);
+    } catch (error) {
+      console.log("Error fetching JSON:", error);
+    } finally {
+      setLoading(false);
+    }
+  };
+  useLayoutEffect(() => {
+    navigation.setOptions({
+      headerTitle: route.params.title
+    })
+  }, [navigation]);
+
+  if (loading){
+    return (
+       <PreLoaderScreen/>
     )
+  }
+  if (!loading){
+     return (
+      <ScrollView showsVerticalScrollIndicator={false}>
+
+        <View style={commonStyles.container}>
+          {data.map(item => {
+            return (
+              <View key={item.id} style={commonStyles.cards}>
+                <TouchableOpacity onPress={() => navigation.navigate("MoviePlayer", item)}>
+
+                  <Image source={{ uri: item.seo.ogImage }} style={commonStyles.imgSize} />
+
+                </TouchableOpacity>
+              </View>
+            )
+          })}
+        </View>
+      </ScrollView>
+    )
+  }
 }
 const Styles = StyleSheet.create({
-    
+
 })

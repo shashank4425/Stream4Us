@@ -36,6 +36,9 @@ const MoviePlayer = ({ route }) => {
   const [isSeeking, setIsSeeking] = useState(false);
   const [orientation, setOrientation] = useState("portrait");
   const [controlsVisible, setControlsVisible] = useState(false);
+  const [speedMenuVisible, setSpeedMenuVisible] = useState(false);
+const [playbackRate, setPlaybackRate] = useState(1.0);
+
   const hideTimer = useRef(null);
   
    useEffect(() => {
@@ -157,7 +160,8 @@ const formatTime = (t) => {
   // Hide after 4 seconds
   hideTimer.current = setTimeout(() => {
     setControlsVisible(false);
-  }, 4000);
+    setSpeedMenuVisible(false);
+  }, 4500);
 };
 
 const onVideoPress = () => {
@@ -168,6 +172,12 @@ const onVideoPress = () => {
   }
   startHideTimer();
 };
+const selectSpeed = (speed) => {
+  setPlaybackRate(speed);
+  setSpeedMenuVisible(false);
+
+};
+
 
 
   return (
@@ -178,7 +188,6 @@ const onVideoPress = () => {
             ref={videoRef}
             source={videoSource}
             paused={!isPlaying}
-
             onLoadStart={() => {
               setIsLoading(true);
               setVideoLoaded(false);
@@ -193,7 +202,7 @@ const onVideoPress = () => {
             onBuffer={({ isBuffering }) => {
               setBuffering(isBuffering);
             }}
-
+            rate={playbackRate}
             onProgress={(data) => setCurrentTime(data.currentTime)}
 
             onEnd={() => videoRef.current.seek(0)}
@@ -266,17 +275,29 @@ const onVideoPress = () => {
                 </View>
                 
                 <View style={orientation == "portrait" ? styles.bottomController : styles.lsbottomController}>
-                  <View style={orientation == "portrait" ? styles.potraitDuration : styles.lsDuration}>
-                    <Text style={styles.potraitDurationTxt}>
+                  <View style={{width: "90%",flexDirection:"row",justifyContent: "flex-start"}}>
+                     <Text style={orientation == "portrait" ? styles.potraitDurationTxt : styles.lsDurationTxt}>
                       {formatTime(currentTime)} / {formatTime(duration)}
-                    </Text>
+                      </Text>
                    </View>
+                  {orientation == "landscape" && (            
+                     <TouchableOpacity
+                              onPress={() => setSpeedMenuVisible(!speedMenuVisible)}
+                              style={{justifyContent:"flex-end", alignItems:"flex-end"}}>
+                              <MaterialIcon
+                                name="speed"   // MATERIAL ICON SPEED SYMBOL
+                                size={28}
+                                color="white"
+                              />
+                            </TouchableOpacity>
+                       )}
                    <View style={orientation == "portrait" ? styles.potraitFullscreen : styles.lsFullscreen}>
-                    <TouchableOpacity onPress={toggleScreen}>
+                     <TouchableOpacity onPress={toggleScreen}>
                       <MaterialIcon style={styles.fsRotate} name={orientation == "portrait" ? "fullscreen" : "fullscreen-exit"} size={24} color="white"
                       ></MaterialIcon>
                     </TouchableOpacity>                  
                   </View>
+
                     
                 </View>
                 <View style={orientation == "portrait" ? styles.sliderController : styles.lsSliderController}>
@@ -301,6 +322,41 @@ const onVideoPress = () => {
                 </View> 
             )}
         </View>
+        {speedMenuVisible && (
+        <View
+          style={{
+            position: "absolute",
+            bottom: 80,
+            right: 25,
+            backgroundColor: "rgba(0,0,0,0.85)",
+            paddingVertical: 8,
+            paddingHorizontal: 12,
+            borderRadius: 12,
+            width: 75
+          }}
+        >
+          {[1, 1.25, 1.5, 1.75, 2].map((rate) => (
+            <TouchableOpacity
+              key={rate}
+              onPress={() => selectSpeed(rate)}
+              style={{
+                paddingVertical: 6,
+              }}
+            >
+              <Text
+                style={{
+                  color: playbackRate === rate ? "yellow" : "white",
+                  fontSize: 16,
+                  textAlign: "center"
+                }}
+              >
+                {rate}x
+              </Text>
+            </TouchableOpacity>
+          ))}
+        </View>
+      )}
+
         {!isSwitching && (
           <View style={styles.container}>
             <View style={styles.contentMain}>
@@ -369,12 +425,22 @@ lsbottomController: {
 
 potraitDurationTxt: {
   backgroundColor: "rgba(0,0,0,0.4)",
+  width:"auto",
   color: "white",
+  textAlign:"center",
   padding:5,
   borderRadius:12,
   fontSize: 14,
 },
-
+lsDurationTxt: {
+  backgroundColor: "rgba(0,0,0,0.4)",
+  width:"auto",
+  color: "white",
+  textAlign:"center",
+  padding:5,
+  borderRadius:12,
+  fontSize: 14,
+},
 // SLIDER
 sliderController: {
   position: "absolute",
@@ -407,15 +473,6 @@ lsSliderController: {
     fontSize: 32,
     padding:5,
     fontWeight: "700"
-  },
-  potraitDuration: {
-    width: "90%",
-    display:"flex",
-    flexDirection:"row",
-    justifyContent: "flex-start"
-  },
-  lsDuration: {
-    padding:5,
   },
 
   potraitFullscreen: {
