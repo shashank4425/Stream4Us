@@ -35,11 +35,7 @@ export default function Home({ navigation }) {
     useFocusEffect(
         React.useCallback(() => {
             const backAction = () => {
-                navigation.replace("Splash");
-                setTimeout(() => {
                     BackHandler.exitApp();
-                }, 50);
-
                 return true;
             };
 
