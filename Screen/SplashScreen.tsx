@@ -1,6 +1,5 @@
 import React, { useEffect, useRef } from "react";
-import { Animated, Dimensions, ImageBackground, StyleSheet } from "react-native";
-import { SafeAreaView } from "react-native-safe-area-context";
+import { Animated, Dimensions, ImageBackground, StyleSheet, View } from "react-native";
 
 const windowHeight = Dimensions.get("window").height;
 const windowWidth = Dimensions.get("window").width;
@@ -10,7 +9,7 @@ export default function SplashScreen({ navigation }) {
   useEffect(() => {
     Animated.timing(fadeAnim, {
       toValue: 1,
-      duration: 2000,
+      duration: 1500,
       useNativeDriver: true,
     }).start();
 
@@ -22,7 +21,7 @@ export default function SplashScreen({ navigation }) {
   }, []);
 
   return (
-    <SafeAreaView style={{ flex: 1 }} edges={[]}>
+    <View style={{ flex: 1 }}>
       <Animated.View style={{ flex: 1, opacity: fadeAnim }}>
         <ImageBackground
           source={require("../assets/images/stream4us/logo/stream4us_splash.png")}
@@ -30,7 +29,7 @@ export default function SplashScreen({ navigation }) {
         >
         </ImageBackground>
       </Animated.View>
-    </SafeAreaView>
+    </View>
   );
 }
 
@@ -38,7 +37,7 @@ const styles = StyleSheet.create({
   bg: {
     flex: 1,
     width: "100%",
-    height: windowHeight,
+    height: "100%",
   },
   centerContainer: {
     flex: 1,
