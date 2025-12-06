@@ -26,7 +26,7 @@ const DarkTheme = {
      }
 }
 export default function AppNavigatorScreen({route}){
- useEffect(() => {
+  useEffect(() => {
     // FULL immersive mode globally
     NavigationBar.setVisibilityAsync("visible");
   }, []);

@@ -5,12 +5,11 @@ import { FontAwesome } from "@expo/vector-icons";
 import { useFocusEffect } from "@react-navigation/native";
 import Constants from "expo-constants";
 import React, { useEffect, useState } from "react";
-import { Animated, BackHandler, Dimensions, Image, ScrollView, StatusBar, StyleSheet, Text, TouchableOpacity, View } from "react-native";
+import { Animated, BackHandler, Dimensions, FlatList, Image, StatusBar, StyleSheet, Text, TouchableOpacity, View } from "react-native";
 const windowWidth = Dimensions.get('window').width;
 const windowHeight = Dimensions.get('window').height;
 
-export default function Home({ navigation }) {
-
+export default function Home({ navigation, route }) {
     const [data, setData] = useState([]);
     const [loading, setLoading] = useState(true);
     useEffect(() => {
@@ -24,18 +23,17 @@ export default function Home({ navigation }) {
             );
 
             const jsonData = await response.json();
-            setData(jsonData);
+            setData(jsonData)
         } catch (error) {
             console.log("Error fetching JSON:", error);
         } finally {
             setLoading(false);
         }
     };
-
     useFocusEffect(
         React.useCallback(() => {
             const backAction = () => {
-                    BackHandler.exitApp();
+                BackHandler.exitApp();
                 return true;
             };
 
@@ -87,54 +85,71 @@ export default function Home({ navigation }) {
                     opacity: iconOpacity, // 👈 animate visibility
                 }}
                 resizeMode="contain"
-            />}
-
-
-            <Animated.ScrollView showsVerticalScrollIndicator={false}
-                scrollEventThrottle={16} onScroll={Animated.event(
+            /> }
+            <StatusBar
+                translucent backgroundColor="transparent"
+                barStyle="light-content"
+            />
+            <Animated.FlatList
+                showsVerticalScrollIndicator={false}
+                // 🟢 TRACK SCROLL POSITION
+                onScroll={Animated.event(
                     [{ nativeEvent: { contentOffset: { y: scrollY } } }],
                     { useNativeDriver: false }
-                )}>
-                <StatusBar
-                    translucent backgroundColor="transparent"
-                    barStyle="light-content"
-                />
-                {loading ? <BannerPreLoaderScreen /> : <TrendingMovies />}
-                {loading &&
-                    <PreLoaderScreen />
-                }
-                {!loading && (<View>
-                    {data.map(items => {
-                        return (
-                            <View style={Styles.cardContainer} key={items.id}>
-                                <View style={Styles.moviesContent}>
-                                    <View style={Styles.leftContent}>
-                                        <Text style={Styles.heading}>{items.category}</Text>
-                                    </View>
-                                    <TouchableOpacity activeOpacity={1} onPress={() => navigation.navigate(items.category, { title: items.category })}>
+                )}
+                data={data}
+
+                keyExtractor={(item, index) => index.toString()}
+                ListHeaderComponent={() => (
+                    loading ? <BannerPreLoaderScreen /> : <TrendingMovies />
+                )}
+                renderItem={({ item }) => (
+                    <View style={{ marginBottom: 20 }}>
+                        {loading ? <PreLoaderScreen /> :
+                            <View>
+                                <View
+                                    style={{
+                                        flexDirection: "row", alignItems: "center", justifyContent: "space-between",
+                                        paddingHorizontal: 15, marginBottom: 6,
+                                    }}>
+                                    <Text style={{
+                                        color: "white",
+                                        fontSize: 18,
+                                        fontWeight: "bold",
+                                        marginLeft: 0,
+                                        marginBottom: 10
+                                    }}>
+                                        {item.category}
+                                    </Text>
+                                    <TouchableOpacity activeOpacity={1} onPress={() => navigation.navigate(item.category, { title: item.category })}>
                                         <FontAwesome name="angle-right" size={24} color="#fff"></FontAwesome>
                                     </TouchableOpacity>
                                 </View>
-                                <ScrollView horizontal={true}>
-                                    {items.Movies?.map(item => {
-                                        return (
 
-                                            <View style={Styles.container} key={item.id}>
-                                                <TouchableOpacity activeOpacity={1} onPress={() => navigation.navigate("MoviePlayer", item)}>
-                                                    <View style={Styles.cards}>
-                                                        <Image source={{ uri: item.seo.ogImage }}
-                                                            style={Styles.imgSize} />
-                                                    </View>
-                                                </TouchableOpacity>
-                                            </View>
-                                        )
-                                    })}
-                                </ScrollView>
+                                <FlatList
+                                    data={item.Movies}
+                                    keyExtractor={(movie) => movie.id}
+                                    horizontal
+                                    showsHorizontalScrollIndicator={false}
+                                    renderItem={({ item }) => (
+                                        <Image
+                                            source={{ uri: item.seo.ogImage }}
+                                            style={{
+                                                width: 120,
+                                                height: 150,
+                                                borderRadius: 8,
+                                                marginHorizontal: 5,
+                                                backgroundColor: "#333"
+                                            }}
+                                        />
+                                    )}
+                                />
                             </View>
-                        )
-                    })}
-                </View>)}
-            </Animated.ScrollView>
+                        }
+                    </View>
+                )}
+            />
+
         </View>
     )
 }
