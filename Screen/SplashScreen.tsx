@@ -1,12 +1,16 @@
+import * as NavigationBar from "expo-navigation-bar";
 import React, { useEffect, useRef } from "react";
-import { Animated, Dimensions, ImageBackground, StyleSheet, View } from "react-native";
+import { Animated, Dimensions, ImageBackground, StatusBar, StyleSheet, View } from "react-native";
 
-const windowHeight = Dimensions.get("window").height;
-const windowWidth = Dimensions.get("window").width;
+const { height: screenHeight, width: screenWidth } = Dimensions.get("screen");
+
 export default function SplashScreen({ navigation }) {
   const fadeAnim = useRef(new Animated.Value(0)).current;
 
   useEffect(() => {
+    StatusBar.setHidden(true, "fade"); // Hide status bar
+    NavigationBar.setVisibilityAsync("hidden"); // Hide navigation bar
+
     Animated.timing(fadeAnim, {
       toValue: 1,
       duration: 1500,
@@ -21,32 +25,24 @@ export default function SplashScreen({ navigation }) {
   }, []);
 
   return (
-    <View style={{ flex: 1 }}>
-      <Animated.View style={{ flex: 1, opacity: fadeAnim }}>
+    <View style={styles.container}>
+      <Animated.View style={[styles.full, { opacity: fadeAnim }]}>
         <ImageBackground
           source={require("../assets/images/stream4us/logo/stream4us_splash.png")}
-          style={styles.bg}
-        >
-        </ImageBackground>
+          style={{ width: screenWidth, height: screenHeight }}
+          resizeMode="cover"
+        />
       </Animated.View>
     </View>
   );
 }
 
 const styles = StyleSheet.create({
-  bg: {
+  container: {
     flex: 1,
-    width: "100%",
-    height: "100%",
+    backgroundColor: "#000",
   },
-  centerContainer: {
-    flex: 1,
-    justifyContent: "center",
-    alignItems: "center",
-  },
-  centerImage: {
-    width: 180,
-    height: 180,
-    resizeMode: "contain",
+  full: {
+    ...StyleSheet.absoluteFillObject,
   },
 });
