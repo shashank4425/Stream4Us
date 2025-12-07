@@ -70,7 +70,7 @@ const TrendingMovies = () => {
 const styles = StyleSheet.create({
   container: {
     width: '100%',
-    marginBottom:10,
+    marginBottom:20,
     height: height * 0.30,   // FIX: define height and remove flex:1
   },
   imageContainer: {

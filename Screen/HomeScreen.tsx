@@ -9,7 +9,7 @@ import { Animated, BackHandler, Dimensions, FlatList, Image, StatusBar, StyleShe
 const windowWidth = Dimensions.get('window').width;
 const windowHeight = Dimensions.get('window').height;
 
-export default function Home({ navigation, route }) {
+export default function Home({ navigation }) {
     const [data, setData] = useState([]);
     const [loading, setLoading] = useState(true);
     useEffect(() => {
@@ -33,6 +33,10 @@ export default function Home({ navigation, route }) {
     useFocusEffect(
         React.useCallback(() => {
             const backAction = () => {
+                navigation.reset({
+                    index: 0,
+                    routes: [{ name: "Splash" }],
+                });
                 BackHandler.exitApp();
                 return true;
             };
@@ -114,15 +118,14 @@ export default function Home({ navigation, route }) {
                                     }}>
                                     <Text style={{
                                         color: "white",
-                                        fontSize: 18,
+                                        fontSize: 16,
                                         fontWeight: "bold",
-                                        marginLeft: 0,
                                         marginBottom: 10
                                     }}>
                                         {item.category}
                                     </Text>
                                     <TouchableOpacity activeOpacity={1} onPress={() => navigation.navigate(item.category, { title: item.category })}>
-                                        <FontAwesome name="angle-right" size={24} color="#fff"></FontAwesome>
+                                        <FontAwesome name="angle-right" size={28} color="#fff"></FontAwesome>
                                     </TouchableOpacity>
                                 </View>
 
@@ -132,16 +135,19 @@ export default function Home({ navigation, route }) {
                                     horizontal
                                     showsHorizontalScrollIndicator={false}
                                     renderItem={({ item }) => (
+                                        <TouchableOpacity activeOpacity={1} 
+                                          onPress={() => navigation.navigate("MoviePlayer", item)}>
                                         <Image
                                             source={{ uri: item.seo.ogImage }}
                                             style={{
-                                                width: 120,
                                                 height: 150,
+                                                width: windowWidth/3.5,
                                                 borderRadius: 8,
-                                                marginHorizontal: 5,
+                                                marginHorizontal: 6,
                                                 backgroundColor: "#333"
                                             }}
                                         />
+                                       </TouchableOpacity>  
                                     )}
                                 />
                             </View>
