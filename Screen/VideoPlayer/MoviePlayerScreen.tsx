@@ -417,8 +417,8 @@ const styles = StyleSheet.create({
 
   lsControle: {
     position: "absolute",
-    left: 30,
-    right: 30,
+    left: 50,
+    right: 50,
     flexDirection: "row",
     justifyContent: "space-between",
     alignItems: "center",
@@ -439,8 +439,8 @@ const styles = StyleSheet.create({
   lsbottomController: {
     position: "absolute",
     bottom: 50,
-    left: 30,
-    right:30,
+    left: 40,
+    right:40,
     flexDirection: "row",
     justifyContent: "space-between",
     alignItems: "center",
@@ -476,8 +476,8 @@ const styles = StyleSheet.create({
   lsSliderController: {
     position: "absolute",
     bottom: 20,
-    left: 30,
-    right: 30,
+    left: 40,
+    right: 40,
   },
 
   screenLockUnlock: {

@@ -1,6 +1,6 @@
 import * as NavigationBar from "expo-navigation-bar";
 import React, { useEffect, useRef } from "react";
-import { Animated, Dimensions, ImageBackground, StyleSheet, View } from "react-native";
+import { Animated, Dimensions, ImageBackground, StyleSheet } from "react-native";
 
 const { height: screenHeight, width: screenWidth } = Dimensions.get("screen");
 
@@ -8,33 +8,41 @@ export default function SplashScreen({ navigation }) {
   const fadeAnim = useRef(new Animated.Value(0)).current;
 
   useEffect(() => {
-    // Allow drawing UNDER the nav bar
-    NavigationBar.setPositionAsync("absolute");
-    NavigationBar.setBackgroundColorAsync("transparent");
-  
-    Animated.timing(fadeAnim, {
-      toValue: 1,
-      duration: 1500,
-      useNativeDriver: true,
-    }).start();
+  NavigationBar.setVisibilityAsync("hidden");
+  NavigationBar.setBackgroundColorAsync("transparent");
 
-    const timeout = setTimeout(() => {
-      navigation.replace("Home");
-    }, 4500);
+  Animated.timing(fadeAnim, {
+    toValue: 1,
+    duration: 1500,
+    useNativeDriver: true,
+  }).start();
 
-    return () => clearTimeout(timeout);
-  }, []);
- return (
-  <View style={styles.container}>
-    <Animated.View style={[styles.full, { opacity: fadeAnim }]}>
-      <ImageBackground
-        source={require("../assets/images/stream4us/logo/stream4us_splash.png")}
-        style={{height:screenHeight}}
-        resizeMode="cover"
-      />
-    </Animated.View>
-  </View>
-);
+  const timeout = setTimeout(async () => {
+    await NavigationBar.setVisibilityAsync("visible");
+    await NavigationBar.setBackgroundColorAsync("#0D0E10");
+
+    navigation.replace("Home");
+  }, 7000);
+
+  return () => {
+    NavigationBar.setVisibilityAsync("visible");
+    NavigationBar.setBackgroundColorAsync("#0D0E10");
+    clearTimeout(timeout);
+  };
+}, []);
+
+
+  return (
+    
+      <Animated.View style={[styles.full, {opacity: fadeAnim }]}>
+        <ImageBackground
+          source={require("../assets/images/stream4us/logo/stream4us_splash.png")}
+          style={StyleSheet.absoluteFillObject}   // 100% fullscreen
+          resizeMode="cover"
+        />
+      </Animated.View>
+    
+  );
 }
 
 const styles = StyleSheet.create({
