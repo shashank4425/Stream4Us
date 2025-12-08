@@ -134,7 +134,7 @@ const MoviePlayer = ({ route }) => {
       await ScreenOrientation.lockAsync(ScreenOrientation.OrientationLock.PORTRAIT_UP);
       setOrientation("portrait");
       setIsSwitching(false);
-      NavigationBar.setVisibilityAsync("visible");
+      await NavigationBar.setVisibilityAsync("visible");
       await NavigationBar.setBehaviorAsync("inset-swipe");
       StatusBar.setHidden(false);
 
@@ -224,6 +224,7 @@ const MoviePlayer = ({ route }) => {
             }
           />
 
+          
           {isLoading && (
             <View
               style={{
@@ -379,9 +380,8 @@ const MoviePlayer = ({ route }) => {
             ))}
           </View>
         )}
-
-        {!isSwitching && (
-          <View style={styles.container}>
+       {orientation == "portrait" && (
+        <View style={styles.container}>
             <View style={styles.contentMain}>
               <Text style={styles.mtitle}>{movieLink.seo.page}</Text>
               <Text style={styles.mline}>{movieLink.line2}</Text>

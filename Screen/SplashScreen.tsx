@@ -8,9 +8,14 @@ export default function SplashScreen({ navigation }) {
   const fadeAnim = useRef(new Animated.Value(0)).current;
 
   useEffect(() => {
-  NavigationBar.setVisibilityAsync("hidden");
-  NavigationBar.setBackgroundColorAsync("transparent");
-
+    const setUpBar = async () => {
+     await NavigationBar.setBehaviorAsync("inset-touch");
+     await NavigationBar.setVisibilityAsync("hidden");
+     await NavigationBar.setBackgroundColorAsync("#db125fff");
+     await NavigationBar.setButtonStyleAsync("light");
+    }
+     setUpBar();
+   
   Animated.timing(fadeAnim, {
     toValue: 1,
     duration: 1500,
@@ -18,15 +23,11 @@ export default function SplashScreen({ navigation }) {
   }).start();
 
   const timeout = setTimeout(async () => {
-    await NavigationBar.setVisibilityAsync("visible");
-    await NavigationBar.setBackgroundColorAsync("#0D0E10");
-
-    navigation.replace("Home");
-  }, 7000);
+      await NavigationBar.setVisibilityAsync("visible");
+        navigation.replace("Home");
+  }, 4500);
 
   return () => {
-    NavigationBar.setVisibilityAsync("visible");
-    NavigationBar.setBackgroundColorAsync("#0D0E10");
     clearTimeout(timeout);
   };
 }, []);

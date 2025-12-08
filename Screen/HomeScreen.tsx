@@ -4,8 +4,10 @@ import PreLoaderScreen from "@/components/splash/PreLoaderScreen";
 import { FontAwesome } from "@expo/vector-icons";
 import { useFocusEffect } from "@react-navigation/native";
 import Constants from "expo-constants";
+
 import React, { useEffect, useState } from "react";
 import { Animated, BackHandler, Dimensions, FlatList, Image, StatusBar, StyleSheet, Text, TouchableOpacity, View } from "react-native";
+
 const windowWidth = Dimensions.get('window').width;
 const windowHeight = Dimensions.get('window').height;
 
@@ -140,6 +142,7 @@ export default function Home({ navigation }) {
                                         <Image
                                             source={{ uri: item.seo.ogImage }}
                                             style={{
+                                                resizeMode:"cover",
                                                 height: 150,
                                                 width: windowWidth/3.5,
                                                 borderRadius: 8,
@@ -193,7 +196,7 @@ const Styles = StyleSheet.create({
     },
     cards: {
         backgroundColor: "#696969",
-        height: 140,
+        height: 160,
         width: windowWidth / 3.5,
         borderRadius: 6,
         padding: 0,

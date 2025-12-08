@@ -15,7 +15,7 @@ const windowWidth = Dimensions.get('window').width;
 const windowHeight = Dimensions.get('window').height;
 export default function AppNavigatorScreen({route}){
  
- 
+
   return (
     <>
     <StatusBar translucent backgroundColor="transparent" barStyle="light-content"/>        
