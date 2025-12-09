@@ -17,6 +17,7 @@ import {
   TouchableWithoutFeedback,
   View
 } from "react-native";
+import ImmersiveMode from "react-native-immersive-mode";
 import MaterialIcon from "react-native-vector-icons/MaterialIcons";
 import Video from "react-native-video";
 const windowWidth = Dimensions.get("window").width;
@@ -126,10 +127,9 @@ const MoviePlayer = ({ route }) => {
       setIsSwitching(true);
       // Force layout refresh
       setTimeout(async () => {
-        await NavigationBar.setVisibilityAsync("hidden");
-        await NavigationBar.setBehaviorAsync("overlay-swipe");
-        StatusBar.setHidden(true);
-      }, 200);
+      StatusBar.setHidden(true);
+      await enableImmersive();   // ⭐ NEW ⭐
+    }, 200);
     } else {
       await ScreenOrientation.lockAsync(ScreenOrientation.OrientationLock.PORTRAIT_UP);
       setOrientation("portrait");
@@ -137,9 +137,36 @@ const MoviePlayer = ({ route }) => {
       await NavigationBar.setVisibilityAsync("visible");
       await NavigationBar.setBehaviorAsync("inset-swipe");
       StatusBar.setHidden(false);
-
+      await disableImmersive();
     }
   };
+const enableImmersive = async () => {
+  try {
+    // Expo navigation bar hide
+    await NavigationBar.setVisibilityAsync("hidden");
+    await NavigationBar.setBehaviorAsync("overlay-swipe");
+
+    // Native sticky immersive mode (REAL immersive)
+    ImmersiveMode.fullLayout(true);
+    ImmersiveMode.setBarMode("FullSticky")
+  } catch (e) {
+    console.log("Immersive error:", e);
+  }
+};
+
+const disableImmersive = async () => {
+  try {
+    await NavigationBar.setVisibilityAsync("visible");
+    await NavigationBar.setBehaviorAsync("inset-swipe");
+
+    ImmersiveMode.fullLayout(false);
+    ImmersiveMode.setBarMode("Normal");
+  } catch (e) {
+    console.log("Exit immersive error:", e);
+  }
+};
+
+
 
   useEffect(() => {
     setTimeout(() => {
