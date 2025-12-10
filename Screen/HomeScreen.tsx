@@ -35,10 +35,6 @@ export default function Home({ navigation }) {
     useFocusEffect(
         React.useCallback(() => {
             const backAction = () => {
-                navigation.reset({
-                    index: 0,
-                    routes: [{ name: "Splash" }],
-                });
                 BackHandler.exitApp();
                 return true;
             };

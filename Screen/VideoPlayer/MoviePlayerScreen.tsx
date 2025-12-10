@@ -101,9 +101,9 @@ const MoviePlayer = ({ route }) => {
           await NavigationBar.setVisibilityAsync("visible");
           await NavigationBar.setBehaviorAsync("inset-swipe");
           StatusBar.setHidden(false);
-
+          disableImmersive();
           setIsSwitching(false);  // ⬅️ SHOW CONTENT AGAIN (after animation)
-        }, 250);                  // 200–300ms works best
+        }, 200);                  // 200–300ms works best
 
         return true;
       }
@@ -121,50 +121,52 @@ const MoviePlayer = ({ route }) => {
   };
 
   const toggleScreen = async () => {
+
     if (orientation === "portrait") {
       await ScreenOrientation.lockAsync(ScreenOrientation.OrientationLock.LANDSCAPE);
       setOrientation("landscape");
       setIsSwitching(true);
       // Force layout refresh
       setTimeout(async () => {
-      StatusBar.setHidden(true);
-      await enableImmersive();   // ⭐ NEW ⭐
-    }, 200);
+        StatusBar.setHidden(true);
+        await enableImmersive();   // ⭐ NEW ⭐
+      }, 200);
     } else {
       await ScreenOrientation.lockAsync(ScreenOrientation.OrientationLock.PORTRAIT_UP);
       setOrientation("portrait");
       setIsSwitching(false);
-      await NavigationBar.setVisibilityAsync("visible");
-      await NavigationBar.setBehaviorAsync("inset-swipe");
       StatusBar.setHidden(false);
       await disableImmersive();
     }
   };
-const enableImmersive = async () => {
-  try {
-    // Expo navigation bar hide
-    await NavigationBar.setVisibilityAsync("hidden");
-    await NavigationBar.setBehaviorAsync("overlay-swipe");
+  const enableImmersive = () => {
+    setTimeout(async () => {
+      try {
+        await NavigationBar.setVisibilityAsync("hidden");
+        await NavigationBar.setBehaviorAsync("inset-touch")
 
-    // Native sticky immersive mode (REAL immersive)
-    ImmersiveMode.fullLayout(true);
-    ImmersiveMode.setBarMode("FullSticky")
-  } catch (e) {
-    console.log("Immersive error:", e);
-  }
-};
+        ImmersiveMode.fullLayout(true);
+        ImmersiveMode.setBarMode("FullSticky");
+        console.log("enabled")
+      } catch (e) {
+        console.log("	enable immersive error:", e);
+      }
+    }, 150);
+  };
 
-const disableImmersive = async () => {
-  try {
-    await NavigationBar.setVisibilityAsync("visible");
-    await NavigationBar.setBehaviorAsync("inset-swipe");
+  const disableImmersive = () => {
+    setTimeout(async () => {
+      try {
+        await NavigationBar.setVisibilityAsync("visible");
+        await NavigationBar.setBehaviorAsync("inset-swipe");
 
-    ImmersiveMode.fullLayout(false);
-    ImmersiveMode.setBarMode("Normal");
-  } catch (e) {
-    console.log("Exit immersive error:", e);
-  }
-};
+        ImmersiveMode.fullLayout(false);
+        ImmersiveMode.setBarMode("Normal");
+      } catch (e) {
+        console.log("disable immersive error:", e);
+      }
+    }, 150);
+  };
 
 
 
@@ -211,13 +213,11 @@ const disableImmersive = async () => {
 
   };
 
-
-
   return (
     <>
       <View style={{ zIndex: -1, flex: 1 }}>
         <View>
-           <Video
+          <Video
             ref={videoRef}
             source={videoSource}
             paused={!isPlaying}
@@ -246,12 +246,12 @@ const disableImmersive = async () => {
 
             style={
               orientation === "portrait"
-                ? {marginTop: 35, width: "100%", height: 200 }
-                : {width: "100%", height: "100%" }
+                ? { marginTop: 35, width: "100%", height: 200 }
+                : { width: "100%", height: "100%" }
             }
           />
 
-          
+
           {isLoading && (
             <View
               style={{
@@ -281,17 +281,17 @@ const disableImmersive = async () => {
           </TouchableWithoutFeedback>
           {controlsVisible && orientation == "landscape" && (
             <View style={styles.screenLockUnlock}>
-                    <Text style={styles.centerText}>
-                      {movieLink.seo.page}
-                    </Text>
-                    <TouchableOpacity onPress={lockScreen}>
-                      <MaterialIcon
-                        name={islockScreen ? "lock" : "lock-open"}
-                        size={36}
-                        color="white"
-                      />
-                    </TouchableOpacity>
-                  </View>
+              <Text style={styles.centerText}>
+                {movieLink.seo.page}
+              </Text>
+              <TouchableOpacity onPress={lockScreen}>
+                <MaterialIcon
+                  name={islockScreen ? "lock" : "lock-open"}
+                  size={36}
+                  color="white"
+                />
+              </TouchableOpacity>
+            </View>
 
           )}
 
@@ -300,10 +300,10 @@ const disableImmersive = async () => {
             <View style={styles.controlsOverlay}>
               <View style={orientation == "portrait" ? styles.potraitControle : styles.lsControle}>
                 {!isLoading &&
-                <TouchableOpacity onPress={moveVideoBack}>
-                  <MaterialIcon name="replay-10" size={36} color="white"
-                  ></MaterialIcon>
-                </TouchableOpacity>}
+                  <TouchableOpacity onPress={moveVideoBack}>
+                    <MaterialIcon name="replay-10" size={36} color="white"
+                    ></MaterialIcon>
+                  </TouchableOpacity>}
                 {!isLoading && <TouchableOpacity onPress={handlePlayPause}>
                   <View>
                     <MaterialIcon
@@ -311,7 +311,7 @@ const disableImmersive = async () => {
                     />
                   </View>
                 </TouchableOpacity>}
-                 {!isLoading && <TouchableOpacity onPress={moveVideoForward}>
+                {!isLoading && <TouchableOpacity onPress={moveVideoForward}>
                   <MaterialIcon name="forward-10" size={36} color="white"
                   ></MaterialIcon>
                 </TouchableOpacity>}
@@ -407,8 +407,8 @@ const disableImmersive = async () => {
             ))}
           </View>
         )}
-       {orientation == "portrait" && (
-        <View style={styles.container}>
+        {orientation == "portrait" && (
+          <View style={styles.container}>
             <View style={styles.contentMain}>
               <Text style={styles.mtitle}>{movieLink.seo.page}</Text>
               <Text style={styles.mline}>{movieLink.line2}</Text>
@@ -467,7 +467,7 @@ const styles = StyleSheet.create({
     position: "absolute",
     bottom: 50,
     left: 40,
-    right:40,
+    right: 40,
     flexDirection: "row",
     justifyContent: "space-between",
     alignItems: "center",
@@ -508,26 +508,26 @@ const styles = StyleSheet.create({
   },
 
   screenLockUnlock: {
-  flexDirection: "row",
-  alignItems: "center",
-  justifyContent: "flex-end",   // icon goes to right end
-  paddingHorizontal: 10,
-  height: 50,
-  left: 30,
-  right: 30,
-  top: 20,
-  position: "absolute",         // needed for absolute center text
-},
+    flexDirection: "row",
+    alignItems: "center",
+    justifyContent: "flex-end",   // icon goes to right end
+    paddingHorizontal: 10,
+    height: 50,
+    left: 30,
+    right: 30,
+    top: 20,
+    position: "absolute",         // needed for absolute center text
+  },
 
-centerText: {
-  position: "absolute",
-  left: 0,
-  right: 0,
-  textAlign: "center",
-  fontSize: 22,
-  fontWeight:700,
-  color: "#FFFFFF",
-},
+  centerText: {
+    position: "absolute",
+    left: 0,
+    right: 0,
+    textAlign: "center",
+    fontSize: 22,
+    fontWeight: 700,
+    color: "#FFFFFF",
+  },
 
   potraitFullscreen: {
     justifyContent: "flex-end",

@@ -19,6 +19,6 @@ export const commonStyles = StyleSheet.create({
         borderRadius: 6,
         height: "100%",
         width: "100%",
-        resizeMode:"contain"
+        resizeMode:"cover"
     }
 })
