@@ -10,16 +10,13 @@ import { createStackNavigator } from '@react-navigation/stack';
 import React from "react";
 import { Dimensions, StatusBar, StyleSheet } from "react-native";
 import SplashScreen from "./SplashScreen";
+
 const Stack = createStackNavigator();
 const windowWidth = Dimensions.get('window').width;
 const windowHeight = Dimensions.get('window').height;
 export default function AppNavigatorScreen({route}){
  
-// useEffect(() => {
-//     // Set nav bar black
-//     NavigationBar.setBackgroundColorAsync('#0D0E10'); // Black
-//     NavigationBar.setButtonStyleAsync('light');       // White icons
-//   }, []);
+
   return (
     <>
     <StatusBar translucent backgroundColor="transparent" barStyle="light-content"/>        
@@ -34,9 +31,6 @@ export default function AppNavigatorScreen({route}){
       headerShown:false,
     }}/>    
     <Stack.Screen name="Home" component={Home} options={{
-      cardStyle: {
-        paddingBottom:43
-      },
       presentation:"transparentModal",
       animation: 'fade',
       gestureEnabled: true,

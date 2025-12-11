@@ -63,7 +63,7 @@ export default function Home({ navigation }) {
         extrapolate: "clamp",
     });
     return (
-        <View style={Styles.screenContainer}>
+         <View style={Styles.screenContainer}>
             <Animated.View
                 style={{
                     height: STATUS_BAR_HEIGHT,
@@ -154,7 +154,6 @@ export default function Home({ navigation }) {
                     </View>
                 )}
             />
-
         </View>
     )
 }
