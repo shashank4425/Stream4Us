@@ -219,7 +219,7 @@ const MoviePlayer = ({ route }) => {
         <View>
           <Video
             ref={videoRef}
-            source={{uri:'https://tvsen7.aynaott.com/sspts1/index.m3u8'}}
+            source={videoSource}
             paused={!isPlaying}
             onLoadStart={() => {
               setIsLoading(true);
