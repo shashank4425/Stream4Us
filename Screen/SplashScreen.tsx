@@ -1,4 +1,3 @@
-import * as NavigationBar from "expo-navigation-bar";
 import React, { useEffect, useRef } from "react";
 import { Animated, ImageBackground, StatusBar, StyleSheet, View } from "react-native";
 export default function SplashScreen({ navigation }) {
@@ -6,8 +5,6 @@ export default function SplashScreen({ navigation }) {
 
   useEffect(() => {
     // Set nav bar black
-    NavigationBar.setVisibilityAsync("hidden");
-    NavigationBar.setBehaviorAsync("overlay-swipe");
     // Fade animation
     Animated.timing(fadeAnim, {
       toValue: 1,
@@ -17,14 +14,14 @@ export default function SplashScreen({ navigation }) {
 
     const timeout = setTimeout(async () => {
 
-      // FIX: reset system UI before applying black navbar
-      await NavigationBar.setVisibilityAsync("visible");
-      await NavigationBar.setBehaviorAsync("inset-swipe");
-      await NavigationBar.setBackgroundColorAsync("#0D0E10");
-      await NavigationBar.setButtonStyleAsync("light");
+      // // FIX: reset system UI before applying black navbar
+      // await NavigationBar.setVisibilityAsync("visible");
+      // await NavigationBar.setBehaviorAsync("inset-swipe");
+      // await NavigationBar.setBackgroundColorAsync("#0D0E10");
+      // await NavigationBar.setButtonStyleAsync("light");
 
       navigation.replace("Home");
-    }, 3000);
+    }, 4000);
 
     return () => clearTimeout(timeout);
   }, []);

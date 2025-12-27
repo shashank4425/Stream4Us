@@ -1,6 +1,5 @@
 import TrendingMovies from "@/components/banner/TrendingMovies";
 import BannerPreLoaderScreen from "@/components/splash/BannerPreLoaderScreen";
-import PreLoaderScreen from "@/components/splash/PreLoaderScreen";
 import { FontAwesome } from "@expo/vector-icons";
 import { useFocusEffect } from "@react-navigation/native";
 import Constants from "expo-constants";
@@ -76,14 +75,14 @@ export default function Home({ navigation }) {
                 }}
             />
             {!loading && <Animated.Image
-                source={require('../assets/images/stream4us/logo/app-logo-stream4us.png')}
+                source={require('../assets/images/stream4us/logo/stream4us.png')}
                 style={{
                     marginTop: windowHeight / 20,
-                    width: windowWidth / 5,
+                    width: windowWidth / 4.5,
                     padding: 2,
                     position: "absolute",
                     zIndex: 1,
-                    height: 30, resizeMode: "contain",
+                    height: 38, resizeMode: "contain",
                     opacity: iconOpacity, // 👈 animate visibility
                 }}
                 resizeMode="contain"
@@ -106,9 +105,9 @@ export default function Home({ navigation }) {
                     loading ? <BannerPreLoaderScreen /> : <TrendingMovies />
                 )}
                 renderItem={({ item }) => (
-                    <View style={{ marginBottom: 20 }}>
-                        {loading ? <PreLoaderScreen /> :
-                            <View>
+                    <View style={{ marginBottom: 10 }}>
+                        
+                            <View style={Styles.cardContainer}>
                                 <View
                                     style={{
                                         flexDirection: "row", alignItems: "center", justifyContent: "space-between",
@@ -123,7 +122,7 @@ export default function Home({ navigation }) {
                                         {item.category}
                                     </Text>
                                     <TouchableOpacity activeOpacity={1} onPress={() => navigation.navigate(item.category, { title: item.category })}>
-                                        <FontAwesome name="angle-right" size={28} color="#fff"></FontAwesome>
+                                        <FontAwesome name="angle-right" size={24} color="#fff"></FontAwesome>
                                     </TouchableOpacity>
                                 </View>
 
@@ -139,10 +138,10 @@ export default function Home({ navigation }) {
                                             source={{ uri: item.seo.ogImage }}
                                             style={{
                                                 resizeMode:"cover",
-                                                height: 150,
-                                                width: windowWidth/3.5,
+                                                height: 155,
+                                                width: windowWidth/3.4,
                                                 borderRadius: 8,
-                                                marginHorizontal: 6,
+                                                marginHorizontal: 3,
                                                 backgroundColor: "#333"
                                             }}
                                         />
@@ -150,7 +149,7 @@ export default function Home({ navigation }) {
                                     )}
                                 />
                             </View>
-                        }
+                        
                     </View>
                 )}
             />
@@ -182,8 +181,7 @@ const Styles = StyleSheet.create({
         zIndex: 999,
     },
     cardContainer: {
-        paddingHorizontal: windowWidth / 25,
-        paddingVertical: windowHeight / 100
+        margin: 6,
     },
     container: {
         flexDirection: 'row',
@@ -195,7 +193,7 @@ const Styles = StyleSheet.create({
         width: windowWidth / 3.5,
         borderRadius: 6,
         padding: 0,
-        marginRight: 5
+        marginRight: 4
     },
     imgSize: {
         borderRadius: 6,

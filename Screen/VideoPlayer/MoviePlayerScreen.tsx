@@ -1,5 +1,6 @@
 import NetInfo from "@react-native-community/netinfo";
 //import Slider from '@react-native-community/slider';
+import { FontAwesome } from "@expo/vector-icons";
 import { Slider } from "@miblanchard/react-native-slider";
 import * as NavigationBar from "expo-navigation-bar";
 import * as ScreenOrientation from "expo-screen-orientation";
@@ -7,9 +8,9 @@ import throttle from "lodash.throttle";
 import React, { useEffect, useRef, useState } from "react";
 import {
   ActivityIndicator,
-  BackHandler,
-  Dimensions,
+  AppState,
   NativeModules,
+  Platform,
   StatusBar,
   StyleSheet,
   Text,
@@ -17,13 +18,11 @@ import {
   TouchableWithoutFeedback,
   View
 } from "react-native";
-import ImmersiveMode from "react-native-immersive-mode";
 import MaterialIcon from "react-native-vector-icons/MaterialIcons";
 import Video from "react-native-video";
-const windowWidth = Dimensions.get("window").width;
-const windowHeight = Dimensions.get("window").height;
+
 const { ExpoPictureInPicture } = NativeModules;
-const MoviePlayer = ({ route }) => {
+const MoviePlayer = ({navigation, route }) => {
   const videoRef = useRef(null);
   const [isConnected, setIsConnected] = useState(true);
   const [isLoading, setIsLoading] = useState(true);
@@ -86,33 +85,6 @@ const MoviePlayer = ({ route }) => {
       videoRef.current.seek(time, 0);  // accurate seek
     }
   }, 200);
-  useEffect(() => {
-    const backHandle = BackHandler.addEventListener("hardwareBackPress", () => {
-      if (orientation === "landscape") {
-
-        setIsSwitching(true);     // ⬅️ HIDE CONTENT
-
-        ScreenOrientation.unlockAsync();
-        ScreenOrientation.lockAsync(ScreenOrientation.OrientationLock.PORTRAIT_UP);
-
-        setOrientation("portrait");
-
-        setTimeout(async () => {
-          await NavigationBar.setVisibilityAsync("visible");
-          await NavigationBar.setBehaviorAsync("inset-swipe");
-          StatusBar.setHidden(false);
-          disableImmersive();
-          setIsSwitching(false);  // ⬅️ SHOW CONTENT AGAIN (after animation)
-        }, 200);                  // 200–300ms works best
-
-        return true;
-      }
-      return false;
-    });
-
-    return () => backHandle.remove();
-  }, [orientation]);
-
 
   const formatTime = (t) => {
     const m = Math.floor(t / 60);
@@ -120,60 +92,77 @@ const MoviePlayer = ({ route }) => {
     return `${m}:${s < 10 ? "0" : ""}${s}`;
   };
 
+  useEffect(() => {
+    const sub = AppState.addEventListener("change", state => {
+      if (state === "active" && orientation === "landscape") {
+        enableImmersive(); // re-hide navbar
+      }
+    });
+    return () => sub.remove();
+  }, [orientation]);
   const toggleScreen = async () => {
+    try {
+      if (orientation === "portrait") {
+        setIsSwitching(true);
 
-    if (orientation === "portrait") {
-      await ScreenOrientation.lockAsync(ScreenOrientation.OrientationLock.LANDSCAPE);
-      setOrientation("landscape");
-      setIsSwitching(true);
-      // Force layout refresh
-      setTimeout(async () => {
-        StatusBar.setHidden(true);
-        await enableImmersive();   // ⭐ NEW ⭐
-      }, 200);
-    } else {
-      await ScreenOrientation.lockAsync(ScreenOrientation.OrientationLock.PORTRAIT_UP);
-      setOrientation("portrait");
-      setIsSwitching(false);
-      StatusBar.setHidden(false);
-      await disableImmersive();
+        // Lock orientation first
+        await ScreenOrientation.lockAsync(
+          ScreenOrientation.OrientationLock.LANDSCAPE
+        );
+
+        setOrientation("landscape");
+
+        // Give Android time to rotate layout
+        await new Promise(resolve => setTimeout(resolve, 300));
+
+        // Hide system UI together
+        if (Platform.OS === "android") {
+          StatusBar.setHidden(true, "fade");
+          await enableImmersive();
+        }
+
+      } else {
+        setIsSwitching(false);
+
+        await ScreenOrientation.lockAsync(
+          ScreenOrientation.OrientationLock.PORTRAIT_UP
+        );
+
+        setOrientation("portrait");
+
+        if (Platform.OS === "android") {
+          StatusBar.setHidden(false, "fade");
+          await disableImmersive();
+        }
+      }
+    } catch (e) {
+      console.log("toggleScreen error:", e);
     }
   };
-  const enableImmersive = () => {
-    setTimeout(async () => {
-      try {
-        await NavigationBar.setVisibilityAsync("hidden");
-        await NavigationBar.setBehaviorAsync("inset-touch")
 
-        ImmersiveMode.fullLayout(true);
-        ImmersiveMode.setBarMode("FullSticky");
-        console.log("enabled")
-      } catch (e) {
-        console.log("	enable immersive error:", e);
-      }
-    }, 150);
+  const enableImmersive = async () => {
+    try {
+      await NavigationBar.setVisibilityAsync("hidden");
+      await NavigationBar.setBehaviorAsync("overlay-swipe"); // ✅ true immersive
+      console.log("got")
+    } catch (e) {
+      console.log("enable immersive error:", e);
+    }
   };
 
-  const disableImmersive = () => {
-    setTimeout(async () => {
-      try {
-        await NavigationBar.setVisibilityAsync("visible");
-        await NavigationBar.setBehaviorAsync("inset-swipe");
-
-        ImmersiveMode.fullLayout(false);
-        ImmersiveMode.setBarMode("Normal");
-      } catch (e) {
-        console.log("disable immersive error:", e);
-      }
-    }, 150);
+  const disableImmersive = async () => {
+    try {
+      await NavigationBar.setVisibilityAsync("visible");
+      await NavigationBar.setBehaviorAsync("inset-swipe");
+    } catch (e) {
+      console.log("disable immersive error:", e);
+    }
   };
-
-
 
   useEffect(() => {
     setTimeout(() => {
       setControlsVisible(false);
-    }, 4500);
+    }, 4000);
   }, []);
 
   const lockScreen = async () => {
@@ -196,7 +185,7 @@ const MoviePlayer = ({ route }) => {
     hideTimer.current = setTimeout(() => {
       setControlsVisible(false);
       setSpeedMenuVisible(false);
-    }, 4500);
+    }, 4000);
   };
 
   const onVideoPress = () => {
@@ -215,8 +204,8 @@ const MoviePlayer = ({ route }) => {
 
   return (
     <>
-      <View style={{ zIndex: -1, flex: 1 }}>
-        <View>
+      <View style={{ flex: 1 }}>
+        <View style={orientation === "landscape" ? styles.lsVideoView : undefined}>
           <Video
             ref={videoRef}
             source={videoSource}
@@ -247,42 +236,35 @@ const MoviePlayer = ({ route }) => {
             style={
               orientation === "portrait"
                 ? { marginTop: 35, width: "100%", height: 200 }
-                : { width: "100%", height: "100%" }
+                : StyleSheet.absoluteFillObject
             }
           />
 
 
           {isLoading && (
             <View
-              style={{
-                position: "absolute",
-                top: 0,
-                left: 0,
-                right: 0,
-                bottom: 0,
-                justifyContent: "center",
-                alignItems: "center",
-                backgroundColor: "#0D0E10"
-              }}
+              style={[
+                StyleSheet.absoluteFillObject,
+                {
+                  justifyContent: "center",
+                  alignItems: "center",
+                  backgroundColor: "#0D0E10",
+                },
+              ]}
             >
               <ActivityIndicator size="large" color="red" />
             </View>
           )}
           <TouchableWithoutFeedback onPress={onVideoPress}>
-            <View
-              style={{
-                position: "absolute",
-                top: 0,
-                bottom: 0,
-                left: 0,
-                right: 0,
-              }}
-            />
+            <View style={StyleSheet.absoluteFillObject} />
           </TouchableWithoutFeedback>
           {controlsVisible && orientation == "landscape" && (
             <View style={styles.screenLockUnlock}>
               <Text style={styles.centerText}>
-                {movieLink.seo.page}
+                <TouchableOpacity style={{marginTop:12, paddingRight:20}} activeOpacity={1} onPress={toggleScreen}>
+                  <FontAwesome name="angle-left" size={24} color="#fff"></FontAwesome>
+              </TouchableOpacity>
+               {movieLink.seo.page}
               </Text>
               <TouchableOpacity onPress={lockScreen}>
                 <MaterialIcon
@@ -423,14 +405,17 @@ const MoviePlayer = ({ route }) => {
 
 
 const styles = StyleSheet.create({
+  lsVideoView: {
+    ...StyleSheet.absoluteFillObject,
+    backgroundColor: "#000",
+  },
+
   controlsOverlay: {
-    position: "absolute",
-    top: 0,
-    bottom: 0,
-    left: 0,
-    right: 0,
+    backgroundColor: "rgba(0,0,0,0.2)",
+    ...StyleSheet.absoluteFillObject,
     justifyContent: "center",
   },
+
 
   // CENTER CONTROLS
   potraitControle: {
@@ -444,8 +429,8 @@ const styles = StyleSheet.create({
 
   lsControle: {
     position: "absolute",
-    left: 50,
-    right: 50,
+    left: 300,
+    right: 300,
     flexDirection: "row",
     justifyContent: "space-between",
     alignItems: "center",
@@ -523,7 +508,7 @@ const styles = StyleSheet.create({
     position: "absolute",
     left: 0,
     right: 0,
-    textAlign: "center",
+    textAlign: "left",
     fontSize: 22,
     fontWeight: 700,
     color: "#FFFFFF",
@@ -550,8 +535,8 @@ const styles = StyleSheet.create({
   },
 
   container: {
-    height: windowHeight,
-    width: windowWidth,
+    height: "100%",
+    width: "100%",
     padding: 20,
   },
   contentMain: {

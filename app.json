@@ -2,9 +2,9 @@
   "expo": {
     "name": "Stream4Us",
     "slug": "Stream4Us",
-    "version": "1.0.8",
+    "version": "1.1.1",
     "orientation": "portrait",
-    "icon": "./assets/images/stream4us/logo/stream4us.png",
+    "icon": "./assets/images/stream4us/logo/stream4us_logo.png",
     "scheme": "com.example.streamus",
     "userInterfaceStyle": "automatic",
     "newArchEnabled": true,
@@ -14,9 +14,9 @@
     "android": {
       "adaptiveIcon": {
         "backgroundColor": "#0D0E10",
-        "foregroundImage": "./assets/images/stream4us/logo/stream4us.png",
-        "backgroundImage": "./assets/images/stream4us/logo/stream4us.png",
-        "monochromeImage": "./assets/images/stream4us/logo/stream4us.png"
+        "foregroundImage": "./assets/images/stream4us/logo/stream4us_logo.png",
+        "backgroundImage": "./assets/images/stream4us/logo/stream4us_logo.png",
+        "monochromeImage": "./assets/images/stream4us/logo/stream4us_logo.png"
       },
       "edgeToEdgeEnabled": true,
       "predictiveBackGestureEnabled": false,
@@ -24,14 +24,13 @@
     },
     "web": {
       "output": "static",
-      "favicon": "./assets/images/stream4us/logo/stream4us.png"
+      "favicon": "./assets/images/stream4us/logo/stream4us_logo.png"
     },
     "plugins": [
       "expo-router",
       [
         "expo-splash-screen",
         {
-          "image": "./assets/images/stream4us/logo/splash.png",
           "resizeMode": "cover",
           "backgroundColor": "#0D0E10",
           "dark": {
@@ -49,12 +48,6 @@
     "experiments": {
       "typedRoutes": true,
       "reactCompiler": true
-    },
-    "extra": {
-      "router": {},
-      "eas": {
-        "projectId": "b43ce736-be96-4ed0-a7fa-84326db8e428"
-      }
     }
   }
 }
