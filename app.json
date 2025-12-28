@@ -2,7 +2,7 @@
   "expo": {
     "name": "Stream4Us",
     "slug": "Stream4Us",
-    "version": "1.1.1",
+    "version": "1.1.3",
     "orientation": "portrait",
     "icon": "./assets/images/stream4us/logo/stream4us_logo.png",
     "scheme": "com.example.streamus",
@@ -19,6 +19,11 @@
         "monochromeImage": "./assets/images/stream4us/logo/stream4us_logo.png"
       },
       "edgeToEdgeEnabled": true,
+      "androidNavigationBar": {
+        "visible": "always",
+        "barStyle": "light-content",
+        "backgroundColor": "#0D0E10"
+      },
       "predictiveBackGestureEnabled": false,
       "package": "com.shashank4425.Stream4Us"
     },
@@ -31,7 +36,8 @@
       [
         "expo-splash-screen",
         {
-          "resizeMode": "cover",
+          "image": "./assets/images/stream4us/logo/splash.png",
+          "resizeMode": "contain",
           "backgroundColor": "#0D0E10",
           "dark": {
             "backgroundColor": "#0D0E10"
@@ -48,6 +54,12 @@
     "experiments": {
       "typedRoutes": true,
       "reactCompiler": true
+    },
+    "extra": {
+      "router": {},
+      "eas": {
+        "projectId": "b43ce736-be96-4ed0-a7fa-84326db8e428"
+      }
     }
   }
 }
