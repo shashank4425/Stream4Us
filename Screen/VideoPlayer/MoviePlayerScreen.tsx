@@ -1,5 +1,6 @@
 import NetInfo from "@react-native-community/netinfo";
 //import Slider from '@react-native-community/slider';
+import { FontAwesome } from "@expo/vector-icons";
 import { Slider } from "@miblanchard/react-native-slider";
 import * as NavigationBar from "expo-navigation-bar";
 import * as ScreenOrientation from "expo-screen-orientation";
@@ -144,7 +145,7 @@ const MoviePlayer = ({ route }) => {
   useEffect(() => {
     setTimeout(() => {
       setControlsVisible(false);
-    }, 4500);
+    }, 4000);
   }, []);
 
   const lockScreen = async () => {
@@ -167,7 +168,7 @@ const MoviePlayer = ({ route }) => {
     hideTimer.current = setTimeout(() => {
       setControlsVisible(false);
       setSpeedMenuVisible(false);
-    }, 4500);
+    }, 4000);
   };
 
   const onVideoPress = () => {
@@ -183,139 +184,106 @@ const MoviePlayer = ({ route }) => {
     setSpeedMenuVisible(false);
 
   };
+const videoStyle = orientation === "portrait" 
+  ? { marginTop: 35, width: "100%", height: 200 } 
+  : { width: "100%", height: "100%", backgroundColor: 'black' };
 
-
-
-  return (
+return (
     <>
-      <View style={{ zIndex: -1, flex: 1 }}>
-        <View>
-           <Video
+      <View style={{ flex: 1, backgroundColor: '#0D0E10' }}> 
+        <StatusBar hidden={orientation === "landscape"} />
+        
+        {/* VIDEO CONTAINER: This needs to constrain the absolute children */}
+        <View style={orientation === "portrait" ? { height: 235 } : { flex: 1 }}>
+          <Video
             ref={videoRef}
             source={videoSource}
             paused={!isPlaying}
-            onLoadStart={() => {
-              setIsLoading(true);
-              setVideoLoaded(false);
-            }}
-
+            onLoadStart={() => { setIsLoading(true); setVideoLoaded(false); }}
             onLoad={(data) => {
               setDuration(data.duration);
               setIsLoading(false);
               setVideoLoaded(true);
               setIsPlaying(true);
             }}
-
-            onBuffer={({ isBuffering }) => {
-              setBuffering(isBuffering);
-            }}
+            onBuffer={({ isBuffering }) => setBuffering(isBuffering)}
             rate={playbackRate}
             onProgress={(data) => setCurrentTime(data.currentTime)}
-
             onEnd={() => videoRef.current.seek(0)}
-
             resizeMode="cover"
             repeat={true}
-
-            style={
-              orientation === "portrait"
-                ? {marginTop: 35, width: "100%", height: 200 }
-                : {width: "100%", height: "100%" }
-            }
+            style={videoStyle}
           />
 
+          {/* TOUCHABLE OVERLAY: Full screen area to toggle controls */}
+          <TouchableWithoutFeedback onPress={onVideoPress}>
+            <View style={StyleSheet.absoluteFill} />
+          </TouchableWithoutFeedback>
+
           {isLoading && (
-            <View
-              style={{
-                position: "absolute",
-                top: 0,
-                left: 0,
-                right: 0,
-                bottom: 0,
-                justifyContent: "center",
-                alignItems: "center",
-                backgroundColor: "#0D0E10"
-              }}
-            >
+            <View style={[StyleSheet.absoluteFill, { justifyContent: "center", alignItems: "center", backgroundColor: "#0D0E10" }]}>
               <ActivityIndicator size="large" color="red" />
             </View>
           )}
-          <TouchableWithoutFeedback onPress={onVideoPress}>
-            <View
-              style={{
-                position: "absolute",
-                top: 0,
-                bottom: 0,
-                left: 0,
-                right: 0,
-              }}
-            />
-          </TouchableWithoutFeedback>
-          {controlsVisible && orientation == "landscape" && (
-            <View style={styles.screenLockUnlock}>
-                    <Text style={styles.centerText}>
-                      {movieLink.seo.page}
-                    </Text>
-                    <TouchableOpacity onPress={lockScreen}>
-                      <MaterialIcon
-                        name={islockScreen ? "lock" : "lock-open"}
-                        size={36}
-                        color="white"
-                      />
-                    </TouchableOpacity>
-                  </View>
 
+          {/* LANDSCAPE HEADER */}
+          {controlsVisible && orientation === "landscape" && (
+            <View style={styles.lsTopVideoContainer}>
+            <View style={styles.screenLockUnlock}>
+              <Text style={styles.centerText} numberOfLines={1}>
+                <TouchableOpacity style={{ marginTop: 12, paddingRight: 20 }} activeOpacity={1} onPress={toggleScreen}>
+                  <FontAwesome name="angle-left" size={24} color="#fff" />
+                </TouchableOpacity>
+                {movieLink.seo.page}
+              </Text>
+              <TouchableOpacity onPress={lockScreen}>
+                <MaterialIcon name={islockScreen ? "lock" : "lock-open"} size={36} color="white" />
+              </TouchableOpacity>
+            </View>
+            </View>
           )}
 
+          {/* MAIN CONTROLS */}
           {isConnected && !islockScreen && controlsVisible && (
-
             <View style={styles.controlsOverlay}>
-              <View style={orientation == "portrait" ? styles.potraitControle : styles.lsControle}>
-                {!isLoading &&
-                <TouchableOpacity onPress={moveVideoBack}>
-                  <MaterialIcon name="replay-10" size={36} color="white"
-                  ></MaterialIcon>
-                </TouchableOpacity>}
-                {!isLoading && <TouchableOpacity onPress={handlePlayPause}>
-                  <View>
-                    <MaterialIcon
-                      name={!isPlaying ? "play-circle-outline" : "pause-circle-outline"} size={60} color="white"
-                    />
-                  </View>
-                </TouchableOpacity>}
-                 {!isLoading && <TouchableOpacity onPress={moveVideoForward}>
-                  <MaterialIcon name="forward-10" size={36} color="white"
-                  ></MaterialIcon>
-                </TouchableOpacity>}
-              </View>
-
-              <View style={orientation == "portrait" ? styles.bottomController : styles.lsbottomController}>
-                <View style={{ width: "90%", flexDirection: "row", justifyContent: "flex-start" }}>
-                  <Text style={orientation == "portrait" ? styles.potraitDurationTxt : styles.lsDurationTxt}>
-                    {formatTime(currentTime)} / {formatTime(duration)}
-                  </Text>
-                </View>
-                {orientation == "landscape" && (
-                  <TouchableOpacity
-                    onPress={() => setSpeedMenuVisible(!speedMenuVisible)}
-                    style={{ justifyContent: "flex-end", alignItems: "flex-end" }}>
-                    <MaterialIcon
-                      name="speed"   // MATERIAL ICON SPEED SYMBOL
-                      size={28}
-                      color="white"
-                    />
+              <View style={orientation === "portrait" ? styles.potraitControle : styles.lsControle}>
+                {!isLoading && (
+                  <TouchableOpacity onPress={moveVideoBack}>
+                    <MaterialIcon name="replay-10" size={36} color="white" />
                   </TouchableOpacity>
                 )}
-                <View style={orientation == "portrait" ? styles.potraitFullscreen : styles.lsFullscreen}>
+                {!isLoading && (
+                  <TouchableOpacity onPress={handlePlayPause}>
+                    <MaterialIcon name={!isPlaying ? "play-circle-outline" : "pause-circle-outline"} size={60} color="white" />
+                  </TouchableOpacity>
+                )}
+                {!isLoading && (
+                  <TouchableOpacity onPress={moveVideoForward}>
+                    <MaterialIcon name="forward-10" size={36} color="white" />
+                  </TouchableOpacity>
+                )}
+              </View>
+
+              {/* BOTTOM STRIP (Time + Fullscreen) */}
+              <View style={orientation === "portrait" ? styles.bottomController : styles.lsbottomController}>
+                <Text style={styles.lsDurationTxt}>
+                  {formatTime(currentTime)} / {formatTime(duration)}
+                </Text>
+                
+                <View style={{ flexDirection: 'row', alignItems: 'center' }}>
+                  {orientation === "landscape" && (
+                    <TouchableOpacity onPress={() => setSpeedMenuVisible(!speedMenuVisible)} style={{ marginRight: 15 }}>
+                      <MaterialIcon name="speed" size={28} color="white" />
+                    </TouchableOpacity>
+                  )}
                   <TouchableOpacity onPress={toggleScreen}>
-                    <MaterialIcon style={styles.fsRotate} name={orientation == "portrait" ? "fullscreen" : "fullscreen-exit"} size={24} color="white"
-                    ></MaterialIcon>
+                    <MaterialIcon style={styles.fsRotate} name={orientation === "portrait" ? "fullscreen" : "fullscreen-exit"} size={36} color="white" />
                   </TouchableOpacity>
                 </View>
-
-
               </View>
-              <View style={orientation == "portrait" ? styles.sliderController : styles.lsSliderController}>
+
+              {/* SLIDER */}
+              <View style={orientation === "portrait" ? styles.sliderController : styles.lsSliderController}>
                 <Slider
                   value={currentTime}
                   minimumValue={0}
@@ -323,29 +291,15 @@ const MoviePlayer = ({ route }) => {
                   minimumTrackTintColor="#b41313ff"
                   maximumTrackTintColor="#b6b3b3ff"
                   thumbTintColor="#b41313ff"
-                  trackStyle={{ height: 4 }}
-                  thumbStyle={{ height: 12, width: 12, borderRadius: 6 }}
-
                   onSlidingStart={() => setIsSeeking(true)}
-
-                  onValueChange={(valueArray) => {
-                    const time = valueArray[0];  // extract number
-                    setCurrentTime(time);
-                    throttledSeek(time);
-                  }}
-
-                  onSlidingComplete={(valueArray) => {
-                    const time = valueArray[0];  // extract number
-                    setIsSeeking(false);
-                    videoRef.current.seek(time);
-                  }}
+                  onValueChange={(val) => { setCurrentTime(val[0]); throttledSeek(val[0]); }}
+                  onSlidingComplete={(val) => { setIsSeeking(false); videoRef.current.seek(val[0]); }}
                 />
-
               </View>
             </View>
           )}
         </View>
-        {speedMenuVisible && (
+{speedMenuVisible && (
           <View
             style={{
               position: "absolute",
@@ -380,57 +334,57 @@ const MoviePlayer = ({ route }) => {
           </View>
         )}
 
-        {!isSwitching && (
+        {/* DESCRIPTION AREA: Move this outside the relative container */}
+        {orientation === "portrait" && !isSwitching && (
           <View style={styles.container}>
             <View style={styles.contentMain}>
               <Text style={styles.mtitle}>{movieLink.seo.page}</Text>
               <Text style={styles.mline}>{movieLink.line2}</Text>
               <Text style={styles.contentDes}>{movieLink.seo.description}</Text>
             </View>
-          </View>)}
+          </View>
+        )}
       </View>
-
-    </>
+    </>  
   )
 };
 
 
 const styles = StyleSheet.create({
+  
   controlsOverlay: {
-    position: "absolute",
-    top: 0,
-    bottom: 0,
-    left: 0,
-    right: 0,
+    ...StyleSheet.absoluteFillObject, // Key: This makes it overlay the video
+    // Optional: slight dim when controls appear
     justifyContent: "center",
   },
-
-  // CENTER CONTROLS
   potraitControle: {
     flexDirection: "row",
     alignItems: "center",
     justifyContent: "space-evenly",
     width: "100%",
-    height: "50%",
-    paddingVertical: 30
+    marginTop: 35, // Match your video marginTop
+    height: 200,   // Match your video height
+  },
+  bottomController: {
+    position: "absolute",
+    bottom: 10, 
+    left: 15,
+    right: 15,
+    flexDirection: "row",
+    justifyContent: "space-between",
+    alignItems: "center",
+  },
+  sliderController: {
+    position: "absolute",
+    bottom: -20, // Aligns slider at the very bottom of the video
+    left: 10,
+    right: 10,
   },
 
   lsControle: {
     position: "absolute",
     left: 30,
     right: 30,
-    flexDirection: "row",
-    justifyContent: "space-between",
-    alignItems: "center",
-  },
-
-  // BOTTOM CONTROLS (time + fullscreen)
-  bottomController: {
-    position: "absolute",
-    bottom: 40,
-    left: 15,
-    right: 15,
-    marginBottom: -25,
     flexDirection: "row",
     justifyContent: "space-between",
     alignItems: "center",
@@ -464,14 +418,6 @@ const styles = StyleSheet.create({
     borderRadius: 12,
     fontSize: 14,
   },
-  // SLIDER
-  sliderController: {
-    position: "absolute",
-    bottom: 5,
-    left: 10,
-    right: 10,
-    marginBottom: -25,
-  },
 
   lsSliderController: {
     position: "absolute",
@@ -480,27 +426,33 @@ const styles = StyleSheet.create({
     right: 30,
   },
 
-  screenLockUnlock: {
-  flexDirection: "row",
-  alignItems: "center",
-  justifyContent: "flex-end",   // icon goes to right end
-  paddingHorizontal: 10,
-  height: 50,
-  left: 30,
-  right: 30,
-  top: 20,
-  position: "absolute",         // needed for absolute center text
-},
+lsTopVideoContainer:{
+    left:0,
+    right:0,
+    height:60,
+    position:"absolute",
+     backgroundColor: 'rgba(0,0,0,0.3)'
+  },
+screenLockUnlock: {
+    flexDirection: "row",
+    alignItems: "center",
+    justifyContent: "flex-end",   // icon goes to right end
+    paddingHorizontal: 10,
+    left: 30,
+    right: 30,
+    top: 20,
+    position: "absolute",         // needed for absolute center text
+  },
 
-centerText: {
-  position: "absolute",
-  left: 0,
-  right: 0,
-  textAlign: "center",
-  fontSize: 22,
-  fontWeight:700,
-  color: "#FFFFFF",
-},
+  centerText: {
+    position: "absolute",
+    left: 0,
+    right: 0,
+    textAlign: "left",
+    fontSize: 22,
+    fontWeight: 700,
+    color: "#FFFFFF",
+  },
 
   potraitFullscreen: {
     justifyContent: "flex-end",

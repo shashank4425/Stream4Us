@@ -11,9 +11,9 @@ export const commonStyles = StyleSheet.create({
     },
     cards: {
         height: 160,
-        width: windowWidth/3.4,        
+        width: windowWidth/3.3,        
         borderRadius: 5,
-        margin:5
+        margin:3
     },
     imgSize: {
         borderRadius: 6,

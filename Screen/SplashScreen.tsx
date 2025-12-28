@@ -1,48 +1,46 @@
-import * as NavigationBar from "expo-navigation-bar";
 import React, { useEffect, useRef } from "react";
-import { Animated, Dimensions, ImageBackground, StatusBar, StyleSheet, View } from "react-native";
-
-const { height: screenHeight, width: screenWidth } = Dimensions.get("screen");
-
+import { Animated, ImageBackground, StatusBar, StyleSheet, View } from "react-native";
 export default function SplashScreen({ navigation }) {
   const fadeAnim = useRef(new Animated.Value(0)).current;
 
   useEffect(() => {
-    StatusBar.setHidden(true, "fade"); // Hide status bar
-    NavigationBar.setVisibilityAsync("hidden"); // Hide navigation bar
-
+    // Set nav bar black
+    // Fade animation
     Animated.timing(fadeAnim, {
       toValue: 1,
       duration: 1500,
       useNativeDriver: true,
     }).start();
 
-    const timeout = setTimeout(() => {
+    const timeout = setTimeout(async () => {
+
+      // // FIX: reset system UI before applying black navbar
+      // await NavigationBar.setVisibilityAsync("visible");
+      // await NavigationBar.setBehaviorAsync("inset-swipe");
+      // await NavigationBar.setBackgroundColorAsync("#0D0E10");
+      // await NavigationBar.setButtonStyleAsync("light");
+
       navigation.replace("Home");
-    }, 4500);
+    }, 4000);
 
     return () => clearTimeout(timeout);
   }, []);
 
   return (
-    <View style={styles.container}>
-      <Animated.View style={[styles.full, { opacity: fadeAnim }]}>
-        <ImageBackground
-          source={require("../assets/images/stream4us/logo/stream4us_splash.png")}
-          style={{ width: screenWidth, height: screenHeight }}
-          resizeMode="cover"
-        />
-      </Animated.View>
+    <View style={{ flex: 1 }}>
+      <StatusBar hidden />
+      <ImageBackground
+        source={require("../assets/images/stream4us/logo/stream4us_splash.png")}
+        style={{ flex: 1 }}
+        resizeMode="cover"
+      />
     </View>
   );
 }
 
 const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    backgroundColor: "#000",
-  },
   full: {
-    ...StyleSheet.absoluteFillObject,
+    flex: 1,
+    justifyContent: "center",
   },
 });
