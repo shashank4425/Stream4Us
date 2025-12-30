@@ -1,7 +1,6 @@
-import NetInfo from "@react-native-community/netinfo";
-//import Slider from '@react-native-community/slider';
 import { FontAwesome } from "@expo/vector-icons";
 import { Slider } from "@miblanchard/react-native-slider";
+import NetInfo from "@react-native-community/netinfo";
 import * as NavigationBar from "expo-navigation-bar";
 import * as ScreenOrientation from "expo-screen-orientation";
 import throttle from "lodash.throttle";
@@ -10,7 +9,30 @@ import {
   ActivityIndicator,
   BackHandler,
   Dimensions,
-  NativeModules,
+  ScrollView // Added ScrollView for better Android compatibility
+  ,
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
   StatusBar,
   StyleSheet,
   Text,
@@ -20,16 +42,15 @@ import {
 } from "react-native";
 import MaterialIcon from "react-native-vector-icons/MaterialIcons";
 import Video from "react-native-video";
+
 const windowWidth = Dimensions.get("window").width;
-const windowHeight = Dimensions.get("window").height;
-const { ExpoPictureInPicture } = NativeModules;
+
 const MoviePlayer = ({ route }) => {
   const videoRef = useRef(null);
   const [isConnected, setIsConnected] = useState(true);
   const [isLoading, setIsLoading] = useState(true);
   const [videoLoaded, setVideoLoaded] = useState(false);
   const [buffering, setBuffering] = useState(true);
-
   const [isPlaying, setIsPlaying] = useState(false);
   const [islockScreen, setIsLockScreen] = useState(false);
   const [isSwitching, setIsSwitching] = useState(false);
@@ -42,129 +63,85 @@ const MoviePlayer = ({ route }) => {
   const [playbackRate, setPlaybackRate] = useState(1.0);
 
   const hideTimer = useRef(null);
+  const movieLink = route.params;
+  const videoSource = require(`../../assets/video/bhojpuri/kalamchaba-gaini.mp4`);
 
+  // --- ANDROID SYSTEM BAR INITIAL CONFIG ---
   useEffect(() => {
+    const setupAndroidBars = async () => {
+      // Prevents resizing when system bars appear
+      await NavigationBar.setBehaviorAsync("overlay-swipe");
+    };
+    setupAndroidBars();
+
     const unsub = NetInfo.addEventListener(state => {
       setIsConnected(state.isConnected);
-
-      if (!state.isConnected) {
-        setIsLoading(true); // Show loader if offline
-      }
+      if (!state.isConnected) setIsLoading(true);
     });
-
     return unsub;
   }, []);
 
-  // 🔥 Loader logic: Hide only when fully loaded AND not buffering
+  
   useEffect(() => {
-    if (videoLoaded && !buffering) {
-      setIsLoading(false);
-    } else {
-      setIsLoading(true);
-    }
+    const setupImmersiveMode = async () => {
+    // This stops the layout from resizing when bars appear
+    await NavigationBar.setBehaviorAsync("overlay-swipe");
+    // Makes the area behind the buttons transparent so video shows through
+    await NavigationBar.setBackgroundColorAsync("#00000000"); 
+  };
+  setupImmersiveMode();
+
+    setIsLoading(!(videoLoaded && !buffering));
   }, [videoLoaded, buffering]);
 
-  const movieLink = route.params;
-  const { videoLink } = route.params;
-  const videoSource = require(`../../assets/video/bhojpuri/kalamchaba-gaini.mp4`)// Require the video
+  const handlePlayPause = () => setIsPlaying(!isPlaying);
 
-  const handlePlayPause = () => {
-    setIsPlaying(!isPlaying);
-  };
-  const moveVideoBack = async () => {
+  const moveVideoBack = () => {
     const newTime = Math.max(currentTime - 10, 0);
     videoRef.current.seek(newTime);
-    setCurrentTime(newTime);
-  }
-  const moveVideoForward = async () => {
+  };
+
+  const moveVideoForward = () => {
     const newTime = Math.min(currentTime + 10, duration);
     videoRef.current.seek(newTime);
-    setCurrentTime(newTime);
-  }
+  };
+
   const throttledSeek = throttle((time) => {
-    if (videoRef.current) {
-      videoRef.current.seek(time, 0);  // accurate seek
-    }
+    if (videoRef.current) videoRef.current.seek(time, 0);
   }, 200);
+
+  const toggleScreen = async () => {
+  if (orientation === "portrait") {
+    await ScreenOrientation.lockAsync(ScreenOrientation.OrientationLock.LANDSCAPE);
+    setOrientation("landscape");
+    
+    // Set these IMMEDIATELY to prevent the resize jump
+    await NavigationBar.setBehaviorAsync("overlay-swipe");
+    await NavigationBar.setVisibilityAsync("hidden");
+    StatusBar.setHidden(true);
+  } else {
+    await ScreenOrientation.lockAsync(ScreenOrientation.OrientationLock.PORTRAIT_UP);
+    setOrientation("portrait");
+    
+    await NavigationBar.setVisibilityAsync("visible");
+    await NavigationBar.setBehaviorAsync("inset-swipe"); // Standard for portrait
+    StatusBar.setHidden(false);
+  }
+};
+
   useEffect(() => {
     const backHandle = BackHandler.addEventListener("hardwareBackPress", () => {
       if (orientation === "landscape") {
-
-        setIsSwitching(true);     // ⬅️ HIDE CONTENT
-
-        ScreenOrientation.unlockAsync();
-        ScreenOrientation.lockAsync(ScreenOrientation.OrientationLock.PORTRAIT_UP);
-
-        setOrientation("portrait");
-
-        setTimeout(async () => {
-          await NavigationBar.setVisibilityAsync("visible");
-          await NavigationBar.setBehaviorAsync("inset-swipe");
-          StatusBar.setHidden(false);
-
-          setIsSwitching(false);  // ⬅️ SHOW CONTENT AGAIN (after animation)
-        }, 250);                  // 200–300ms works best
-
+        toggleScreen();
         return true;
       }
       return false;
     });
-
     return () => backHandle.remove();
   }, [orientation]);
 
-
-  const formatTime = (t) => {
-    const m = Math.floor(t / 60);
-    const s = Math.floor(t % 60);
-    return `${m}:${s < 10 ? "0" : ""}${s}`;
-  };
-
-  const toggleScreen = async () => {
-    if (orientation === "portrait") {
-      await ScreenOrientation.lockAsync(ScreenOrientation.OrientationLock.LANDSCAPE);
-      setOrientation("landscape");
-      setIsSwitching(true);
-      // Force layout refresh
-      setTimeout(async () => {
-        await NavigationBar.setVisibilityAsync("hidden");
-        await NavigationBar.setBehaviorAsync("overlay-swipe");
-        StatusBar.setHidden(true);
-      }, 200);
-    } else {
-      await ScreenOrientation.lockAsync(ScreenOrientation.OrientationLock.PORTRAIT_UP);
-      setOrientation("portrait");
-      setIsSwitching(false);
-      NavigationBar.setVisibilityAsync("visible");
-      await NavigationBar.setBehaviorAsync("inset-swipe");
-      StatusBar.setHidden(false);
-
-    }
-  };
-
-  useEffect(() => {
-    setTimeout(() => {
-      setControlsVisible(false);
-    }, 4000);
-  }, []);
-
-  const lockScreen = async () => {
-    if (islockScreen == false) {
-      setControlsVisible(false);
-      setIsLockScreen(true)
-    } else {
-      setIsLockScreen(false);
-      setControlsVisible(true);
-    }
-  }
-
   const startHideTimer = () => {
-    // Clear previous timer
-    if (hideTimer.current) {
-      clearTimeout(hideTimer.current);
-    }
-
-    // Hide after 4 seconds
+    if (hideTimer.current) clearTimeout(hideTimer.current);
     hideTimer.current = setTimeout(() => {
       setControlsVisible(false);
       setSpeedMenuVisible(false);
@@ -172,29 +149,38 @@ const MoviePlayer = ({ route }) => {
   };
 
   const onVideoPress = () => {
-    if (controlsVisible) {
-      setControlsVisible(false);
-    } else {
-      setControlsVisible(true);
-    }
-    startHideTimer();
+    setControlsVisible(!controlsVisible);
+    if (!controlsVisible) startHideTimer();
   };
-  const selectSpeed = (speed) => {
-    setPlaybackRate(speed);
-    setSpeedMenuVisible(false);
 
+  const formatTime = (t) => {
+    const m = Math.floor(t / 60);
+    const s = Math.floor(t % 60);
+    return `${m}:${s < 10 ? "0" : ""}${s}`;
   };
-const videoStyle = orientation === "portrait" 
-  ? { marginTop: 35, width: "100%", height: 200 } 
-  : { width: "100%", height: "100%", backgroundColor: 'black' };
 
-return (
+  const lockScreen = () => {
+    setIsLockScreen(!islockScreen);
+    setControlsVisible(islockScreen);
+  };
+
+  const videoStyle = orientation === "portrait"
+    ? { marginTop: 35, width: "100%", height: 200 }
+    : { width: "100%", height: "100%", backgroundColor: 'black' };
+
+  return (
     <>
-      <View style={{ flex: 1, backgroundColor: '#0D0E10' }}> 
-        <StatusBar hidden={orientation === "landscape"} />
-        
-        {/* VIDEO CONTAINER: This needs to constrain the absolute children */}
-        <View style={orientation === "portrait" ? { height: 235 } : { flex: 1 }}>
+      <View style={{ flex: 1, backgroundColor: '#0D0E10' }}>
+        {/* FIX 1: Add translucent={true}. This tells Android to draw the app 
+          behind the status bar area, preventing a layout jump when the bar hides. */}
+        <StatusBar
+          translucent={true}
+          backgroundColor="transparent"
+          hidden={orientation === "landscape"}
+        />
+
+        {/* VIDEO CONTAINER */}
+        <View style={orientation === "portrait" ? { height: 235 } : { flex: 1, backgroundColor: 'black' }}>
           <Video
             ref={videoRef}
             source={videoSource}
@@ -208,14 +194,18 @@ return (
             }}
             onBuffer={({ isBuffering }) => setBuffering(isBuffering)}
             rate={playbackRate}
-            onProgress={(data) => setCurrentTime(data.currentTime)}
+            // FIX 2: Only update currentTime if not seeking to prevent slider "fighting"
+            onProgress={(data) => {
+              if (!isSeeking) setCurrentTime(data.currentTime);
+            }}
             onEnd={() => videoRef.current.seek(0)}
+            // FIX 3: Use 'contain' in landscape to ensure the video isn't cut off by notches
             resizeMode="cover"
             repeat={true}
             style={videoStyle}
           />
 
-          {/* TOUCHABLE OVERLAY: Full screen area to toggle controls */}
+          {/* TOUCHABLE OVERLAY */}
           <TouchableWithoutFeedback onPress={onVideoPress}>
             <View style={StyleSheet.absoluteFill} />
           </TouchableWithoutFeedback>
@@ -229,23 +219,40 @@ return (
           {/* LANDSCAPE HEADER */}
           {controlsVisible && orientation === "landscape" && (
             <View style={styles.lsTopVideoContainer}>
-            <View style={styles.screenLockUnlock}>
-              <Text style={styles.centerText} numberOfLines={1}>
-                <TouchableOpacity style={{ marginTop: 12, paddingRight: 20 }} activeOpacity={1} onPress={toggleScreen}>
-                  <FontAwesome name="angle-left" size={24} color="#fff" />
-                </TouchableOpacity>
-                {movieLink.seo.page}
-              </Text>
-              <TouchableOpacity onPress={lockScreen}>
-                <MaterialIcon name={islockScreen ? "lock" : "lock-open"} size={36} color="white" />
+              <View style={styles.screenLockUnlock}>
+               {!islockScreen && (<TouchableOpacity
+                style={{ padding: 15, zIndex: 20 }}
+                onPress={toggleScreen}
+              >
+                <FontAwesome name="angle-left" size={30} color="#fff" />
+              </TouchableOpacity>)}
+
+              {/* Movie Title - Flex 1 makes it take available space */}
+              <View style={{ flex: 1, justifyContent: 'center' }}>
+                <Text style={styles.lsTitleText} numberOfLines={1}>
+                  {movieLink.seo.page}
+                </Text>
+              </View>
+
+              {/* Lock Icon - Now on the right side */}
+              <TouchableOpacity
+                style={{ padding: 15, zIndex: 20 }}
+                onPress={lockScreen}
+              >
+                <MaterialIcon
+                  name={islockScreen ? "lock" : "lock-open"}
+                  size={30}
+                  color="white"
+                />
               </TouchableOpacity>
             </View>
             </View>
           )}
 
+
           {/* MAIN CONTROLS */}
           {isConnected && !islockScreen && controlsVisible && (
-            <View style={styles.controlsOverlay}>
+            <View style={styles.controlsOverlay} pointerEvents="box-none">
               <View style={orientation === "portrait" ? styles.potraitControle : styles.lsControle}>
                 {!isLoading && (
                   <TouchableOpacity onPress={moveVideoBack}>
@@ -269,7 +276,7 @@ return (
                 <Text style={styles.lsDurationTxt}>
                   {formatTime(currentTime)} / {formatTime(duration)}
                 </Text>
-                
+
                 <View style={{ flexDirection: 'row', alignItems: 'center' }}>
                   {orientation === "landscape" && (
                     <TouchableOpacity onPress={() => setSpeedMenuVisible(!speedMenuVisible)} style={{ marginRight: 15 }}>
@@ -292,41 +299,35 @@ return (
                   maximumTrackTintColor="#b6b3b3ff"
                   thumbTintColor="#b41313ff"
                   onSlidingStart={() => setIsSeeking(true)}
-                  onValueChange={(val) => { setCurrentTime(val[0]); throttledSeek(val[0]); }}
-                  onSlidingComplete={(val) => { setIsSeeking(false); videoRef.current.seek(val[0]); }}
+                  onValueChange={(val) => {
+                    setCurrentTime(val[0]);
+                    throttledSeek(val[0]);
+                  }}
+                  onSlidingComplete={(val) => {
+                    setIsSeeking(false);
+                    videoRef.current.seek(val[0]);
+                  }}
                 />
               </View>
             </View>
           )}
         </View>
-{speedMenuVisible && (
-          <View
-            style={{
-              position: "absolute",
-              bottom: 80,
-              right: 25,
-              backgroundColor: "rgba(0,0,0,0.85)",
-              paddingVertical: 8,
-              paddingHorizontal: 12,
-              borderRadius: 12,
-              width: 75
-            }}
-          >
+
+        {/* SPEED MENU POPUP */}
+        {speedMenuVisible && (
+          <View style={styles.speedMenuPopup}>
             {[1, 1.25, 1.5, 1.75, 2].map((rate) => (
               <TouchableOpacity
                 key={rate}
-                onPress={() => selectSpeed(rate)}
-                style={{
-                  paddingVertical: 6,
-                }}
+                onPress={() => setPlaybackRate(rate)}
+                style={{ paddingVertical: 8 }}
               >
-                <Text
-                  style={{
-                    color: playbackRate === rate ? "yellow" : "white",
-                    fontSize: 16,
-                    textAlign: "center"
-                  }}
-                >
+                <Text style={{
+                  color: playbackRate === rate ? "yellow" : "white",
+                  fontSize: 16,
+                  textAlign: "center",
+                  fontWeight: 'bold'
+                }}>
                   {rate}x
                 </Text>
               </TouchableOpacity>
@@ -334,148 +335,131 @@ return (
           </View>
         )}
 
-        {/* DESCRIPTION AREA: Move this outside the relative container */}
+        {/* DESCRIPTION AREA */}
+        {/* FIX 4: Wrap in ScrollView. In portrait, if the navigation bar appears, 
+          the ScrollView ensures the text is still reachable and doesn't "cut off" */}
         {orientation === "portrait" && !isSwitching && (
-          <View style={styles.container}>
-            <View style={styles.contentMain}>
-              <Text style={styles.mtitle}>{movieLink.seo.page}</Text>
-              <Text style={styles.mline}>{movieLink.line2}</Text>
-              <Text style={styles.contentDes}>{movieLink.seo.description}</Text>
+          <ScrollView style={{ flex: 1 }}>
+            <View style={styles.container}>
+              <View style={styles.contentMain}>
+                <Text style={styles.mtitle}>{movieLink.seo.page}</Text>
+                <Text style={styles.mline}>{movieLink.line2}</Text>
+                <Text style={styles.contentDes}>{movieLink.seo.description}</Text>
+              </View>
             </View>
-          </View>
+          </ScrollView>
         )}
       </View>
-    </>  
-  )
+    </>
+  );
+
 };
 
-
 const styles = StyleSheet.create({
-  
   controlsOverlay: {
-    ...StyleSheet.absoluteFillObject, // Key: This makes it overlay the video
-    // Optional: slight dim when controls appear
+    ...StyleSheet.absoluteFillObject,
+    backgroundColor: 'rgba(0,0,0,0.2)',
     justifyContent: "center",
+    zIndex: 10,
   },
   potraitControle: {
     flexDirection: "row",
     alignItems: "center",
     justifyContent: "space-evenly",
     width: "100%",
-    marginTop: 35, // Match your video marginTop
-    height: 200,   // Match your video height
+    height: 200,
+  },
+  lsControle: {
+    flexDirection: "row",
+    justifyContent: "center",
+    alignItems: "center",
+    gap: 100, // Keeps icons spread out in landscape
   },
   bottomController: {
     position: "absolute",
-    bottom: 10, 
+    bottom: 15,
     left: 15,
     right: 15,
     flexDirection: "row",
     justifyContent: "space-between",
     alignItems: "center",
   },
-  sliderController: {
-    position: "absolute",
-    bottom: -20, // Aligns slider at the very bottom of the video
-    left: 10,
-    right: 10,
-  },
-
-  lsControle: {
-    position: "absolute",
-    left: 30,
-    right: 30,
-    flexDirection: "row",
-    justifyContent: "space-between",
-    alignItems: "center",
-  },
-
   lsbottomController: {
     position: "absolute",
     bottom: 50,
-    left: 30,
-    right:30,
+    left: 40,
+    right: 40,
     flexDirection: "row",
     justifyContent: "space-between",
     alignItems: "center",
   },
-
-  potraitDurationTxt: {
-    backgroundColor: "rgba(0,0,0,0.4)",
-    width: "auto",
-    color: "white",
-    textAlign: "center",
-    padding: 5,
-    borderRadius: 12,
-    fontSize: 14,
+  sliderController: {
+    position: "absolute",
+    bottom: -20,
+    left: 10,
+    right: 10,
   },
-  lsDurationTxt: {
-    backgroundColor: "rgba(0,0,0,0.4)",
-    width: "auto",
-    color: "white",
-    textAlign: "center",
-    padding: 5,
-    borderRadius: 12,
-    fontSize: 14,
-  },
-
   lsSliderController: {
     position: "absolute",
-    bottom: 20,
-    left: 30,
-    right: 30,
+    bottom: 10,
+    left: 40,
+    right: 40,
   },
 
-lsTopVideoContainer:{
-    left:0,
-    right:0,
-    height:60,
-    position:"absolute",
-     backgroundColor: 'rgba(0,0,0,0.3)'
+  lsTopVideoContainer: {
+    position: "absolute",
+    top: 0,
+    left: 0,
+    right: 0,
+    height: 70, // Increased height for better touch area
+    flexDirection: 'row',
+    alignItems: 'center',
+    backgroundColor: 'rgba(0,0,0,0.5)', // Darker overlay for text visibility
+    paddingHorizontal: 10,
+    zIndex: 50,
   },
-screenLockUnlock: {
+
+  screenLockUnlock: {
     flexDirection: "row",
     alignItems: "center",
     justifyContent: "flex-end",   // icon goes to right end
     paddingHorizontal: 10,
     left: 30,
     right: 30,
-    top: 20,
     position: "absolute",         // needed for absolute center text
   },
 
-  centerText: {
-    position: "absolute",
-    left: 0,
-    right: 0,
-    textAlign: "left",
-    fontSize: 22,
-    fontWeight: 700,
+  lsTitleText: {
     color: "#FFFFFF",
+    fontSize: 18,
+    fontWeight: "700",
+    textAlign: 'center',
+    paddingHorizontal: 10,
   },
 
-  potraitFullscreen: {
-    justifyContent: "flex-end",
-    position: "relative"
-  },
-  lsFullscreen: {
-    end: "auto"
-  },
-
-  fsRotate: {
-    fontSize: 36,
-    fontWeight: "100",
-  },
-  brightnesSlider: {
-    top: "48%",
-    position: "relative",
-    width: 100,
-    flexDirection: "row",
-    transform: [{ rotate: '-90deg' }],
+  speedMenuPopup: {
+    position: "absolute",
+    // In landscape, we want it higher up so it doesn't block the slider
+    bottom: 100,
+    right: 40,
+    backgroundColor: "rgba(0,0,0,0.9)",
+    borderRadius: 12,
+    width: 80,
+    borderWidth: 1,
+    borderColor: 'rgba(255,255,255,0.2)',
+    zIndex: 100, // Important for Android
+    elevation: 10,
   },
 
+
+  centerText: {
+    flex: 1,
+    fontSize: 18,
+    fontWeight: "700",
+    color: "#FFFFFF",
+    textAlign: 'center'
+  },
   container: {
-    height: windowHeight,
     width: windowWidth,
     padding: 20,
   },
@@ -483,22 +467,11 @@ screenLockUnlock: {
     textAlign: "center",
     justifyContent: "space-between",
   },
-  mtitle: {
-    color: "#FFF",
-    fontWeight: "700",
-    fontSize: 18
-  },
-  mline: {
-    color: "#dcdcdc",
-    fontWeight: "700",
-    fontSize: 13,
-    paddingVertical: 10
-  },
-  contentDes: {
-    color: "#dcdcdc",
-    fontWeight: "700",
-    fontSize: 10
-  },
+  mtitle: { color: "#FFF", fontWeight: "700", fontSize: 18 },
+  mline: { color: "#dcdcdc", fontSize: 13, paddingVertical: 10 },
+  contentDes: { color: "#dcdcdc", fontSize: 12, lineHeight: 18 },
+  lsDurationTxt: { color: "white", backgroundColor: "rgba(0,0,0,0.5)", padding: 4, borderRadius: 5 }
 });
 
 export default MoviePlayer;
+
