@@ -9,31 +9,7 @@ import {
   ActivityIndicator,
   BackHandler,
   Dimensions,
-  ScrollView // Added ScrollView for better Android compatibility
-  ,
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+  ScrollView,
   StatusBar,
   StyleSheet,
   Text,
