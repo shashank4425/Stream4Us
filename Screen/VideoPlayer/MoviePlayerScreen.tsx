@@ -33,6 +33,7 @@ import {
 
 
 
+
   StatusBar,
   StyleSheet,
   Text,
@@ -387,8 +388,8 @@ const styles = StyleSheet.create({
   lsbottomController: {
     position: "absolute",
     bottom: 50,
-    left: 40,
-    right: 40,
+    left: 50,
+    right: 50,
     flexDirection: "row",
     justifyContent: "space-between",
     alignItems: "center",
@@ -402,8 +403,8 @@ const styles = StyleSheet.create({
   lsSliderController: {
     position: "absolute",
     bottom: 10,
-    left: 40,
-    right: 40,
+    left: 50,
+    right: 50,
   },
 
   lsTopVideoContainer: {
@@ -424,8 +425,8 @@ const styles = StyleSheet.create({
     alignItems: "center",
     justifyContent: "flex-end",   // icon goes to right end
     paddingHorizontal: 10,
-    left: 30,
-    right: 30,
+    left: 50,
+    right: 50,
     position: "absolute",         // needed for absolute center text
   },
 
@@ -474,4 +475,3 @@ const styles = StyleSheet.create({
 });
 
 export default MoviePlayer;
-
