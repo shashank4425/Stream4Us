@@ -7,7 +7,9 @@ import RomanticMovies from "@/Screen/movies/RemanceMovies/RomanticMovies";
 import SouthDubbedMovies from "@/Screen/movies/SouthMovies/SouthDubbedMoviesScreen";
 import MoviePlayer from "@/Screen/VideoPlayer/MoviePlayerScreen";
 import { createStackNavigator } from '@react-navigation/stack';
-import React from "react";
+import React, { useEffect } from "react";
+import SystemNavigationBar from "react-native-system-navigation-bar";
+
 import { Dimensions, StatusBar, StyleSheet } from "react-native";
 import SplashScreen from "./SplashScreen";
 
@@ -16,7 +18,14 @@ const windowWidth = Dimensions.get('window').width;
 const windowHeight = Dimensions.get('window').height;
 export default function AppNavigatorScreen({route}){
  
+ useEffect(() => {
+    // Show nav bar
+    SystemNavigationBar.navigationShow();
 
+    // Set background color
+    SystemNavigationBar.setNavigationColor("#0D0E10", "light");
+
+  }, []);
   return (
     <>
     <StatusBar translucent backgroundColor="transparent" barStyle="light-content"/>        
