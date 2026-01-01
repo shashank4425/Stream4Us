@@ -61,10 +61,8 @@ const MoviePlayer = ({ route }) => {
   
   useEffect(() => {
     const setupImmersiveMode = async () => {
-    // This stops the layout from resizing when bars appear
     await NavigationBar.setBehaviorAsync("overlay-swipe");
-    // Makes the area behind the buttons transparent so video shows through
-    await NavigationBar.setBackgroundColorAsync("#00000000"); 
+    await NavigationBar.setBackgroundColorAsync("#0D0E10"); 
   };
   setupImmersiveMode();
 
@@ -141,23 +139,19 @@ const MoviePlayer = ({ route }) => {
     setControlsVisible(islockScreen);
   };
 
-  const videoStyle = orientation === "portrait"
-    ? { marginTop: 35, width: "100%", height: 200 }
-    : { width: "100%", height: "100%", backgroundColor: 'black' };
+  const videoStyle = StyleSheet.absoluteFillObject;
 
   return (
     <>
       <View style={{ flex: 1, backgroundColor: '#0D0E10' }}>
-        {/* FIX 1: Add translucent={true}. This tells Android to draw the app 
-          behind the status bar area, preventing a layout jump when the bar hides. */}
         <StatusBar
           translucent={true}
           backgroundColor="transparent"
           hidden={orientation === "landscape"}
         />
 
-        {/* VIDEO CONTAINER */}
-        <View style={orientation === "portrait" ? { height: 235 } : { flex: 1, backgroundColor: 'black' }}>
+        <View style={orientation === "portrait" ? {marginTop: StatusBar.currentHeight, height: 200 } 
+          : { ...StyleSheet.absoluteFillObject, backgroundColor:"#0D0E10", zIndex: 1}}> 
           <Video
             ref={videoRef}
             source={videoSource}
@@ -198,14 +192,14 @@ const MoviePlayer = ({ route }) => {
             <View style={styles.lsTopVideoContainer}>
               <View style={styles.screenLockUnlock}>
                {!islockScreen && (<TouchableOpacity
-                style={{ padding: 15, zIndex: 20 }}
+                style={{ paddingRight: 15, zIndex: 20 }}
                 onPress={toggleScreen}
               >
                 <FontAwesome name="angle-left" size={30} color="#fff" />
               </TouchableOpacity>)}
 
               {/* Movie Title - Flex 1 makes it take available space */}
-              <View style={{ flex: 1, justifyContent: 'center' }}>
+              <View style={{ flex: 1, justifyContent: "flex-start", alignItems:"flex-start" }}>
                 <Text style={styles.lsTitleText} numberOfLines={1}>
                   {movieLink.seo.page}
                 </Text>
@@ -213,7 +207,7 @@ const MoviePlayer = ({ route }) => {
 
               {/* Lock Icon - Now on the right side */}
               <TouchableOpacity
-                style={{ padding: 15, zIndex: 20 }}
+                style={{ padding: 0, zIndex: 20 }}
                 onPress={lockScreen}
               >
                 <MaterialIcon

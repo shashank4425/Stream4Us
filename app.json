@@ -19,11 +19,6 @@
         "monochromeImage": "./assets/images/stream4us/logo/stream4us_logo.png"
       },
       "edgeToEdgeEnabled": true,
-      "androidNavigationBar": {
-        "visible": "always",
-        "barStyle": "light-content",
-        "backgroundColor": "#0D0E10"
-      },
       "predictiveBackGestureEnabled": false,
       "package": "com.shashank4425.Stream4Us"
     },

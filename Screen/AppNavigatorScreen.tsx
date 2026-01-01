@@ -22,7 +22,6 @@ export default function AppNavigatorScreen({route}){
     // Show nav bar
     SystemNavigationBar.navigationShow();
 
-    // Set background color
     SystemNavigationBar.setNavigationColor("#0D0E10", "light");
 
   }, []);
