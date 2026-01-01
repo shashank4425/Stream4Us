@@ -9,6 +9,7 @@ import {
   ActivityIndicator,
   BackHandler,
   Dimensions,
+  Platform,
   ScrollView,
   StatusBar,
   StyleSheet,
@@ -46,8 +47,15 @@ const MoviePlayer = ({ route }) => {
   // --- ANDROID SYSTEM BAR INITIAL CONFIG ---
   useEffect(() => {
     const setupAndroidBars = async () => {
-      // Prevents resizing when system bars appear
-      await NavigationBar.setBehaviorAsync("overlay-swipe");
+      if(Platform.OS == "android"){
+        try{
+        await NavigationBar.setPositionAsync("absolute");
+        await NavigationBar.setBehaviorAsync("overlay-swipe");
+        await NavigationBar.setBackgroundColorAsync("#0D0E10");
+      } catch(e){
+          console.log("edge to edge enabled");
+      }
+     }
     };
     setupAndroidBars();
 
@@ -60,12 +68,6 @@ const MoviePlayer = ({ route }) => {
 
   
   useEffect(() => {
-    const setupImmersiveMode = async () => {
-    await NavigationBar.setBehaviorAsync("overlay-swipe");
-    await NavigationBar.setBackgroundColorAsync("#0D0E10"); 
-  };
-  setupImmersiveMode();
-
     setIsLoading(!(videoLoaded && !buffering));
   }, [videoLoaded, buffering]);
 
@@ -87,20 +89,18 @@ const MoviePlayer = ({ route }) => {
 
   const toggleScreen = async () => {
   if (orientation === "portrait") {
+    StatusBar.setHidden(true);
     await ScreenOrientation.lockAsync(ScreenOrientation.OrientationLock.LANDSCAPE);
     setOrientation("landscape");
-    
-    // Set these IMMEDIATELY to prevent the resize jump
-    await NavigationBar.setBehaviorAsync("overlay-swipe");
     await NavigationBar.setVisibilityAsync("hidden");
-    StatusBar.setHidden(true);
+    await NavigationBar.setBehaviorAsync("overlay-swipe");
   } else {
-    await ScreenOrientation.lockAsync(ScreenOrientation.OrientationLock.PORTRAIT_UP);
-    setOrientation("portrait");
-    
+    StatusBar.setHidden(false);
+    setOrientation("portrait");    
     await NavigationBar.setVisibilityAsync("visible");
     await NavigationBar.setBehaviorAsync("inset-swipe"); // Standard for portrait
-    StatusBar.setHidden(false);
+    await ScreenOrientation.lockAsync(ScreenOrientation.OrientationLock.PORTRAIT_UP);
+
   }
 };
 
@@ -363,6 +363,7 @@ const styles = StyleSheet.create({
     flexDirection: "row",
     justifyContent: "space-between",
     alignItems: "center",
+    zIndex: 100
   },
   sliderController: {
     position: "absolute",
@@ -387,7 +388,7 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     backgroundColor: 'rgba(0,0,0,0.5)', // Darker overlay for text visibility
     paddingHorizontal: 10,
-    zIndex: 50,
+    zIndex: 100,
   },
 
   screenLockUnlock: {

@@ -21,13 +21,13 @@ export default function AppNavigatorScreen({route}){
  useEffect(() => {
     // Show nav bar
     SystemNavigationBar.navigationShow();
+    SystemNavigationBar.setNavigationColor("#0D0E10", "dark");
 
-    SystemNavigationBar.setNavigationColor("#0D0E10", "light");
-
+    SystemNavigationBar.setNavigationBarContrastEnforced(false);
   }, []);
   return (
     <>
-    <StatusBar translucent backgroundColor="transparent" barStyle="light-content"/>        
+    <StatusBar translucent backgroundColor="#0D0E10" barStyle="light-content"/>        
      <Stack.Navigator initialRouteName="SplashScreen" screenOptions={{
         cardStyle: {
           backgroundColor:"#0D0E10",
