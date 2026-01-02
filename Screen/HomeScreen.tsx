@@ -3,14 +3,15 @@ import BannerPreLoaderScreen from "@/components/splash/BannerPreLoaderScreen";
 import { FontAwesome } from "@expo/vector-icons";
 import { useFocusEffect } from "@react-navigation/native";
 import Constants from "expo-constants";
-
 import React, { useEffect, useState } from "react";
 import { Animated, BackHandler, Dimensions, FlatList, Image, StatusBar, StyleSheet, Text, TouchableOpacity, View } from "react-native";
+import { useSafeAreaInsets } from "react-native-safe-area-context";
 
 const windowWidth = Dimensions.get('window').width;
 const windowHeight = Dimensions.get('window').height;
 
 export default function Home({ navigation }) {
+    const insets = useSafeAreaInsets();
     const [data, setData] = useState([]);
     const [loading, setLoading] = useState(true);
     useEffect(() => {
@@ -62,7 +63,8 @@ export default function Home({ navigation }) {
         extrapolate: "clamp",
     });
     return (
-         <View style={Styles.screenContainer}>
+         <View style={{
+          flex: 1, backgroundColor: "#0D0E10"}}>
             <Animated.View
                 style={{
                     height: STATUS_BAR_HEIGHT,
