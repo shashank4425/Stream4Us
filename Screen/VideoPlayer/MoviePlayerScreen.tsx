@@ -16,11 +16,11 @@ import {
   Text,
   TouchableOpacity,
   TouchableWithoutFeedback,
-  View
+  View,
+  useWindowDimensions
 } from "react-native";
 import MaterialIcon from "react-native-vector-icons/MaterialIcons";
 import Video from "react-native-video";
-
 const windowWidth = Dimensions.get("window").width;
 
 const MoviePlayer = ({ route }) => {
@@ -44,7 +44,7 @@ const MoviePlayer = ({ route }) => {
   const movieLink = route.params;
   const videoSource = require(`../../assets/video/bhojpuri/kalamchaba-gaini.mp4`);
 
-  const { width: SCREEN_WIDTH, height: SCREEN_HEIGHT } =
+  const { width, height } = useWindowDimensions();
   Dimensions.get("screen");
   // --- ANDROID SYSTEM BAR INITIAL CONFIG ---
   useEffect(() => {
@@ -98,7 +98,7 @@ const MoviePlayer = ({ route }) => {
     setOrientation("landscape");
     StatusBar.setHidden(true);
     await NavigationBar.setVisibilityAsync("hidden");
-    await NavigationBar.setBehaviorAsync("inset-swipe");
+    await NavigationBar.setBehaviorAsync("overlay-swipe");
   } else {
     await ScreenOrientation.lockAsync(
       ScreenOrientation.OrientationLock.PORTRAIT_UP
@@ -157,7 +157,7 @@ const MoviePlayer = ({ route }) => {
         />
 
         <View style={ orientation === "landscape" ? 
-          {width: SCREEN_WIDTH, height: SCREEN_HEIGHT, backgroundColor: "#000"} 
+          {flex: 1, backgroundColor: "#0D0E10"} 
           : {marginTop: StatusBar.currentHeight, height: 200,width: "100%",backgroundColor: "#0D0E10"}}> 
           <Video
             ref={videoRef}
@@ -178,19 +178,9 @@ const MoviePlayer = ({ route }) => {
             }}
             onEnd={() => videoRef.current.seek(0)}
             // FIX 3: Use 'contain' in landscape to ensure the video isn't cut off by notches
-            resizeMode="cover"
+            resizeMode="contain"
             repeat={true}
-            style={
-              orientation === "landscape"
-                ? {
-                    width: SCREEN_WIDTH,
-                    height: SCREEN_HEIGHT,
-                  }
-                : {
-                    width: "100%",
-                    height: "100%",
-                  }
-            }
+            style={StyleSheet.absoluteFill}
           />
 
           {/* TOUCHABLE OVERLAY */}
