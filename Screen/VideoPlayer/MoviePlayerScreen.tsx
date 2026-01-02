@@ -44,6 +44,8 @@ const MoviePlayer = ({ route }) => {
   const movieLink = route.params;
   const videoSource = require(`../../assets/video/bhojpuri/kalamchaba-gaini.mp4`);
 
+  const { width: SCREEN_WIDTH, height: SCREEN_HEIGHT } =
+  Dimensions.get("screen");
   // --- ANDROID SYSTEM BAR INITIAL CONFIG ---
   useEffect(() => {
     const setupAndroidBars = async () => {
@@ -89,18 +91,22 @@ const MoviePlayer = ({ route }) => {
 
   const toggleScreen = async () => {
   if (orientation === "portrait") {
-    StatusBar.setHidden(true);
-    await ScreenOrientation.lockAsync(ScreenOrientation.OrientationLock.LANDSCAPE);
+    
+    await ScreenOrientation.lockAsync(
+      ScreenOrientation.OrientationLock.LANDSCAPE
+    );
     setOrientation("landscape");
+    StatusBar.setHidden(true);
     await NavigationBar.setVisibilityAsync("hidden");
-    await NavigationBar.setBehaviorAsync("overlay-swipe");
+    await NavigationBar.setBehaviorAsync("inset-swipe");
   } else {
+    await ScreenOrientation.lockAsync(
+      ScreenOrientation.OrientationLock.PORTRAIT_UP
+    );
+    setOrientation("portrait");
     StatusBar.setHidden(false);
-    setOrientation("portrait");    
     await NavigationBar.setVisibilityAsync("visible");
-    await NavigationBar.setBehaviorAsync("inset-swipe"); // Standard for portrait
-    await ScreenOrientation.lockAsync(ScreenOrientation.OrientationLock.PORTRAIT_UP);
-
+    await NavigationBar.setBehaviorAsync("inset-swipe");
   }
 };
 
@@ -150,8 +156,9 @@ const MoviePlayer = ({ route }) => {
           hidden={orientation === "landscape"}
         />
 
-        <View style={orientation === "portrait" ? {marginTop: StatusBar.currentHeight, height: 200 } 
-          : { ...StyleSheet.absoluteFillObject, backgroundColor:"#0D0E10", zIndex: 1}}> 
+        <View style={ orientation === "landscape" ? 
+          {width: SCREEN_WIDTH, height: SCREEN_HEIGHT, backgroundColor: "#000"} 
+          : {marginTop: StatusBar.currentHeight, height: 200,width: "100%",backgroundColor: "#0D0E10"}}> 
           <Video
             ref={videoRef}
             source={videoSource}
@@ -173,7 +180,17 @@ const MoviePlayer = ({ route }) => {
             // FIX 3: Use 'contain' in landscape to ensure the video isn't cut off by notches
             resizeMode="cover"
             repeat={true}
-            style={videoStyle}
+            style={
+              orientation === "landscape"
+                ? {
+                    width: SCREEN_WIDTH,
+                    height: SCREEN_HEIGHT,
+                  }
+                : {
+                    width: "100%",
+                    height: "100%",
+                  }
+            }
           />
 
           {/* TOUCHABLE OVERLAY */}

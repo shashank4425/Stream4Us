@@ -3,10 +3,11 @@ import PreLoaderScreen from "@/components/splash/PreLoaderScreen";
 import { createStackNavigator } from '@react-navigation/stack';
 import { useEffect, useLayoutEffect, useState } from "react";
 import { Image, ScrollView, StyleSheet, TouchableOpacity, View } from "react-native";
-
+import { useSafeAreaInsets } from "react-native-safe-area-context";
 const Stack = createStackNavigator();
 
 export default function HorrorMovies({ navigation, route }) {
+  const insets = useSafeAreaInsets();
   const [data, setData] = useState([]);
   const [loading, setLoading] = useState(true);
   useEffect(() => {
