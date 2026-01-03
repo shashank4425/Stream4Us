@@ -2,8 +2,8 @@
   "expo": {
     "name": "Stream4Us",
     "slug": "Stream4Us",
-    "version": "1.1.4",
-    "orientation": "DEFAULT",
+    "version": "1.1.5",
+    "orientation": "portrait",
     "icon": "./assets/images/stream4us/logo/stream4us_logo.png",
     "scheme": "com.example.streamus",
     "userInterfaceStyle": "automatic",
@@ -29,13 +29,6 @@
     "plugins": [
       "expo-router",
       [
-      "expo-navigation-bar",
-       {
-        "behavior":"overlay-swipe",
-        "visibility": "hidden"
-       }
-      ],
-      [
         "expo-splash-screen",
         {
           "image": "./assets/images/stream4us/logo/splash.png",
@@ -44,12 +37,6 @@
           "dark": {
             "backgroundColor": "#0D0E10"
           }
-        }
-      ],
-      [
-        "expo-screen-orientation",
-        {
-          "initialOrientation": "DEFAULT"
         }
       ]
     ],
