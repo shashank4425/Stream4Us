@@ -16,11 +16,11 @@ import {
   Text,
   TouchableOpacity,
   TouchableWithoutFeedback,
-  View
+  View,
+  useWindowDimensions
 } from "react-native";
 import MaterialIcon from "react-native-vector-icons/MaterialIcons";
 import Video from "react-native-video";
-
 const windowWidth = Dimensions.get("window").width;
 
 const MoviePlayer = ({ route }) => {
@@ -44,20 +44,20 @@ const MoviePlayer = ({ route }) => {
   const movieLink = route.params;
   const videoSource = require(`../../assets/video/bhojpuri/kalamchaba-gaini.mp4`);
 
-  const { width: SCREEN_WIDTH, height: SCREEN_HEIGHT } =
+  const { width, height } = useWindowDimensions();
   Dimensions.get("screen");
   // --- ANDROID SYSTEM BAR INITIAL CONFIG ---
   useEffect(() => {
     const setupAndroidBars = async () => {
-      if(Platform.OS == "android"){
-        try{
-        await NavigationBar.setPositionAsync("absolute");
-        await NavigationBar.setBehaviorAsync("overlay-swipe");
-        await NavigationBar.setBackgroundColorAsync("#0D0E10");
-      } catch(e){
+      if (Platform.OS == "android") {
+        try {
+          await NavigationBar.setPositionAsync("absolute");
+          await NavigationBar.setBehaviorAsync("overlay-swipe");
+          await NavigationBar.setBackgroundColorAsync("#0D0E10");
+        } catch (e) {
           console.log("edge to edge enabled");
+        }
       }
-     }
     };
     setupAndroidBars();
 
@@ -68,7 +68,7 @@ const MoviePlayer = ({ route }) => {
     return unsub;
   }, []);
 
-  
+
   useEffect(() => {
     setIsLoading(!(videoLoaded && !buffering));
   }, [videoLoaded, buffering]);
@@ -90,25 +90,25 @@ const MoviePlayer = ({ route }) => {
   }, 200);
 
   const toggleScreen = async () => {
-  if (orientation === "portrait") {
-    
-    await ScreenOrientation.lockAsync(
-      ScreenOrientation.OrientationLock.LANDSCAPE
-    );
-    setOrientation("landscape");
-    StatusBar.setHidden(true);
-    await NavigationBar.setVisibilityAsync("hidden");
-    await NavigationBar.setBehaviorAsync("inset-swipe");
-  } else {
-    await ScreenOrientation.lockAsync(
-      ScreenOrientation.OrientationLock.PORTRAIT_UP
-    );
-    setOrientation("portrait");
-    StatusBar.setHidden(false);
-    await NavigationBar.setVisibilityAsync("visible");
-    await NavigationBar.setBehaviorAsync("inset-swipe");
-  }
-};
+    if (orientation === "portrait") {
+
+      await ScreenOrientation.lockAsync(
+        ScreenOrientation.OrientationLock.LANDSCAPE
+      );
+      setOrientation("landscape");
+      StatusBar.setHidden(true);
+      await NavigationBar.setVisibilityAsync("hidden");
+      await NavigationBar.setBehaviorAsync("overlay-swipe");
+    } else {
+      await ScreenOrientation.lockAsync(
+        ScreenOrientation.OrientationLock.PORTRAIT_UP
+      );
+      setOrientation("portrait");
+      StatusBar.setHidden(false);
+      await NavigationBar.setVisibilityAsync("visible");
+      await NavigationBar.setBehaviorAsync("inset-swipe");
+    }
+  };
 
   useEffect(() => {
     const backHandle = BackHandler.addEventListener("hardwareBackPress", () => {
@@ -149,50 +149,39 @@ const MoviePlayer = ({ route }) => {
 
   return (
     <>
-      <View style={{ flex: 1, backgroundColor: '#0D0E10' }}>
+      <View style={styles.root}>
         <StatusBar
           translucent={true}
           backgroundColor="transparent"
           hidden={orientation === "landscape"}
         />
-
-        <View style={ orientation === "landscape" ? 
-          {width: SCREEN_WIDTH, height: SCREEN_HEIGHT, backgroundColor: "#000"} 
-          : {marginTop: StatusBar.currentHeight, height: 200,width: "100%",backgroundColor: "#0D0E10"}}> 
-          <Video
-            ref={videoRef}
-            source={videoSource}
-            paused={!isPlaying}
-            onLoadStart={() => { setIsLoading(true); setVideoLoaded(false); }}
-            onLoad={(data) => {
-              setDuration(data.duration);
-              setIsLoading(false);
-              setVideoLoaded(true);
-              setIsPlaying(true);
-            }}
-            onBuffer={({ isBuffering }) => setBuffering(isBuffering)}
-            rate={playbackRate}
-            // FIX 2: Only update currentTime if not seeking to prevent slider "fighting"
-            onProgress={(data) => {
-              if (!isSeeking) setCurrentTime(data.currentTime);
-            }}
-            onEnd={() => videoRef.current.seek(0)}
-            // FIX 3: Use 'contain' in landscape to ensure the video isn't cut off by notches
-            resizeMode="cover"
-            repeat={true}
-            style={
-              orientation === "landscape"
-                ? {
-                    width: SCREEN_WIDTH,
-                    height: SCREEN_HEIGHT,
-                  }
-                : {
-                    width: "100%",
-                    height: "100%",
-                  }
-            }
-          />
-
+        <View style={styles.fullscreenWrapper}>
+          <View
+            style={[
+              styles.videoBox,
+              orientation === 'portrait' ? styles.portraitVideoBox : styles.landscapeVideoBox]}>
+            <Video
+              ref={videoRef}
+              source={videoSource}
+              paused={!isPlaying}
+              onLoadStart={() => { setIsLoading(true); setVideoLoaded(false); }}
+              onLoad={(data) => {
+                setDuration(data.duration);
+                setIsLoading(false);
+                setVideoLoaded(true);
+                setIsPlaying(true);
+              }}
+              onBuffer={({ isBuffering }) => setBuffering(isBuffering)}
+              rate={playbackRate}
+              onProgress={(data) => {
+                if (!isSeeking) setCurrentTime(data.currentTime);
+              }}
+              onEnd={() => videoRef.current.seek(0)}
+              resizeMode={orientation === 'landscape' ? 'cover' : 'contain'}
+              repeat={true}
+              style={StyleSheet.absoluteFill}
+            />
+          
           {/* TOUCHABLE OVERLAY */}
           <TouchableWithoutFeedback onPress={onVideoPress}>
             <View style={StyleSheet.absoluteFill} />
@@ -208,32 +197,32 @@ const MoviePlayer = ({ route }) => {
           {controlsVisible && orientation === "landscape" && (
             <View style={styles.lsTopVideoContainer}>
               <View style={styles.screenLockUnlock}>
-               {!islockScreen && (<TouchableOpacity
-                style={{ paddingRight: 15, zIndex: 20 }}
-                onPress={toggleScreen}
-              >
-                <FontAwesome name="angle-left" size={30} color="#fff" />
-              </TouchableOpacity>)}
+                {!islockScreen && (<TouchableOpacity
+                  style={{ paddingRight: 15, zIndex: 20 }}
+                  onPress={toggleScreen}
+                >
+                  <FontAwesome name="angle-left" size={30} color="#fff" />
+                </TouchableOpacity>)}
 
-              {/* Movie Title - Flex 1 makes it take available space */}
-              <View style={{ flex: 1, justifyContent: "flex-start", alignItems:"flex-start" }}>
-                <Text style={styles.lsTitleText} numberOfLines={1}>
-                  {movieLink.seo.page}
-                </Text>
+                {/* Movie Title - Flex 1 makes it take available space */}
+                <View style={{ flex: 1, justifyContent: "flex-start", alignItems: "flex-start" }}>
+                  <Text style={styles.lsTitleText} numberOfLines={1}>
+                    {movieLink.seo.page}
+                  </Text>
+                </View>
+
+                {/* Lock Icon - Now on the right side */}
+                <TouchableOpacity
+                  style={{ padding: 0, zIndex: 20 }}
+                  onPress={lockScreen}
+                >
+                  <MaterialIcon
+                    name={islockScreen ? "lock" : "lock-open"}
+                    size={30}
+                    color="white"
+                  />
+                </TouchableOpacity>
               </View>
-
-              {/* Lock Icon - Now on the right side */}
-              <TouchableOpacity
-                style={{ padding: 0, zIndex: 20 }}
-                onPress={lockScreen}
-              >
-                <MaterialIcon
-                  name={islockScreen ? "lock" : "lock-open"}
-                  size={30}
-                  color="white"
-                />
-              </TouchableOpacity>
-            </View>
             </View>
           )}
 
@@ -338,12 +327,48 @@ const MoviePlayer = ({ route }) => {
           </ScrollView>
         )}
       </View>
+      </View>
     </>
   );
 
 };
 
 const styles = StyleSheet.create({
+  root: {
+    position: 'absolute',
+    top: 0,
+    left: 0,
+    right: 0,
+    bottom: 0,
+    backgroundColor: '#0D0E10',
+  },
+  fullscreenWrapper: {
+    position: 'absolute',
+    top: 0,
+    left: 0,
+    right: 0,
+    bottom: 0,
+  },
+
+  videoBox: {
+    width: '100%',
+    backgroundColor: '#0D0E10',
+  },
+
+  portraitVideoBox: {
+    height: 200,
+    marginTop: Platform.OS === 'android'
+      ? StatusBar.currentHeight ?? 0
+      : 0,
+  },
+
+  landscapeVideoBox: {
+    position: 'absolute',
+    top: 0,
+    left: 0,
+    right: 0,
+    bottom: 0,   // 🔥 THIS IS THE KEY
+  },
   controlsOverlay: {
     ...StyleSheet.absoluteFillObject,
     backgroundColor: 'rgba(0,0,0,0.2)',

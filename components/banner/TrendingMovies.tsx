@@ -1,8 +1,9 @@
 import { useNavigation } from '@react-navigation/native';
+import { LinearGradient } from 'expo-linear-gradient';
 import React, { useEffect, useRef, useState } from 'react';
-import { Dimensions, FlatList, Image, StyleSheet, TouchableOpacity, View } from 'react-native';
+import { Dimensions, FlatList, Image, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
+import MaterialIcon from "react-native-vector-icons/MaterialIcons";
 import { bannerList } from "../../assets/bannerList/bannerList";
-
 const { width, height } = Dimensions.get('window');
 
 const TrendingMovies = () => {
@@ -40,13 +41,46 @@ const TrendingMovies = () => {
     index,
   });
 
-  const renderItem = ({ item, index }) => (
+  const renderItem = ({ item }) => (
     <View style={styles.imageContainer}>
-      <TouchableOpacity onPress={() => navigation.navigate("MoviePlayer", item)}>
-        <Image source={{ uri: item.seo.ogImage }} style={styles.image} />
+      <Image source={{ uri: item.seo.ogImage }} style={styles.image} />
+
+      {/* Dark image gradient */}
+      <LinearGradient
+        pointerEvents="none"   // ✅ IMPORTANT
+        colors={[
+          'rgba(13,14,16,0)',    // transparent version of #0D0E10
+          'rgba(13,14,16,0.4)',
+          'rgba(13,14,16,0.8)',
+          '#0D0E10'
+        ]}
+        locations={[0, 0.3, 0.6, 1]}
+        style={styles.gradient}
+      />
+
+      {/* Button ABOVE gradient */}
+      <TouchableOpacity
+        activeOpacity={0.8}
+        onPress={() => navigation.navigate('MoviePlayer', item)}
+        style={styles.buttonWrapper}   // 👈 MOVE style HERE
+      >
+        <LinearGradient
+          colors={['#028CF3', '#F4119E']}
+          start={{ x: 0, y: 0 }}
+          end={{ x: 1.1, y: 0 }}
+          style={styles.button}
+        >
+          <View style={styles.buttonContent}>
+            <View style={styles.iconWrapper}>
+              <MaterialIcon name="play-arrow" style={styles.playIcon} size={30} color="white"></MaterialIcon>
+            </View>
+            <Text style={styles.buttonText}> Watch Now</Text>
+          </View>
+        </LinearGradient>
       </TouchableOpacity>
     </View>
   );
+
 
   return (
     <View style={styles.container}>
@@ -70,12 +104,12 @@ const TrendingMovies = () => {
 const styles = StyleSheet.create({
   container: {
     width: '100%',
-    marginBottom:20,
-    height: height * 0.30,   // FIX: define height and remove flex:1
+    marginBottom: 20,
+    height: height * 0.45,   // FIX: define height and remove flex:1
   },
   imageContainer: {
     width: width,
-    height: height * 0.30,
+    height: height * 0.45,
   },
   image: {
     width: "100%",
@@ -83,9 +117,56 @@ const styles = StyleSheet.create({
     resizeMode: 'cover',
     backgroundColor: "#696969",
   },
+  gradient: {
+    position: 'absolute',
+    bottom: 0,
+    left: 0,
+    right: 0,
+    height: '75%',
+    zIndex: 1,        // gradient layer
+  },
+
+  buttonWrapper: {
+    position: 'absolute',
+    bottom: 10,
+    left: 0,
+    right: 0,
+    alignItems: 'center',
+    zIndex: 2,        // ✅ ABOVE gradient
+  },
+  button: {
+    height: 44,
+    paddingHorizontal: 32,
+    borderRadius: 6,
+    justifyContent: 'center',
+    alignItems: 'center',
+    elevation: 0,
+    shadowColor: 'transparent',
+  },
+  buttonContent: {
+    flexDirection: 'row',
+    alignItems: 'center',
+  },
+
+  iconWrapper: {
+    width: 32,
+    height: 30,
+    borderRadius: 4,          // 👈 subtle radius
+    justifyContent: 'center',
+    alignItems: 'center',
+    marginRight: 4,
+  },
+  playIcon: {
+    marginRight: 6, // 👈 tight spacing like OTT apps
+  },
+  buttonText: {
+    color: '#fff',
+    fontSize: 18,
+    fontWeight: '600',
+  },
   flatListContent: {
     paddingHorizontal: 0,
-  },
+  }
 });
 
 export default TrendingMovies;
