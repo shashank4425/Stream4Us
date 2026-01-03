@@ -2,6 +2,7 @@ import { useNavigation } from '@react-navigation/native';
 import { LinearGradient } from 'expo-linear-gradient';
 import React, { useEffect, useRef, useState } from 'react';
 import { Dimensions, FlatList, Image, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
+import MaterialIcon from "react-native-vector-icons/MaterialIcons";
 import { bannerList } from "../../assets/bannerList/bannerList";
 const { width, height } = Dimensions.get('window');
 
@@ -64,12 +65,17 @@ const TrendingMovies = () => {
         style={styles.buttonWrapper}   // 👈 MOVE style HERE
       >
         <LinearGradient
-          colors={['#2278FB', '#F4119E']}
+          colors={['#028CF3', '#F4119E']}
           start={{ x: 0, y: 0 }}
-          end={{ x: 1, y: 0 }}
+          end={{ x: 1.1, y: 0 }}
           style={styles.button}
         >
-          <Text style={styles.buttonText}>Watch Now</Text>
+          <View style={styles.buttonContent}>
+            <View style={styles.iconWrapper}>
+              <MaterialIcon name="play-arrow" style={styles.playIcon} size={30} color="white"></MaterialIcon>
+            </View>
+            <Text style={styles.buttonText}> Watch Now</Text>
+          </View>
         </LinearGradient>
       </TouchableOpacity>
     </View>
@@ -128,7 +134,6 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     zIndex: 2,        // ✅ ABOVE gradient
   },
-
   button: {
     height: 44,
     paddingHorizontal: 32,
@@ -137,6 +142,22 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     elevation: 0,
     shadowColor: 'transparent',
+  },
+  buttonContent: {
+    flexDirection: 'row',
+    alignItems: 'center',
+  },
+
+  iconWrapper: {
+    width: 32,
+    height: 30,
+    borderRadius: 4,          // 👈 subtle radius
+    justifyContent: 'center',
+    alignItems: 'center',
+    marginRight: 4,
+  },
+  playIcon: {
+    marginRight: 6, // 👈 tight spacing like OTT apps
   },
   buttonText: {
     color: '#fff',
