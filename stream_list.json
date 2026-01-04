@@ -4,43 +4,43 @@
         "category": "Sports",
         "Movies": [
             {
-                "id": "4058381",
+                "id": "001",
                 "logo": "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTCjK5ckgYt3Tg-a_SQ5fBnzvYz1M9gHK-2aMMOP7IiwetePVmEnCj8Iw8g&s=10",
                 "name": "BPL 2026",
                 "url": "https://tvsen1.aynaott.com/YNMn5kZz8aLm/index.m3u8"
             },
             {
-                "id": "3987001",
+                "id": "002",
                 "logo": "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRPCvTmUhiKDs4ehoVpFLh7xwdCNK2-N_gNFqnaOM4YRQ&s=10",
                 "name": "Live Sports",
                 "url": "https://tvsen1.aynaott.com/YNMn5kZz8aLm/index.m3u8"
             },
             {
-                "id": "3487480",
+                "id": "003",
                 "logo": "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRPCvTmUhiKDs4ehoVpFLh7xwdCNK2-N_gNFqnaOM4YRQ&s=10",
                 "name": "Live Sports",
                 "url": "https://starsportshindiii.pages.dev/index.m3u8"
             },
             {
-                "id": "3484974",
+                "id": "004",
                 "logo": "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRPCvTmUhiKDs4ehoVpFLh7xwdCNK2-N_gNFqnaOM4YRQ&s=10",
                 "name": "Live Sports",
                 "url": "https://starsportshindiii.pages.dev/720p.m3u8"
             },
             {
-                "id": "3487481",
+                "id": "005",
                 "logo": "",
                 "name": "Sky sports cricket",
                 "url": "http://ch01.sh365.org/24234/index.m3u8?token=c49SP8TrtUZfww"
             },
             {
-                "id": "3487481",
+                "id": "006",
                 "logo": "",
                 "name": "TNT Sports 2",
                 "url": "http://178.33.239.54:8080/510/index.m3u8"
             },
             {
-                "id": "3484974",
+                "id": "007",
                 "logo": "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRPCvTmUhiKDs4ehoVpFLh7xwdCNK2-N_gNFqnaOM4YRQ&s=10",
                 "name": "TNT Sports 3",
                 "url": "http://178.33.239.54:8080/511/index.m3u8"
@@ -52,67 +52,67 @@
         "category": "Movies",
         "Movies": [
             {
-                "id": "3488466",
+                "id": "101",
                 "logo": "",
                 "name": "Hinde Movies",
                 "url": "https://cloudfrontnet.vercel.app/tplay/playout/209612/master.m3u8"
             },
             {
-                "id": "3497006",
+                "id": "102",
                 "logo": "",
                 "name": "Hinde Movies 2",
                 "url": "https://cloudfrontnet.vercel.app/tplay/playout/209622/master.m3u8"
             },
             {
-                "id": "3496659",
+                "id": "103",
                 "logo": "",
                 "name": "Hinde Dabbing Movies",
                 "url": "https://cloudfrontnet.vercel.app/tplay/playout/209593/master.m3u8"
             },
             {
-                "id": "3760812",
+                "id": "104",
                 "logo": "https://raw.githubusercontent.com/subirkumarpaul/Logo/main/B4U%20Movies.png",
                 "name": "B4U Movies",
                 "url": "https://cdnb4u.wiseplayout.com/B4U_Movies/HD1080/HD1080.m3u8"
             },
             {
-                "id": "3497006",
+                "id": "105",
                 "logo": "https://raw.githubusercontent.com/subirkumarpaul/Logo/main/B4U%20Movies.png",
                 "name": "B4U Kadak",
                 "url": "https://cdn-2.pishow.tv/live/227/master.m3u8"
             },
             {
-                "id": "3496659",
+                "id": "106",
                 "logo": "https://i.ibb.co/KjjqnRH/Picsart-23-06-30-21-35-20-283.png",
                 "name": "Sheemaroo Bollywood",
                 "url": "https://cdn-uw2-prod.tsv2.amagi.tv/linear/amg00864-shemarooenterta-shemabollywood-ono/playlist.m3u8"
             },
             {
-                "id": "3760812",
+                "id": "107",
                 "logo": "https://static.wikia.nocookie.net/jhmovie/images/7/7b/Goldmines_logo.png/revision/latest?cb=20240404141630",
                 "name": "Goldmines",
                 "url": "https://cdn-2.pishow.tv/live/1459/master.m3u8"
             },
             {
-                "id": "3760813",
+                "id": "108",
                 "logo": "",
                 "name": "Goldmines Movies",
                 "url": "https://cdn-2.pishow.tv/live/1461/master.m3u8"
             },
             {
-                "id": "3497006",
+                "id": "09",
                 "logo": "",
                 "name": "Goldmines Movies 2",
                 "url": "https://cdn-2.pishow.tv/live/1460/master.m3u8"
             },
             {
-                "id": "3496659",
+                "id": "10",
                 "logo": "",
                 "name": "Bollywood HD",
                 "url": "https://d35j504z0x2vu2.cloudfront.net/v1/manifest/0bc8e8376bd8417a1b6761138aa41c26c7309312/bollywood-hd/d3227daf-ea13-48c9-95a4-1619862d136e/0.m3u8"
             },
             {
-                "id": "3760812",
+                "id": "111",
                 "logo": "",
                 "name": "Bollywood Classic HD",
                 "url": "https://d35j504z0x2vu2.cloudfront.net/v1/master/0bc8e8376bd8417a1b6761138aa41c26c7309312/bollywood-classic/manifest.m3u8"
@@ -124,7 +124,7 @@
         "category": "Entertainment",
         "Movies": [
             {
-                "id": "41122",
+                "id": "201",
                 "logo": "",
                 "name": "Dangal Tv",
                 "url": "https://live-dangal.akamaized.net/liveabr/playlist.m3u8"
