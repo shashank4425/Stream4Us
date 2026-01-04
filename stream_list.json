@@ -1,317 +1,134 @@
 [
     {
-        "logo": "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTCjK5ckgYt3Tg-a_SQ5fBnzvYz1M9gHK-2aMMOP7IiwetePVmEnCj8Iw8g&s=10",
-        "name": "BPL 2026",
-        "url": "https://tvsen1.aynaott.com/YNMn5kZz8aLm/index.m3u8"
+        "id": "22220",
+        "category": "Sports",
+        "Movies": [
+            {
+                "id": "4058381",
+                "logo": "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTCjK5ckgYt3Tg-a_SQ5fBnzvYz1M9gHK-2aMMOP7IiwetePVmEnCj8Iw8g&s=10",
+                "name": "BPL 2026",
+                "url": "https://tvsen1.aynaott.com/YNMn5kZz8aLm/index.m3u8"
+            },
+            {
+                "id": "3987001",
+                "logo": "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRPCvTmUhiKDs4ehoVpFLh7xwdCNK2-N_gNFqnaOM4YRQ&s=10",
+                "name": "Live Sports",
+                "url": "https://tvsen1.aynaott.com/YNMn5kZz8aLm/index.m3u8"
+            },
+            {
+                "id": "3487480",
+                "logo": "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRPCvTmUhiKDs4ehoVpFLh7xwdCNK2-N_gNFqnaOM4YRQ&s=10",
+                "name": "Live Sports",
+                "url": "https://starsportshindiii.pages.dev/index.m3u8"
+            },
+            {
+                "id": "3484974",
+                "logo": "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRPCvTmUhiKDs4ehoVpFLh7xwdCNK2-N_gNFqnaOM4YRQ&s=10",
+                "name": "Live Sports",
+                "url": "https://starsportshindiii.pages.dev/720p.m3u8"
+            },
+            {
+                "id": "3487481",
+                "logo": "",
+                "name": "Sky sports cricket",
+                "url": "http://ch01.sh365.org/24234/index.m3u8?token=c49SP8TrtUZfww"
+            },
+            {
+                "id": "3487481",
+                "logo": "",
+                "name": "TNT Sports 2",
+                "url": "http://178.33.239.54:8080/510/index.m3u8"
+            },
+            {
+                "id": "3484974",
+                "logo": "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRPCvTmUhiKDs4ehoVpFLh7xwdCNK2-N_gNFqnaOM4YRQ&s=10",
+                "name": "TNT Sports 3",
+                "url": "http://178.33.239.54:8080/511/index.m3u8"
+            }
+        ]
     },
     {
-        "logo": "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRPCvTmUhiKDs4ehoVpFLh7xwdCNK2-N_gNFqnaOM4YRQ&s=10",
-        "name": "Live Sports",
-        "url": "https://tvsen1.aynaott.com/YNMn5kZz8aLm/index.m3u8"
+        "id": "22221",
+        "category": "Movies",
+        "Movies": [
+            {
+                "id": "3488466",
+                "logo": "",
+                "name": "Hinde Movies",
+                "url": "https://cloudfrontnet.vercel.app/tplay/playout/209612/master.m3u8"
+            },
+            {
+                "id": "3497006",
+                "logo": "",
+                "name": "Hinde Movies 2",
+                "url": "https://cloudfrontnet.vercel.app/tplay/playout/209622/master.m3u8"
+            },
+            {
+                "id": "3496659",
+                "logo": "",
+                "name": "Hinde Dabbing Movies",
+                "url": "https://cloudfrontnet.vercel.app/tplay/playout/209593/master.m3u8"
+            },
+            {
+                "id": "3760812",
+                "logo": "https://raw.githubusercontent.com/subirkumarpaul/Logo/main/B4U%20Movies.png",
+                "name": "B4U Movies",
+                "url": "https://cdnb4u.wiseplayout.com/B4U_Movies/HD1080/HD1080.m3u8"
+            },
+            {
+                "id": "3497006",
+                "logo": "https://raw.githubusercontent.com/subirkumarpaul/Logo/main/B4U%20Movies.png",
+                "name": "B4U Kadak",
+                "url": "https://cdn-2.pishow.tv/live/227/master.m3u8"
+            },
+            {
+                "id": "3496659",
+                "logo": "https://i.ibb.co/KjjqnRH/Picsart-23-06-30-21-35-20-283.png",
+                "name": "Sheemaroo Bollywood",
+                "url": "https://cdn-uw2-prod.tsv2.amagi.tv/linear/amg00864-shemarooenterta-shemabollywood-ono/playlist.m3u8"
+            },
+            {
+                "id": "3760812",
+                "logo": "https://static.wikia.nocookie.net/jhmovie/images/7/7b/Goldmines_logo.png/revision/latest?cb=20240404141630",
+                "name": "Goldmines",
+                "url": "https://cdn-2.pishow.tv/live/1459/master.m3u8"
+            },
+            {
+                "id": "3760813",
+                "logo": "",
+                "name": "Goldmines Movies",
+                "url": "https://cdn-2.pishow.tv/live/1461/master.m3u8"
+            },
+            {
+                "id": "3497006",
+                "logo": "",
+                "name": "Goldmines Movies 2",
+                "url": "https://cdn-2.pishow.tv/live/1460/master.m3u8"
+            },
+            {
+                "id": "3496659",
+                "logo": "",
+                "name": "Bollywood HD",
+                "url": "https://d35j504z0x2vu2.cloudfront.net/v1/manifest/0bc8e8376bd8417a1b6761138aa41c26c7309312/bollywood-hd/d3227daf-ea13-48c9-95a4-1619862d136e/0.m3u8"
+            },
+            {
+                "id": "3760812",
+                "logo": "",
+                "name": "Bollywood Classic HD",
+                "url": "https://d35j504z0x2vu2.cloudfront.net/v1/master/0bc8e8376bd8417a1b6761138aa41c26c7309312/bollywood-classic/manifest.m3u8"
+            }
+        ]
     },
     {
-        "logo": "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRPCvTmUhiKDs4ehoVpFLh7xwdCNK2-N_gNFqnaOM4YRQ&s=10",
-        "name": "Live Sports",
-        "url": "https://starsportshindiii.pages.dev/index.m3u8"
-    },
-    {
-        "logo": "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRPCvTmUhiKDs4ehoVpFLh7xwdCNK2-N_gNFqnaOM4YRQ&s=10",
-        "name": "Live Sports",
-        "url": "https://starsportshindiii.pages.dev/720p.m3u8"
-    },
-    {
-        "logo": "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRPCvTmUhiKDs4ehoVpFLh7xwdCNK2-N_gNFqnaOM4YRQ&s=10",
-        "name": "Live Sports",
-        "url": "https://fl1.moveonjoy.com/WILLOW_CRICKET/index.m3u8"
-    },
-    {
-        "logo": "",
-        "name": "Hinde Movies",
-        "url": "https://cloudfrontnet.vercel.app/tplay/playout/209612/master.m3u8"
-    },
-    {
-        "logo": "",
-        "name": "Hinde Movies 2",
-        "url": "https://cloudfrontnet.vercel.app/tplay/playout/209622/master.m3u8"
-    },
-    {
-        "logo": "",
-        "name": "Hinde Dabbing Movies",
-        "url": "https://cloudfrontnet.vercel.app/tplay/playout/209593/master.m3u8"
-    },
-    {
-        "logo": "",
-        "name": "The Movie Club",
-        "url": "https://cc-r5hupcym5oehh.akamaized.net/v1/master/3722c60a815c199d9c0ef36c5b73da68a62b09d1/cc-r5hupcym5oehh/SBUM/RunnTV/BollyFlix_IN/BollyFlix_IN.m3u8"
-    },
-    {
-        "logo": "https://raw.githubusercontent.com/subirkumarpaul/Logo/main/B4U%20Movies.png",
-        "name": "B4U Movies",
-        "url": "https://cdnb4u.wiseplayout.com/B4U_Movies/HD1080/HD1080.m3u8"
-    },
-    {
-        "logo": "https://raw.githubusercontent.com/subirkumarpaul/Logo/main/B4U%20Movies.png",
-        "name": "B4U Kadak",
-        "url": "https://cdn-2.pishow.tv/live/227/master.m3u8"
-    },
-    {
-        "logo": "https://i.ibb.co/KjjqnRH/Picsart-23-06-30-21-35-20-283.png",
-        "name": "Sheemaroo Bollywood",
-        "url": "https://cdn-uw2-prod.tsv2.amagi.tv/linear/amg00864-shemarooenterta-shemabollywood-ono/playlist.m3u8"
-    },
-    {
-        "logo": "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSisiK50nT9KXOAVZcRYy4aTrv4cVP9btrY4_s2KvXzXaSzGeUEmvgE3Gj4&s=10",
-        "name": "Joo Music",
-        "url": "https://livecdn.live247stream.com/joomusic/tv/playlist.m3u8"
-    },
-    {
-        "logo": "https://static.wikia.nocookie.net/jhmovie/images/7/7b/Goldmines_logo.png/revision/latest?cb=20240404141630",
-        "name": "Goldmines",
-        "url": "https://cdn-2.pishow.tv/live/1459/master.m3u8"
-    },
-    {
-        "logo": "",
-        "name": "Goldmines Movies",
-        "url": "https://cdn-2.pishow.tv/live/1461/master.m3u8"
-    },
-    {
-        "logo": "",
-        "name": "Goldmines Movies 2",
-        "url": "https://cdn-2.pishow.tv/live/1460/master.m3u8"
-    },
-    {
-        "logo": "",
-        "name": "Bollywood HD",
-        "url": "https://d35j504z0x2vu2.cloudfront.net/v1/manifest/0bc8e8376bd8417a1b6761138aa41c26c7309312/bollywood-hd/d3227daf-ea13-48c9-95a4-1619862d136e/0.m3u8"
-    },
-    {
-        "logo": "",
-        "name": "Bollywood Classic HD",
-        "url": "https://d35j504z0x2vu2.cloudfront.net/v1/master/0bc8e8376bd8417a1b6761138aa41c26c7309312/bollywood-classic/manifest.m3u8"
-    },
-    {
-        "logo": "",
-        "name": "DD Sports 2.0",
-        "url": "https://d3qs3d2rkhfqrt.cloudfront.net/out/v1/b17adfe543354fdd8d189b110617cddd/index.m3u8"
-    },
-    {
-        "logo": "",
-        "name": "BBC Earth",
-        "url": "https://amg00793-bbcstudios-amg00793c3-lg-us-2528.playouts.now.amagi.tv/playlist/amg00793-bbcstudios-bbcearta-lgus/playlist.m3u8"
-    },
-    {
-        "logo": "https://raw.githubusercontent.com/subirkumarpaul/Logo/main/Travel%20XP.png",
-        "name": "Travel XP English EU",
-        "url": "https://travelxp-travelxp-1-eu.rakuten.wurl.tv/playlist.m3u8"
-    },
-    {
-        "logo": "https://raw.githubusercontent.com/subirkumarpaul/Logo/main/Travel%20XP.png",
-        "name": "Travel XP English NZ",
-        "url": "https://travelxp-travelxp-1-nz.samsung.wurl.tv/playlist.m3u8"
-    },
-    {
-        "logo": "",
-        "name": "4K Travel",
-        "url": "https://d35j504z0x2vu2.cloudfront.net/v1/master/0bc8e8376bd8417a1b6761138aa41c26c7309312/4k-travel-tv/manifest.m3u8"
-    },
-    {
-        "logo": "https://i.postimg.cc/sfZsrWst/20240823_023726.png",
-        "name": "Wild Earth",
-        "url": "https://wildearth-plex.amagi.tv/master.m3u8"
-    },
-    {
-        "logo": "https://upload.wikimedia.org/wikipedia/sco/c/cc/Motu_Patlu_official_logo.png",
-        "name": "Motu Patlu",
-        "url": "https://cloudfrontnet.vercel.app/tplay/playout/209622/master.m3u8"
-    },
-    {
-        "logo": "",
-        "name": "Sky News",
-        "url": "https://d39chvnxm26pgp.cloudfront.net/v1/master/72588bff830dec7b26d7cbbf5f3c24928aec5c03/cc-sthen6ms4vxgv-stage/WNSFO/ABR.m3u8"
-    },
-    {
-        "logo": "https://i.postimg.cc/vH3MKVPY/CNN.jpg",
-        "name": "CNA News",
-        "url": "https://d2e1asnsl7br7b.cloudfront.net/7782e205e72f43aeb4a48ec97f66ebbe/index_5.m3u8"
-    },
-    {
-        "logo": "",
-        "name": "Willow Cricket",
-        "url": "https://fl1.moveonjoy.com/WILLOW_CRICKET/index.m3u8"
-    },
-    {
-        "logo": "",
-        "name": "T SPORTS HD",
-        "url": "https://tvsen1.aynaott.com/YNMn5kZz8aLm/index.m3u8"
-    },
-    {
-        "logo": "",
-        "name": "Makka TV",
-        "url": "https://media2.streambrothers.com:1936/8122/8122/playlist.m3u8"
-    },
-    {
-        "logo": "",
-        "name": "HBO FAMILY",
-        "url": "https://fl1.moveonjoy.com/HBO_FAMILY/index.m3u8"
-    },
-    {
-        "logo": "",
-        "name": "Movies Thriller",
-        "url": "https://shls-live-enc.edgenextcdn.net/out/v1/f6d718e841f8442f8374de47f18c93a7/index.m3u8"
-    },
-    {
-        "logo": "",
-        "name": "START WORLD",
-        "url": "https://livetv.mylifeisgood.net.ru/channels/strvf.m3u8"
-    },
-    {
-        "logo": "",
-        "name": "Dangal",
-        "url": "https://live-dangal.akamaized.net/liveabr/playlist.m3u8"
-    },
-    {
-        "logo": "https://upload.wikimedia.org/wikipedia/en/thumb/0/02/Bangladesh_Television_Logo.svg/1200px-Bangladesh_Television_Logo.svg.png",
-        "name": "BTV",
-        "url": "https://owrcovcrpy.gpcdn.net/bpk-tv/1709/output/master.m3u8"
-    },
-    {
-        "logo": "https://uplo_logo.png",
-        "name": "Doraemon",
-        "url": "https://cloudfrontnet.vercel.app/tplay/playout/209902/master.m3u8"
-    },
-    {
-        "logo": "",
-        "name": "T SPORT HD🇧🇩",
-        "url": "https://tvsen1.aynaott.com/YNMn5kZz8aLm/index.m3u8"
-    },
-    {
-        "logo": "",
-        "name": "T SPORT HD",
-        "url": "https: //tvsen1.aynaott.com/YNMn5kZz8aLm/tracks-v1a1/mono.ts.m3u8"
-    },
-    {
-        "logo": "",
-        "name": "T Sports (AynaOTT)",
-        "url": "https: //tvsen1.aynaott.com/YNMn5kZz8aLm/index.m3u8"
-    },
-    {
-        "logo": "",
-        "name": "Willow Sports",
-        "url": "https://fl1.moveonjoy.com/WILLOW_CRICKET/index.m3u8"
-    },
-    {
-        "logo": "",
-        "name": "Willow Sports",
-        "url": "https://fl1.moveonjoy.com/WILLOW_CRICKET/index.m3u8"
-    },
-    {
-        "logo": "",
-        "name": "Bollywood Movies",
-        "url": "https://cloudfrontnet.vercel.app/tplay/playout/209612/master.m3u8"
-    },
-    {
-        "logo": "",
-        "name": "Bollywood Movies",
-        "url": "https://cloudfrontnet.vercel.app/tplay/playout/209593/master.m3u8"
-    },
-    {
-        "logo": "",
-        "name": "Jio Chinema",
-        "url": "https://cloudfrontnet.vercel.app/tplay/playout/209622/master.m3u8"
-    },
-    {
-        "logo": "",
-        "name": "Catoons",
-        "url": "https://cloudfrontnet.vercel.app/tplay/playout/209901/master.m3u8"
-    },
-    {
-        "logo": "",
-        "name": "Dorymon",
-        "url": "https://cloudfrontnet.vercel.app/tplay/playout/209902/master.m3u8"
-    },
-    {
-        "logo": "https://is.gd/Qwtxnl",
-        "name": "FOX NEWS",
-        "url": "https://stream.livenewsplay.com:9443/hls/foxnews/foxsd.m3u8"
-    },
-    {
-        "logo": "https://is.gd/imZMIp",
-        "name": "DW NEWS",
-        "url": "https://dwamdstream102.akamaized.net/hls/live/2015525/dwstream102/stream02/streamPlaylist.m3u8"
-    },
-    {
-        "logo": "https://is.gd/ywX5PG",
-        "name": "CNN NEWS",
-        "url": "https://amg01448-samsungin-cnnnow-samsungin-4npqg.amagi.tv/playlist/amg01448-samsungin-cnnnow-samsungin/playlist.m3u8"
-    },
-    {
-        "logo": "https://is.gd/ih6x8j",
-        "name": "NDTV NEWS",
-        "url": "https://ndtv24x7elemarchana.akamaized.net/hls/live/2003678-b/ndtv24x7/master.m3u8"
-    },
-    {
-        "logo": "https://i.imgur.com/wgIUsFu.png",
-        "name": "BBC News",
-        "url": "https://ythls.armelin.one/channel/UCelk6aHijZq-GJBBB9YpReA.m3u8?v=1"
-    },
-    {
-        "logo": "https://i.imgur.com/A1xzjOI.png",
-        "name": "DW English",
-        "url": "https://dwamdstream102.akamaized.net/hls/live/2015525/dwstream102/index.m3u8?v=1"
-    },
-    {
-        "logo": "https://i.ibb.co/whc9vkT/download-5.png",
-        "name": "FOX News (AU)",
-        "url": "https://fox-foxnewsnow-samsungus.amagi.tv/playlist720p.m3u8"
-    },
-    {
-        "logo": "https://i.ibb.co/M7W5zRy/images.png",
-        "name": "RT News (EN)",
-        "url": "https://rt-glb.rttv.com/live/rtnews/playlist.m3u8"
-    },
-    {
-        "logo": "https://i.ibb.co/M7W5zRy/images.png",
-        "name": "RTNEWS GLOBAL",
-        "url": "https://rt-rtd.rttv.com/dvr/rtdoc/playlist.m3u8?v=1"
-    },
-    {
-        "logo": "https://i.postimg.cc/ZnD8CtvQ/BBC.jpg",
-        "name": "Breaking News",
-        "url": "https://cdn-ue1-prod.tsv2.amagi.tv/linear/amg02703-leadstory-leadstory-samsungau/playlist.m3u8"
-    },
-    {
-        "logo": "https://i.postimg.cc/ZnD8CtvQ/BBC.jpg",
-        "name": "CGTN",
-        "url": "https://0472.org/hls/cgtn.m3u8"
-    },
-    {
-        "logo": "https://i.postimg.cc/vH3MKVPY/CNN.jpg",
-        "name": "CNN (US)",
-        "url": "https://turnerlive.warnermediacdn.com/hls/live/586495/cnngo/cnn_slate/VIDEO_0_3564000.m3u8"
-    },
-    {
-        "logo": "https://i.imgur.com/kcMUGOE.jpg",
-        "name": "Global News (US)",
-        "url": "https://live.corusdigitaldev.com/groupb/live/3062d0e3-ed4c-4f47-8482-95648250f4b8/live.isml/.m3u8"
-    },
-    {
-        "logo": "https://i.imgur.com/kcMUGOE.jpg",
-        "name": "India Today",
-        "url": "https://indiatodaylive.akamaized.net/hls/live/2014320/indiatoday/indiatodaylive/playlist.m3u8"
-    },
-    {
-        "logo": "https://i.imgur.com/ldXaLJK.png",
-        "name": "NDTV English",
-        "url": "https://ndtv24x7elemarchana.akamaized.net/hls/live/2003678/ndtv24x7/master.m3u8"
-    },
-    {
-        "logo": "https://i.imgur.com/ldXaLJK.png",
-        "name": "NDTV Hindi",
-        "url": "https://ndtvindiaelemarchana.akamaized.net/hls/live/2003679/ndtvindia/master.m3u8"
-    },
-    {
-        "logo": "https://i.postimg.cc/RZJmcSt6/9XM.jpg",
-        "name": "News Max 2",
-        "url": "https://nmxlive.akamaized.net/hls/live/529965/Live_1/index.m3u8"
+        "id": "22222",
+        "category": "Entertainment",
+        "Movies": [
+            {
+                "id": "41122",
+                "logo": "",
+                "name": "Dangal Tv",
+                "url": "https://live-dangal.akamaized.net/liveabr/playlist.m3u8"
+            }
+        ]
     }
 ]
