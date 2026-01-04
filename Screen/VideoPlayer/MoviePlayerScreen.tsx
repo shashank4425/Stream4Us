@@ -9,6 +9,7 @@ import {
   ActivityIndicator,
   BackHandler,
   Dimensions,
+  InteractionManager,
   Platform,
   ScrollView,
   StatusBar,
@@ -42,24 +43,17 @@ const MoviePlayer = ({ route }) => {
 
   const hideTimer = useRef(null);
   const movieLink = route.params;
+  const videoSource = movieLink.seo ?
+    require(`../../assets/video/bhojpuri/kalamchaba-gaini.mp4`) : { uri: movieLink.url };
   
-  const videoSource = {uri: "https://live-dangal.akamaized.net/liveabr/playlist.m3u8"};
   const { width, height } = useWindowDimensions();
   Dimensions.get("screen");
   // --- ANDROID SYSTEM BAR INITIAL CONFIG ---
   useEffect(() => {
-    const setupAndroidBars = async () => {
-      if (Platform.OS == "android") {
-        try {
-          await NavigationBar.setPositionAsync("absolute");
-          await NavigationBar.setBehaviorAsync("overlay-swipe");
-          await NavigationBar.setBackgroundColorAsync("#0D0E10");
-        } catch (e) {
-          console.log("edge to edge enabled");
-        }
-      }
-    };
-    setupAndroidBars();
+    if (Platform.OS === "android") {
+      NavigationBar.setBehaviorAsync("overlay-swipe");
+      NavigationBar.setPositionAsync("absolute");
+    }
 
     const unsub = NetInfo.addEventListener(state => {
       setIsConnected(state.isConnected);
@@ -91,25 +85,28 @@ const MoviePlayer = ({ route }) => {
 
   const toggleScreen = async () => {
     if (orientation === "portrait") {
-
       await ScreenOrientation.lockAsync(
         ScreenOrientation.OrientationLock.LANDSCAPE
       );
-      setOrientation("landscape");
-      StatusBar.setHidden(true);
-      await NavigationBar.setVisibilityAsync("hidden");
-      await NavigationBar.setBehaviorAsync("overlay-swipe");
+
+      InteractionManager.runAfterInteractions(async () => {
+        setOrientation("landscape");
+        StatusBar.setHidden(true, "fade");
+        await NavigationBar.setVisibilityAsync("hidden");
+      });
+
     } else {
       await ScreenOrientation.lockAsync(
         ScreenOrientation.OrientationLock.PORTRAIT_UP
       );
-      setOrientation("portrait");
-      StatusBar.setHidden(false);
-      await NavigationBar.setVisibilityAsync("visible");
-      await NavigationBar.setBehaviorAsync("inset-swipe");
+
+      InteractionManager.runAfterInteractions(async () => {
+        setOrientation("portrait");
+        StatusBar.setHidden(false, "fade");
+        await NavigationBar.setVisibilityAsync("visible");
+      });
     }
   };
-
   useEffect(() => {
     const backHandle = BackHandler.addEventListener("hardwareBackPress", () => {
       if (orientation === "landscape") {
@@ -153,7 +150,6 @@ const MoviePlayer = ({ route }) => {
         <StatusBar
           translucent={true}
           backgroundColor="transparent"
-          hidden={orientation === "landscape"}
         />
         <View style={styles.fullscreenWrapper}>
           <View
@@ -177,156 +173,156 @@ const MoviePlayer = ({ route }) => {
                 if (!isSeeking) setCurrentTime(data.currentTime);
               }}
               onEnd={() => videoRef.current.seek(0)}
-              resizeMode={orientation === 'landscape' ? 'cover' : 'cover'}
+              resizeMode="contain"
               repeat={true}
               style={StyleSheet.absoluteFill}
             />
-          
-          {/* TOUCHABLE OVERLAY */}
-          <TouchableWithoutFeedback onPress={onVideoPress}>
-            <View style={StyleSheet.absoluteFill} />
-          </TouchableWithoutFeedback>
 
-          {isLoading && (
-            <View style={[StyleSheet.absoluteFill, { justifyContent: "center", alignItems: "center", backgroundColor: "#0D0E10" }]}>
-              <ActivityIndicator size="large" color="red" />
-            </View>
-          )}
+            {/* TOUCHABLE OVERLAY */}
+            <TouchableWithoutFeedback onPress={onVideoPress}>
+              <View style={StyleSheet.absoluteFill} />
+            </TouchableWithoutFeedback>
 
-          {/* LANDSCAPE HEADER */}
-          {controlsVisible && orientation === "landscape" && (
-            <View style={styles.lsTopVideoContainer}>
-              <View style={styles.screenLockUnlock}>
-                {!islockScreen && (<TouchableOpacity
-                  style={{ paddingRight: 15, zIndex: 20 }}
-                  onPress={toggleScreen}
-                >
-                  <FontAwesome name="angle-left" size={30} color="#fff" />
-                </TouchableOpacity>)}
+            {isLoading && (
+              <View style={[StyleSheet.absoluteFill, { justifyContent: "center", alignItems: "center", backgroundColor: "#0D0E10" }]}>
+                <ActivityIndicator size="large" color="red" />
+              </View>
+            )}
 
-                {/* Movie Title - Flex 1 makes it take available space */}
-                <View style={{ flex: 1, justifyContent: "flex-start", alignItems: "flex-start" }}>
-                  <Text style={styles.lsTitleText} numberOfLines={1}>
-                    {movieLink.seo.page}
-                  </Text>
+            {/* LANDSCAPE HEADER */}
+            {controlsVisible && orientation === "landscape" && (
+              <View style={styles.lsTopVideoContainer}>
+                <View style={styles.screenLockUnlock}>
+                  {!islockScreen && (<TouchableOpacity
+                    style={{ paddingRight: 15, zIndex: 20 }}
+                    onPress={toggleScreen}
+                  >
+                    <FontAwesome name="angle-left" size={30} color="#fff" />
+                  </TouchableOpacity>)}
+
+                  {/* Movie Title - Flex 1 makes it take available space */}
+                  <View style={{ flex: 1, justifyContent: "flex-start", alignItems: "flex-start" }}>
+                    <Text style={styles.lsTitleText} numberOfLines={1}>
+                      {movieLink.seo ? movieLink.seo.page : movieLink.name}
+                    </Text>
+                  </View>
+
+                  {/* Lock Icon - Now on the right side */}
+                  <TouchableOpacity
+                    style={{ padding: 0, zIndex: 20 }}
+                    onPress={lockScreen}
+                  >
+                    <MaterialIcon
+                      name={islockScreen ? "lock" : "lock-open"}
+                      size={30}
+                      color="white"
+                    />
+                  </TouchableOpacity>
                 </View>
-
-                {/* Lock Icon - Now on the right side */}
-                <TouchableOpacity
-                  style={{ padding: 0, zIndex: 20 }}
-                  onPress={lockScreen}
-                >
-                  <MaterialIcon
-                    name={islockScreen ? "lock" : "lock-open"}
-                    size={30}
-                    color="white"
-                  />
-                </TouchableOpacity>
               </View>
-            </View>
-          )}
+            )}
 
 
-          {/* MAIN CONTROLS */}
-          {isConnected && !islockScreen && controlsVisible && (
-            <View style={styles.controlsOverlay} pointerEvents="box-none">
-              <View style={orientation === "portrait" ? styles.potraitControle : styles.lsControle}>
-                {!isLoading && (
-                  <TouchableOpacity onPress={moveVideoBack}>
-                    <MaterialIcon name="replay-10" size={36} color="white" />
-                  </TouchableOpacity>
-                )}
-                {!isLoading && (
-                  <TouchableOpacity onPress={handlePlayPause}>
-                    <MaterialIcon name={!isPlaying ? "play-circle-outline" : "pause-circle-outline"} size={60} color="white" />
-                  </TouchableOpacity>
-                )}
-                {!isLoading && (
-                  <TouchableOpacity onPress={moveVideoForward}>
-                    <MaterialIcon name="forward-10" size={36} color="white" />
-                  </TouchableOpacity>
-                )}
-              </View>
-
-              {/* BOTTOM STRIP (Time + Fullscreen) */}
-              <View style={orientation === "portrait" ? styles.bottomController : styles.lsbottomController}>
-                <Text style={styles.lsDurationTxt}>
-                  {formatTime(currentTime)} / {formatTime(duration)}
-                </Text>
-
-                <View style={{ flexDirection: 'row', alignItems: 'center' }}>
-                  {orientation === "landscape" && (
-                    <TouchableOpacity onPress={() => setSpeedMenuVisible(!speedMenuVisible)} style={{ marginRight: 15 }}>
-                      <MaterialIcon name="speed" size={28} color="white" />
+            {/* MAIN CONTROLS */}
+            {isConnected && !islockScreen && controlsVisible && (
+              <View style={styles.controlsOverlay} pointerEvents="box-none">
+                <View style={orientation === "portrait" ? styles.potraitControle : styles.lsControle}>
+                  {!isLoading && (
+                    <TouchableOpacity onPress={moveVideoBack}>
+                      <MaterialIcon name="replay-10" size={36} color="white" />
                     </TouchableOpacity>
                   )}
-                  <TouchableOpacity onPress={toggleScreen}>
-                    <MaterialIcon style={styles.fsRotate} name={orientation === "portrait" ? "fullscreen" : "fullscreen-exit"} size={36} color="white" />
-                  </TouchableOpacity>
+                  {!isLoading && (
+                    <TouchableOpacity onPress={handlePlayPause}>
+                      <MaterialIcon name={!isPlaying ? "play-circle-outline" : "pause-circle-outline"} size={60} color="white" />
+                    </TouchableOpacity>
+                  )}
+                  {!isLoading && (
+                    <TouchableOpacity onPress={moveVideoForward}>
+                      <MaterialIcon name="forward-10" size={36} color="white" />
+                    </TouchableOpacity>
+                  )}
+                </View>
+
+                {/* BOTTOM STRIP (Time + Fullscreen) */}
+                <View style={orientation === "portrait" ? styles.bottomController : styles.lsbottomController}>
+                  <Text style={styles.lsDurationTxt}>
+                    {formatTime(currentTime)} / {formatTime(duration)}
+                  </Text>
+
+                  <View style={{ flexDirection: 'row', alignItems: 'center' }}>
+                    {orientation === "landscape" && (
+                      <TouchableOpacity onPress={() => setSpeedMenuVisible(!speedMenuVisible)} style={{ marginRight: 15 }}>
+                        <MaterialIcon name="speed" size={28} color="white" />
+                      </TouchableOpacity>
+                    )}
+                    <TouchableOpacity onPress={toggleScreen}>
+                      <MaterialIcon style={styles.fsRotate} name={orientation === "portrait" ? "fullscreen" : "fullscreen-exit"} size={36} color="white" />
+                    </TouchableOpacity>
+                  </View>
+                </View>
+
+                {/* SLIDER */}
+                <View style={orientation === "portrait" ? styles.sliderController : styles.lsSliderController}>
+                  <Slider
+                    value={currentTime}
+                    minimumValue={0}
+                    maximumValue={duration}
+                    minimumTrackTintColor="#b41313ff"
+                    maximumTrackTintColor="#b6b3b3ff"
+                    thumbTintColor="#b41313ff"
+                    onSlidingStart={() => setIsSeeking(true)}
+                    onValueChange={(val) => {
+                      setCurrentTime(val[0]);
+                      throttledSeek(val[0]);
+                    }}
+                    onSlidingComplete={(val) => {
+                      setIsSeeking(false);
+                      videoRef.current.seek(val[0]);
+                    }}
+                  />
                 </View>
               </View>
+            )}
+          </View>
 
-              {/* SLIDER */}
-              <View style={orientation === "portrait" ? styles.sliderController : styles.lsSliderController}>
-                <Slider
-                  value={currentTime}
-                  minimumValue={0}
-                  maximumValue={duration}
-                  minimumTrackTintColor="#b41313ff"
-                  maximumTrackTintColor="#b6b3b3ff"
-                  thumbTintColor="#b41313ff"
-                  onSlidingStart={() => setIsSeeking(true)}
-                  onValueChange={(val) => {
-                    setCurrentTime(val[0]);
-                    throttledSeek(val[0]);
-                  }}
-                  onSlidingComplete={(val) => {
-                    setIsSeeking(false);
-                    videoRef.current.seek(val[0]);
-                  }}
-                />
-              </View>
+          {/* SPEED MENU POPUP */}
+          {speedMenuVisible && (
+            <View style={styles.speedMenuPopup}>
+              {[1, 1.25, 1.5, 1.75, 2].map((rate) => (
+                <TouchableOpacity
+                  key={rate}
+                  onPress={() => setPlaybackRate(rate)}
+                  style={{ paddingVertical: 8 }}
+                >
+                  <Text style={{
+                    color: playbackRate === rate ? "yellow" : "white",
+                    fontSize: 16,
+                    textAlign: "center",
+                    fontWeight: 'bold'
+                  }}>
+                    {rate}x
+                  </Text>
+                </TouchableOpacity>
+              ))}
             </View>
           )}
-        </View>
 
-        {/* SPEED MENU POPUP */}
-        {speedMenuVisible && (
-          <View style={styles.speedMenuPopup}>
-            {[1, 1.25, 1.5, 1.75, 2].map((rate) => (
-              <TouchableOpacity
-                key={rate}
-                onPress={() => setPlaybackRate(rate)}
-                style={{ paddingVertical: 8 }}
-              >
-                <Text style={{
-                  color: playbackRate === rate ? "yellow" : "white",
-                  fontSize: 16,
-                  textAlign: "center",
-                  fontWeight: 'bold'
-                }}>
-                  {rate}x
-                </Text>
-              </TouchableOpacity>
-            ))}
-          </View>
-        )}
-
-        {/* DESCRIPTION AREA */}
-        {/* FIX 4: Wrap in ScrollView. In portrait, if the navigation bar appears, 
+          {/* DESCRIPTION AREA */}
+          {/* FIX 4: Wrap in ScrollView. In portrait, if the navigation bar appears, 
           the ScrollView ensures the text is still reachable and doesn't "cut off" */}
-        {orientation === "portrait" && !isSwitching && (
-          <ScrollView style={{ flex: 1 }}>
-            <View style={styles.container}>
-              <View style={styles.contentMain}>
-                <Text style={styles.mtitle}>{movieLink.seo.page}</Text>
-                <Text style={styles.mline}>{movieLink.line2}</Text>
-                <Text style={styles.contentDes}>{movieLink.seo.description}</Text>
+          {orientation === "portrait" && !isSwitching && (
+            <ScrollView style={{ flex: 1 }}>
+              <View style={styles.container}>
+                <View style={styles.contentMain}>
+                  <Text style={styles.mtitle}>{movieLink.seo ? movieLink.seo.page : movieLink.name}</Text>
+                  <Text style={styles.mline}>{movieLink.line2}</Text>
+                  <Text style={styles.contentDes}>{movieLink.seo ? movieLink.seo.description : "No Description"}</Text>
+                </View>
               </View>
-            </View>
-          </ScrollView>
-        )}
-      </View>
+            </ScrollView>
+          )}
+        </View>
       </View>
     </>
   );
@@ -335,11 +331,7 @@ const MoviePlayer = ({ route }) => {
 
 const styles = StyleSheet.create({
   root: {
-    position: 'absolute',
-    top: 0,
-    left: 0,
-    right: 0,
-    bottom: 0,
+    flex: 1,
     backgroundColor: '#0D0E10',
   },
   fullscreenWrapper: {

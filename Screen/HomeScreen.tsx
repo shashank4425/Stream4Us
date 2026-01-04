@@ -112,7 +112,7 @@ export default function Home({ navigation }) {
                     loading ? <BannerPreLoaderScreen /> : <TrendingMovies />
                 )}
                 ListFooterComponent={() => (
-                    <View style={{ paddingVertical: 30, alignItems: "center" }}>
+                    !loading && <View style={{ paddingVertical: 30, alignItems: "center" }}>
                         <TouchableOpacity
                                 activeOpacity={0.8}
                                 onPress={() => navigation.navigate('LiveStreaming', { title: "Live TV" })}
