@@ -1,4 +1,5 @@
 import Home from "@/Screen/HomeScreen";
+import LiveStreaming from "@/Screen/LiveChannels/LiveStreaming";
 import ActionMovies from "@/Screen/movies/ActionMovies/ActionMovies";
 import BhojpuriBhaukalMovies from "@/Screen/movies/BhojpuriMovies/BhojpuriBhaukalMovies";
 import GlobalHitsMovies from "@/Screen/movies/GlobalHitsMovies/GlobalHitsMoviesScreen";
@@ -20,9 +21,9 @@ const windowHeight = Dimensions.get('window').height;
 export default function AppNavigatorScreen({ route }) {
 
   const insets = useSafeAreaInsets();
- const pathname = usePathname();
-console.log(pathname)
-   const isSplash = pathname === "/";
+  const pathname = usePathname();
+  console.log(pathname)
+  const isSplash = pathname === "/";
 
   useEffect(() => {
     NavigationBar.setPositionAsync("absolute");
@@ -105,6 +106,14 @@ console.log(pathname)
               animation: 'fade',
               gestureEnabled: true,
               headerShown: false, cardStyle: { backgroundColor: "#0D0E10", width: "100%", height: "100%" }
+            }} />
+          <Stack.Screen name="LiveStreaming" component={LiveStreaming}
+            options={{
+              presentation: "transparentModal",
+              animation: 'fade',
+              gestureEnabled: true,
+              headerTitle: () => null, headerTintColor: "#FFF",
+              headerStyle: { backgroundColor: "#0D0E10", height: windowHeight / 10 },
             }} />
         </Stack.Navigator>
       </View>

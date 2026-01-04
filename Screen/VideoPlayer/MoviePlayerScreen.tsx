@@ -42,8 +42,8 @@ const MoviePlayer = ({ route }) => {
 
   const hideTimer = useRef(null);
   const movieLink = route.params;
-  const videoSource = require(`../../assets/video/bhojpuri/kalamchaba-gaini.mp4`);
-
+  
+  const videoSource = {uri: "https://live-dangal.akamaized.net/liveabr/playlist.m3u8"};
   const { width, height } = useWindowDimensions();
   Dimensions.get("screen");
   // --- ANDROID SYSTEM BAR INITIAL CONFIG ---
@@ -177,7 +177,7 @@ const MoviePlayer = ({ route }) => {
                 if (!isSeeking) setCurrentTime(data.currentTime);
               }}
               onEnd={() => videoRef.current.seek(0)}
-              resizeMode={orientation === 'landscape' ? 'cover' : 'contain'}
+              resizeMode={orientation === 'landscape' ? 'cover' : 'cover'}
               repeat={true}
               style={StyleSheet.absoluteFill}
             />
