@@ -17,8 +17,7 @@ import {
   Text,
   TouchableOpacity,
   TouchableWithoutFeedback,
-  View,
-  useWindowDimensions
+  View
 } from "react-native";
 import MaterialIcon from "react-native-vector-icons/MaterialIcons";
 import Video from "react-native-video";
@@ -45,15 +44,16 @@ const MoviePlayer = ({ route }) => {
   const movieLink = route.params;
   const videoSource = movieLink.seo ?
     require(`../../assets/video/bhojpuri/kalamchaba-gaini.mp4`) : { uri: movieLink.url };
-  
-  const { width, height } = useWindowDimensions();
-  Dimensions.get("screen");
-  // --- ANDROID SYSTEM BAR INITIAL CONFIG ---
+
+
   useEffect(() => {
     if (Platform.OS === "android") {
       NavigationBar.setBehaviorAsync("overlay-swipe");
       NavigationBar.setPositionAsync("absolute");
     }
+  }, []);
+
+  useEffect(() => {
 
     const unsub = NetInfo.addEventListener(state => {
       setIsConnected(state.isConnected);
@@ -142,8 +142,6 @@ const MoviePlayer = ({ route }) => {
     setControlsVisible(islockScreen);
   };
 
-  const videoStyle = StyleSheet.absoluteFillObject;
-
   return (
     <>
       <View style={styles.root}>
@@ -155,27 +153,54 @@ const MoviePlayer = ({ route }) => {
           <View
             style={[
               styles.videoBox,
-              orientation === 'portrait' ? styles.portraitVideoBox : styles.landscapeVideoBox]}>
+              orientation === "portrait"
+                ? styles.portraitVideoBox
+                : styles.landscapeFullscreen
+            ]}>
             <Video
               ref={videoRef}
               source={videoSource}
               paused={!isPlaying}
-              onLoadStart={() => { setIsLoading(true); setVideoLoaded(false); }}
+              useTextureView={false}
+              resizeMode="cover"
+              repeat
+              style={StyleSheet.absoluteFill}
+
+              // ✅ ANDROID FIXES
+              useTextureView={false}
+              disableFocus={true}
+              maxBitRate={2500000}
+
+              bufferConfig={{
+                minBufferMs: 20000,
+                maxBufferMs: 60000,
+                bufferForPlaybackMs: 3000,
+                bufferForPlaybackAfterRebufferMs: 5000,
+              }}
+
+              onLoadStart={() => {
+                setIsLoading(true);
+                setVideoLoaded(false);
+              }}
+
               onLoad={(data) => {
                 setDuration(data.duration);
                 setIsLoading(false);
                 setVideoLoaded(true);
                 setIsPlaying(true);
               }}
+
               onBuffer={({ isBuffering }) => setBuffering(isBuffering)}
+
               rate={playbackRate}
+
               onProgress={(data) => {
                 if (!isSeeking) setCurrentTime(data.currentTime);
               }}
-              onEnd={() => videoRef.current.seek(0)}
-              resizeMode="contain"
-              repeat={true}
-              style={StyleSheet.absoluteFill}
+
+              onEnd={() => videoRef.current?.seek(0)}
+
+              onError={(e) => console.log("Video error", e)}
             />
 
             {/* TOUCHABLE OVERLAY */}
@@ -183,11 +208,23 @@ const MoviePlayer = ({ route }) => {
               <View style={StyleSheet.absoluteFill} />
             </TouchableWithoutFeedback>
 
-            {isLoading && (
-              <View style={[StyleSheet.absoluteFill, { justifyContent: "center", alignItems: "center", backgroundColor: "#0D0E10" }]}>
+            {/* ✅ LOADER OVERLAY (FIXED) */}
+            {(isLoading || buffering) && (
+              <View
+                pointerEvents="none"
+                style={[
+                  StyleSheet.absoluteFill,
+                  {
+                    justifyContent: "center",
+                    alignItems: "center",
+                    backgroundColor: "rgba(13,14,16,0.35)",
+                  },
+                ]}
+              >
                 <ActivityIndicator size="large" color="red" />
               </View>
             )}
+
 
             {/* LANDSCAPE HEADER */}
             {controlsVisible && orientation === "landscape" && (
@@ -225,19 +262,20 @@ const MoviePlayer = ({ route }) => {
 
             {/* MAIN CONTROLS */}
             {isConnected && !islockScreen && controlsVisible && (
-              <View style={styles.controlsOverlay} pointerEvents="box-none">
+              <View style={[
+                styles.controlsOverlay, { paddingBottom: Platform.OS === "android" ? 40 : 0 }]}>
                 <View style={orientation === "portrait" ? styles.potraitControle : styles.lsControle}>
-                  {!isLoading && (
+                  {!isLoading && movieLink.seo && (
                     <TouchableOpacity onPress={moveVideoBack}>
                       <MaterialIcon name="replay-10" size={36} color="white" />
                     </TouchableOpacity>
                   )}
-                  {!isLoading && (
+                  {!isLoading && movieLink.seo && (
                     <TouchableOpacity onPress={handlePlayPause}>
                       <MaterialIcon name={!isPlaying ? "play-circle-outline" : "pause-circle-outline"} size={60} color="white" />
                     </TouchableOpacity>
                   )}
-                  {!isLoading && (
+                  {!isLoading && movieLink.seo && (
                     <TouchableOpacity onPress={moveVideoForward}>
                       <MaterialIcon name="forward-10" size={36} color="white" />
                     </TouchableOpacity>
@@ -246,12 +284,12 @@ const MoviePlayer = ({ route }) => {
 
                 {/* BOTTOM STRIP (Time + Fullscreen) */}
                 <View style={orientation === "portrait" ? styles.bottomController : styles.lsbottomController}>
-                  <Text style={styles.lsDurationTxt}>
+                   <Text style={styles.lsDurationTxt}>
                     {formatTime(currentTime)} / {formatTime(duration)}
                   </Text>
 
                   <View style={{ flexDirection: 'row', alignItems: 'center' }}>
-                    {orientation === "landscape" && (
+                    {orientation === "landscape" && movieLink.seo && (
                       <TouchableOpacity onPress={() => setSpeedMenuVisible(!speedMenuVisible)} style={{ marginRight: 15 }}>
                         <MaterialIcon name="speed" size={28} color="white" />
                       </TouchableOpacity>
@@ -263,6 +301,7 @@ const MoviePlayer = ({ route }) => {
                 </View>
 
                 {/* SLIDER */}
+                {movieLink.seo &&
                 <View style={orientation === "portrait" ? styles.sliderController : styles.lsSliderController}>
                   <Slider
                     value={currentTime}
@@ -281,7 +320,7 @@ const MoviePlayer = ({ route }) => {
                       videoRef.current.seek(val[0]);
                     }}
                   />
-                </View>
+                </View>}
               </View>
             )}
           </View>
@@ -348,19 +387,22 @@ const styles = StyleSheet.create({
   },
 
   portraitVideoBox: {
-    height: 200,
-    marginTop: Platform.OS === 'android'
-      ? StatusBar.currentHeight ?? 0
-      : 0,
+    marginTop: StatusBar.currentHeight,
+    aspectRatio: 16 / 9,
+    width: '100%',
   },
-
-  landscapeVideoBox: {
-    position: 'absolute',
+  landscapeFullscreen: {
+    position: "absolute",
     top: 0,
     left: 0,
     right: 0,
-    bottom: 0,   // 🔥 THIS IS THE KEY
+    bottom: 0,
+    paddingTop: 30,
+    paddingBottom: 30,
+    backgroundColor: "#000",
   },
+
+
   controlsOverlay: {
     ...StyleSheet.absoluteFillObject,
     backgroundColor: 'rgba(0,0,0,0.2)',
