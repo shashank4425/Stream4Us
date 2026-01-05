@@ -131,9 +131,9 @@
         "Movies": [
             {
                 "id": "201",
-                "logo": "",
+                "logo": "https://raw.githubusercontent.com/shashank4425/Stream4Us/refs/heads/movies/channel_logo/dangal.png",
                 "name": "Dangal Tv",
-                "url": "https://raw.githubusercontent.com/shashank4425/Stream4Us/refs/heads/movies/channel_logo/dangal.png"
+                "url": "https://live-dangal.akamaized.net/liveabr/playlist.m3u8"
             }
         ]
     }
