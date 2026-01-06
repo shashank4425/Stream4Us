@@ -98,27 +98,33 @@
                 "logo": "https://static.wikia.nocookie.net/jhmovie/images/7/7b/Goldmines_logo.png/revision/latest?cb=20240404141630",
                 "name": "Goldmines",
                 "url": "https://cdn-2.pishow.tv/live/1459/master.m3u8"
-            },
+            },,
             {
                 "id": "108",
+                "logo": "",
+                "name": "Goldmines",
+                "url": "https://cdn-2.pishow.tv/live/1459/master.m3u8"
+            },
+            {
+                "id": "109",
                 "logo": "",
                 "name": "Goldmines Movies",
                 "url": "https://cdn-2.pishow.tv/live/1461/master.m3u8"
             },
             {
-                "id": "109",
+                "id": "110",
                 "logo": "",
                 "name": "Goldmines Movies 2",
                 "url": "https://cdn-2.pishow.tv/live/1460/master.m3u8"
             },
             {
-                "id": "110",
+                "id": "111",
                 "logo": "",
                 "name": "Bollywood HD",
                 "url": "https://d35j504z0x2vu2.cloudfront.net/v1/manifest/0bc8e8376bd8417a1b6761138aa41c26c7309312/bollywood-hd/d3227daf-ea13-48c9-95a4-1619862d136e/0.m3u8"
             },
             {
-                "id": "111",
+                "id": "112",
                 "logo": "",
                 "name": "Bollywood Classic HD",
                 "url": "https://d35j504z0x2vu2.cloudfront.net/v1/master/0bc8e8376bd8417a1b6761138aa41c26c7309312/bollywood-classic/manifest.m3u8"
