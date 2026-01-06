@@ -324,7 +324,17 @@ const MoviePlayer = ({ route }) => {
               </View>
             )}
           </View>
-
+          {orientation === "portrait" && !isSwitching && (
+            <ScrollView style={{ flex: 1 }}>
+              <View style={styles.container}>
+                <View style={styles.contentMain}>
+                  <Text style={styles.mtitle}>{movieLink.seo ? movieLink.seo.page : movieLink.name}</Text>
+                  <Text style={styles.mline}>{movieLink.line2}</Text>
+                  <Text style={styles.contentDes}>{movieLink.seo ? movieLink.seo.description : "No Description"}</Text>
+                </View>
+              </View>
+            </ScrollView>
+          )}
           {/* SPEED MENU POPUP */}
           {speedMenuVisible && (
             <View style={styles.speedMenuPopup}>
@@ -345,21 +355,6 @@ const MoviePlayer = ({ route }) => {
                 </TouchableOpacity>
               ))}
             </View>
-          )}
-
-          {/* DESCRIPTION AREA */}
-          {/* FIX 4: Wrap in ScrollView. In portrait, if the navigation bar appears, 
-          the ScrollView ensures the text is still reachable and doesn't "cut off" */}
-          {orientation === "portrait" && !isSwitching && (
-            <ScrollView style={{ flex: 1 }}>
-              <View style={styles.container}>
-                <View style={styles.contentMain}>
-                  <Text style={styles.mtitle}>{movieLink.seo ? movieLink.seo.page : movieLink.name}</Text>
-                  <Text style={styles.mline}>{movieLink.line2}</Text>
-                  <Text style={styles.contentDes}>{movieLink.seo ? movieLink.seo.description : "No Description"}</Text>
-                </View>
-              </View>
-            </ScrollView>
           )}
         </View>
       </View>
