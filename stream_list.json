@@ -5,7 +5,7 @@
         "Movies": [
             {
                 "id": "001",
-                "logo": "",
+                "logo": "https://raw.githubusercontent.com/shashank4425/Stream4Us/refs/heads/movies/channel_logo/willow_cricket.png",
                 "name": "Willow Cricket",
                 "url": "https://fl1.moveonjoy.com/WILLOW_CRICKET/index.m3u8"
             },
