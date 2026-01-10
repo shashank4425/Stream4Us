@@ -13,14 +13,7 @@ export default function SplashScreen({ navigation }) {
     }).start();
 
     const timeout = setTimeout(async () => {
-
-      // // FIX: reset system UI before applying black navbar
-      // await NavigationBar.setVisibilityAsync("visible");
-      // await NavigationBar.setBehaviorAsync("inset-swipe");
-      // await NavigationBar.setBackgroundColorAsync("#0D0E10");
-      // await NavigationBar.setButtonStyleAsync("light");
-
-      navigation.replace("Home");
+      navigation.replace("BottomAppNavigator");
     }, 4000);
 
     return () => clearTimeout(timeout);

@@ -1,18 +1,10 @@
-import Home from "@/Screen/HomeScreen";
-import LiveStreaming from "@/Screen/LiveChannels/LiveStreaming";
-import ActionMovies from "@/Screen/movies/ActionMovies/ActionMovies";
-import BhojpuriBhaukalMovies from "@/Screen/movies/BhojpuriMovies/BhojpuriBhaukalMovies";
-import GlobalHitsMovies from "@/Screen/movies/GlobalHitsMovies/GlobalHitsMoviesScreen";
-import HorrorMovies from "@/Screen/movies/HorrorMovies/HorrorMovies";
-import RomanticMovies from "@/Screen/movies/RemanceMovies/RomanticMovies";
-import SouthDubbedMovies from "@/Screen/movies/SouthMovies/SouthDubbedMoviesScreen";
-import MoviePlayer from "@/Screen/VideoPlayer/MoviePlayerScreen";
 import { createStackNavigator } from '@react-navigation/stack';
 import * as NavigationBar from "expo-navigation-bar";
 import { usePathname } from "expo-router";
 import React, { useEffect } from "react";
 import { Dimensions, StatusBar, StyleSheet, View } from "react-native";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
+import BottomAppNavigator from "./BottomAppNavigator";
 import SplashScreen from "./SplashScreen";
 
 const Stack = createStackNavigator();
@@ -48,73 +40,11 @@ export default function AppNavigatorScreen({ route }) {
           <Stack.Screen name="SplashScreen" component={SplashScreen} options={{
             headerLeft: () => null,
             headerShown: false,
-          }} />
-          <Stack.Screen name="Home" component={Home} options={{
-            presentation: "card",
-            animation: 'fade',
-            gestureEnabled: false,
+          }} />  
+          <Stack.Screen name="BottomAppNavigator" component={BottomAppNavigator} options={{
             headerLeft: () => null,
             headerShown: false,
-            headerStyle: { backgroundColor: "#0D0E10", height: windowHeight / 10 },
-            headerTintColor: "#ffffff"
-          }} />
-          <Stack.Screen name="Action Movies" component={ActionMovies} options={{
-            presentation: "card",
-            animation: 'fade',
-            gestureEnabled: false,
-            headerTitle: () => null, headerTintColor: "#FFF",
-            headerStyle: { backgroundColor: "#0D0E10", height: windowHeight / 10 },
-          }} />
-          <Stack.Screen name="Global Hits Movies" component={GlobalHitsMovies} options={{
-            presentation: "card",
-            animation: 'fade',
-            gestureEnabled: false,
-            headerTitle: () => null, headerTintColor: "#FFF",
-            headerStyle: { backgroundColor: "#0D0E10", height: windowHeight / 10 },
-          }} />
-          <Stack.Screen name="Romantic Movies" component={RomanticMovies} options={{
-            presentation: "card",
-            animation: 'fade',
-            gestureEnabled: false,
-            headerTitle: () => null, headerTintColor: "#FFF",
-            headerStyle: { backgroundColor: "#0D0E10", height: windowHeight / 10 },
-          }} />
-          <Stack.Screen name="South Dubbed Movies" component={SouthDubbedMovies} options={{
-            presentation: "card",
-            animation: 'fade',
-            gestureEnabled: false,
-            headerTitle: () => null, headerTintColor: "#FFF",
-            headerStyle: { backgroundColor: "#0D0E10", height: windowHeight / 10 },
-          }} />
-          <Stack.Screen name="Bhojpuri Bhaukal" component={BhojpuriBhaukalMovies} options={{
-            presentation: "card",
-            animation: 'fade',
-            gestureEnabled: false,
-            headerTitle: () => null, headerTintColor: "#FFF",
-            headerStyle: { backgroundColor: "#0D0E10", height: windowHeight / 10 },
-          }} />
-          <Stack.Screen name="Horror" component={HorrorMovies} options={{
-            presentation: "card",
-            animation: 'fade',
-            gestureEnabled: false,
-            headerTitle: () => null, headerTintColor: "#FFF",
-            headerStyle: { backgroundColor: "#0D0E10", height: windowHeight / 10 },
-          }} />
-          <Stack.Screen name="MoviePlayer" component={MoviePlayer}
-            options={{
-              presentation: "card",
-              animation: 'fade',
-              gestureEnabled: false,
-              headerShown: false, cardStyle: { backgroundColor: "#0D0E10", width: "100%", height: "100%" }
-            }} />
-          <Stack.Screen name="LiveStreaming" component={LiveStreaming}
-            options={{
-              presentation: "card",
-              animation: 'fade',
-              gestureEnabled: false,
-              headerTitle: () => null, headerTintColor: "#FFF",
-              headerStyle: { backgroundColor: "#0D0E10", height: windowHeight / 10 },
-            }} />
+          }} />   
         </Stack.Navigator>
       </View>
     </>
