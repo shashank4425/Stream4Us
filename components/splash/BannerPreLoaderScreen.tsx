@@ -11,7 +11,7 @@ const BannerPreLoaderScreen = () => {
                     key={i}
                     style={{
                         width: width,       // exact 3 items
-                        height: height * 0.30,
+                        height: height * 0.45,
                         backgroundColor: "#222",
                         borderRadius: 0,
                         marginBottom: 10,   // vertical spacing
