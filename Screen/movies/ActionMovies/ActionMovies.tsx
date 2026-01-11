@@ -19,8 +19,8 @@ export default function ActionMovies({ navigation, route }) {
       const response = await fetch(
         "https://raw.githubusercontent.com/shashank4425/Stream4Us/refs/heads/movies/bollywood/action/movies.json"
       );
-
       const jsonData = await response.json();
+      
       setData(jsonData);
     } catch (error) {
       console.log("Error fetching JSON:", error);
