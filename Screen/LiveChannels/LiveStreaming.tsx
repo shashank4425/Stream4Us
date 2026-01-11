@@ -1,5 +1,5 @@
 import PreLoaderScreen from "@/components/splash/PreLoaderScreen";
-import React, { useEffect, useLayoutEffect, useState } from "react";
+import React, { useEffect, useState } from "react";
 import {
   Dimensions,
   FlatList,
@@ -23,11 +23,11 @@ export default function LiveStreaming({ navigation, route }) {
   const [loading, setLoading] = useState(true);
   const [channels, setChannels] = useState([]);
 
-  useLayoutEffect(() => {
-    navigation.setOptions({
-      headerTitle: route.params?.title || "Live TV",
-    });
-  }, [navigation, route]);
+  // useLayoutEffect(() => {
+  //   navigation.setOptions({
+  //     headerTitle: route.params?.title || "Live TV",
+  //   });
+  // }, [navigation, route]);
 
   const stream_list =
     "https://raw.githubusercontent.com/shashank4425/Stream4Us/refs/heads/movies/stream_list.json";

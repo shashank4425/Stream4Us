@@ -17,11 +17,19 @@ export default function AppNavigatorScreen({ route }) {
   console.log(pathname)
   const isSplash = pathname === "/";
 
-  useEffect(() => {
-    NavigationBar.setPositionAsync("absolute");
+ useEffect(() => {
+  NavigationBar.setPositionAsync("absolute");
+  NavigationBar.setBehaviorAsync("overlay-swipe"); // 🔑 KEY LINE
+  NavigationBar.setButtonStyleAsync("light");
+
+  if (isSplash) {
     NavigationBar.setBackgroundColorAsync("transparent");
-    NavigationBar.setButtonStyleAsync("light");
-  }, []);
+  } else {
+    NavigationBar.setBackgroundColorAsync("#0D0E10");
+  }
+}, [isSplash]);
+
+
   return (
     <>
       <View
@@ -42,6 +50,9 @@ export default function AppNavigatorScreen({ route }) {
             headerShown: false,
           }} />  
           <Stack.Screen name="BottomAppNavigator" component={BottomAppNavigator} options={{
+            presentation: "card",
+            animation: 'fade',
+            gestureEnabled: false,
             headerLeft: () => null,
             headerShown: false,
           }} />   

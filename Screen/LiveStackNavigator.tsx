@@ -25,7 +25,7 @@ export default function LiveStackNavigator() {
                 component={LiveStreaming}
                 options={{
                     headerShown: true,
-                    headerTitle: 'Live TV',
+                    headerTitle: "",
                     headerStatusBarHeight: insets.top, // 🔥 THIS FIXES IT
                     headerStyle: {
                         backgroundColor: "#0D0E10",

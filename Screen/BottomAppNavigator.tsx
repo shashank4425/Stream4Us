@@ -17,9 +17,11 @@ function CustomTabBar({ state, navigation }) {
         bottom: 0,
         left: 0,
         right: 0,
-        height: 48, // 🔥 EXACT system bar height
+        height: 50, // 🔥 EXACT system bar height
         flexDirection: 'row',
         backgroundColor: '#0D0E10',
+        borderTopWidth: 1,
+        borderTopColor: 'rgba(255,255,255,0.08)',
       }}
     >
       {state.routes.map((route, index) => {
@@ -43,13 +45,13 @@ function CustomTabBar({ state, navigation }) {
             />
             <Text
               style={{
-                fontSize: 12,
-                lineHeight: 10,
+                fontSize: 11,
+                lineHeight: 8,
                 marginTop:4,   // 🔥 overlay text
                 color: focused ? '#fff' : '#777',
               }}
             >
-              {route.name === 'Home' ? 'Home' : 'Live'}
+              {route.name === 'Home' ? 'Home' : 'Live TV'}
             </Text>
           </TouchableOpacity>
         );
