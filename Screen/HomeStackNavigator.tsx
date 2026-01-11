@@ -5,7 +5,6 @@ import GlobalHitsMovies from "@/Screen/movies/GlobalHitsMovies/GlobalHitsMoviesS
 import HorrorMovies from "@/Screen/movies/HorrorMovies/HorrorMovies";
 import RomanticMovies from "@/Screen/movies/RemanceMovies/RomanticMovies";
 import SouthDubbedMovies from "@/Screen/movies/SouthMovies/SouthDubbedMoviesScreen";
-import MoviePlayer from "@/Screen/VideoPlayer/MoviePlayerScreen";
 import { createStackNavigator } from '@react-navigation/stack';
 import React from "react";
 import { Dimensions, StyleSheet } from "react-native";
@@ -82,14 +81,7 @@ export default function HomeStackNavigator({ route }) {
             gestureEnabled: false,
             headerTitle: () => null, headerTintColor: "#FFF",
             headerStyle: { backgroundColor: "#0D0E10", height: windowHeight / 10 },
-          }} />
-          <Stack.Screen name="MoviePlayer" component={MoviePlayer}
-            options={{
-              presentation: "card",
-              animation: 'fade',
-              gestureEnabled: false,
-              headerShown: false, cardStyle: { backgroundColor: "#0D0E10", width: "100%", height: "100%" }
-            }} />
+          }} />          
           
         </Stack.Navigator>
     </>

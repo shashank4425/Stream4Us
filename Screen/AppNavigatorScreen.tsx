@@ -6,6 +6,7 @@ import { Dimensions, StatusBar, StyleSheet, View } from "react-native";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
 import BottomAppNavigator from "./BottomAppNavigator";
 import SplashScreen from "./SplashScreen";
+import MoviePlayer from './VideoPlayer/MoviePlayerScreen';
 
 const Stack = createStackNavigator();
 const windowWidth = Dimensions.get('window').width;
@@ -56,6 +57,13 @@ export default function AppNavigatorScreen({ route }) {
             headerLeft: () => null,
             headerShown: false,
           }} />   
+          <Stack.Screen name="MoviePlayer" component={MoviePlayer}
+            options={{
+              presentation: "card",
+              animation: 'fade',
+              gestureEnabled: false,
+              headerShown: false, cardStyle: { backgroundColor: "#0D0E10", width: "100%", height: "100%" }
+            }} />
         </Stack.Navigator>
       </View>
     </>

@@ -140,7 +140,7 @@ export default function Home({ navigation }) {
                             <View
                                 style={{
                                     flexDirection: "row", alignItems: "center", justifyContent: "space-between",
-                                    paddingHorizontal: 15, marginBottom: 6,
+                                    paddingHorizontal: 10, marginBottom: 6,
                                 }}>
                                 <Text style={{
                                     color: "white",
@@ -151,7 +151,7 @@ export default function Home({ navigation }) {
                                     {item.category}
                                 </Text>
                                 <TouchableOpacity activeOpacity={1} onPress={() => navigation.navigate(item.category, { title: item.category })}>
-                                    <FontAwesome name="angle-right" size={24} color="#fff"></FontAwesome>
+                                    <FontAwesome name="angle-right" size={22} color="#fff"></FontAwesome>
                                 </TouchableOpacity>
                             </View>
 
