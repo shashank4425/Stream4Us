@@ -11,12 +11,12 @@ import {
   Dimensions,
   InteractionManager,
   Platform,
+  Pressable,
   ScrollView,
   StatusBar,
   StyleSheet,
   Text,
   TouchableOpacity,
-  TouchableWithoutFeedback,
   View
 } from "react-native";
 import MaterialIcon from "react-native-vector-icons/MaterialIcons";
@@ -39,6 +39,7 @@ const MoviePlayer = ({ route }) => {
   const [controlsVisible, setControlsVisible] = useState(false);
   const [speedMenuVisible, setSpeedMenuVisible] = useState(false);
   const [playbackRate, setPlaybackRate] = useState(1.0);
+  const [playerReady, setPlayerReady] = useState(false);
 
   const hideTimer = useRef(null);
   const movieLink = route.params;
@@ -161,13 +162,10 @@ const MoviePlayer = ({ route }) => {
               ref={videoRef}
               source={videoSource}
               paused={!isPlaying}
-              useTextureView={false}
               resizeMode="cover"
               repeat
               style={StyleSheet.absoluteFill}
 
-              // ✅ ANDROID FIXES
-              useTextureView={false}
               disableFocus={true}
               maxBitRate={2500000}
 
@@ -188,6 +186,7 @@ const MoviePlayer = ({ route }) => {
                 setIsLoading(false);
                 setVideoLoaded(true);
                 setIsPlaying(true);
+                setPlayerReady(true);
               }}
 
               onBuffer={({ isBuffering }) => setBuffering(isBuffering)}
@@ -202,13 +201,13 @@ const MoviePlayer = ({ route }) => {
 
               onError={(e) => console.log("Video error", e)}
             />
-
-            {/* TOUCHABLE OVERLAY */}
-            <TouchableWithoutFeedback onPress={onVideoPress}>
-              <View style={StyleSheet.absoluteFill} />
-            </TouchableWithoutFeedback>
-
-            {/* ✅ LOADER OVERLAY (FIXED) */}
+            <Pressable
+              onPress={onVideoPress}
+              style={[
+                StyleSheet.absoluteFillObject,
+                { zIndex: 5, elevation: 5 }
+              ]}
+            />
             {(isLoading || buffering) && (
               <View
                 pointerEvents="none"
@@ -260,8 +259,7 @@ const MoviePlayer = ({ route }) => {
             )}
 
 
-            {/* MAIN CONTROLS */}
-            {isConnected && !islockScreen && controlsVisible && (
+            {playerReady && isConnected && !islockScreen && controlsVisible && (
               <View style={[
                 styles.controlsOverlay, { paddingBottom: Platform.OS === "android" ? 40 : 0 }]}>
                 <View style={orientation === "portrait" ? styles.potraitControle : styles.lsControle}>
@@ -284,7 +282,7 @@ const MoviePlayer = ({ route }) => {
 
                 {/* BOTTOM STRIP (Time + Fullscreen) */}
                 <View style={orientation === "portrait" ? styles.bottomController : styles.lsbottomController}>
-                   <Text style={styles.lsDurationTxt}>
+                  <Text style={styles.lsDurationTxt}>
                     {formatTime(currentTime)} / {formatTime(duration)}
                   </Text>
 
@@ -301,26 +299,26 @@ const MoviePlayer = ({ route }) => {
                 </View>
 
                 {/* SLIDER */}
-                {movieLink.seo &&
-                <View style={orientation === "portrait" ? styles.sliderController : styles.lsSliderController}>
-                  <Slider
-                    value={currentTime}
-                    minimumValue={0}
-                    maximumValue={duration}
-                    minimumTrackTintColor="#b41313ff"
-                    maximumTrackTintColor="#b6b3b3ff"
-                    thumbTintColor="#b41313ff"
-                    onSlidingStart={() => setIsSeeking(true)}
-                    onValueChange={(val) => {
-                      setCurrentTime(val[0]);
-                      throttledSeek(val[0]);
-                    }}
-                    onSlidingComplete={(val) => {
-                      setIsSeeking(false);
-                      videoRef.current.seek(val[0]);
-                    }}
-                  />
-                </View>}
+                {movieLink.seo && playerReady &&
+                  <View style={orientation === "portrait" ? styles.sliderController : styles.lsSliderController}>
+                    <Slider
+                      value={currentTime}
+                      minimumValue={0}
+                      maximumValue={duration}
+                      minimumTrackTintColor="#b41313ff"
+                      maximumTrackTintColor="#b6b3b3ff"
+                      thumbTintColor="#b41313ff"
+                      onSlidingStart={() => setIsSeeking(true)}
+                      onValueChange={(val) => {
+                        setCurrentTime(val[0]);
+                        throttledSeek(val[0]);
+                      }}
+                      onSlidingComplete={(val) => {
+                        setIsSeeking(false);
+                        videoRef.current.seek(val[0]);
+                      }}
+                    />
+                  </View>}
               </View>
             )}
           </View>
@@ -454,7 +452,7 @@ const styles = StyleSheet.create({
     top: 0,
     left: 0,
     right: 0,
-    height: 70, // Increased height for better touch area
+    height: 60, // Increased height for better touch area
     flexDirection: 'row',
     alignItems: 'center',
     backgroundColor: 'rgba(0,0,0,0.5)', // Darker overlay for text visibility

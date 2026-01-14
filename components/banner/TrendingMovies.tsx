@@ -87,7 +87,7 @@ const TrendingMovies = () => {
         style={styles.buttonWrapper}
       >
         <LinearGradient
-          colors={['#028CF3', '#F4119E']}
+          colors={['#0496FF', '#E500A4']}
           start={{ x: 0, y: 0 }}
           end={{ x: 1.1, y: 0 }}
           style={styles.button}

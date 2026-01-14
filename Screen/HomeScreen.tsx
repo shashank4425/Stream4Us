@@ -135,12 +135,12 @@ export default function Home({ navigation }) {
                     </View>
                 )}
                 renderItem={({ item }) => (
-                    <View style={{ marginBottom: 10 }}>
+                    <View style={{ marginBottom: 12 }}>
                         <View style={Styles.cardContainer}>
                             <View
                                 style={{
                                     flexDirection: "row", alignItems: "center", justifyContent: "space-between",
-                                    paddingHorizontal: 10, marginBottom: 6,
+                                    paddingHorizontal: 10, marginBottom: 4,
                                 }}>
                                 <Text style={{
                                     color: "white",
