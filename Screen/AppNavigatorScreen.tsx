@@ -5,6 +5,7 @@ import React, { useEffect } from "react";
 import { Dimensions, StatusBar, StyleSheet, View } from "react-native";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
 import BottomAppNavigator from "./BottomAppNavigator";
+import OfflineScreen from './OfflineScreen/OfflinneScreen';
 import SplashScreen from "./SplashScreen";
 import MoviePlayer from './VideoPlayer/MoviePlayerScreen';
 
@@ -50,6 +51,15 @@ export default function AppNavigatorScreen({ route }) {
             headerLeft: () => null,
             headerShown: false,
           }} />  
+           <Stack.Screen
+            name="OfflineScreen"
+            component={OfflineScreen}
+            options={{ headerShown: false, 
+              presentation: "card",
+              animation: 'fade',
+              gestureEnabled: false,
+             }}
+          />
           <Stack.Screen name="BottomAppNavigator" component={BottomAppNavigator} options={{
             presentation: "card",
             animation: 'fade',

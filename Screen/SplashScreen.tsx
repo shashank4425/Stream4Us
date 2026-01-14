@@ -1,10 +1,10 @@
+import NetInfo from "@react-native-community/netinfo";
 import React, { useEffect, useRef } from "react";
 import { Animated, ImageBackground, StatusBar, StyleSheet, View } from "react-native";
 export default function SplashScreen({ navigation }) {
-  const fadeAnim = useRef(new Animated.Value(0)).current;
+   const fadeAnim = useRef(new Animated.Value(0)).current;
 
   useEffect(() => {
-    // Set nav bar black
     // Fade animation
     Animated.timing(fadeAnim, {
       toValue: 1,
@@ -13,8 +13,14 @@ export default function SplashScreen({ navigation }) {
     }).start();
 
     const timeout = setTimeout(async () => {
-      navigation.replace("BottomAppNavigator");
-    }, 4000);
+      const state = await NetInfo.fetch();
+
+      if (state.isConnected && state.isInternetReachable) {
+        navigation.replace("BottomAppNavigator");
+      } else {
+        navigation.replace("OfflineScreen");
+      }
+    }, 4000); // splash duration
 
     return () => clearTimeout(timeout);
   }, []);
