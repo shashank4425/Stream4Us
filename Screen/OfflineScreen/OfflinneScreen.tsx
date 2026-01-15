@@ -1,32 +1,57 @@
-import React from "react";
+import NetInfo from "@react-native-community/netinfo";
+import React, { useEffect, useRef, useState } from "react";
 import {
-    Linking,
-    Platform,
-    Pressable,
-    StyleSheet,
-    Text,
-    View,
+  Image,
+  Linking,
+  Platform,
+  Pressable,
+  StyleSheet,
+  Text,
+  View,
 } from "react-native";
-import MaterialIcon from "react-native-vector-icons/MaterialIcons";
+export default function OfflineScreen({ navigation }) {
+  const redirected = useRef(false);
 
-export default function OfflineScreen() {
+  const [backOnline, setBackOnline] = useState(false);
+
+  useEffect(() => {
+    const unsubscribe = NetInfo.addEventListener(state => {
+      const hasInternet =
+        state.isConnected && state.isInternetReachable;
+
+      if (hasInternet && !redirected.current) {
+        redirected.current = true;
+
+        setBackOnline(true); // ✅ show bottom banner
+
+        setTimeout(() => {
+          navigation.replace("BottomAppNavigator");
+        }, 1200); // ⏱ smooth delay
+      }
+    });
+
+    return () => unsubscribe();
+  }, []);
 
   const openWifiSettings = async () => {
-  try {
-    if (Platform.OS === "android") {
-      await Linking.sendIntent("android.settings.WIFI_SETTINGS");
-    } else {
-      await Linking.openURL("App-Prefs:root=WIFI");
+    try {
+      if (Platform.OS === "android") {
+        await Linking.sendIntent("android.settings.WIFI_SETTINGS");
+      } else {
+        await Linking.openURL("App-Prefs:root=WIFI");
+      }
+    } catch (e) {
+      Linking.openSettings();
     }
-  } catch (e) {
-    Linking.openSettings();
-  }
-};
+  };
 
   return (
     <View style={styles.container}>
       <View style={styles.content}>
-         <MaterialIcon name="rocket-launch"  size={120} color="#495057"></MaterialIcon>
+        <Image
+          source={require("../../assets/images/stream4us/logo/stream4us_rocket.png")}
+          style={styles.rocket}
+        />
         <Text style={styles.title}>No Internet Connection</Text>
         <Text style={styles.subtitle}>
           Please turn on your mobile data or connect to Wi-Fi to continue
@@ -42,7 +67,13 @@ export default function OfflineScreen() {
           <Text style={styles.buttonText}>Open Device Settings</Text>
         </Pressable>
       </View>
+      {backOnline && (
+        <View style={styles.backOnline}>
+          <Text style={styles.backOnlineText}>Back Online</Text>
+        </View>
+      )}
     </View>
+
   );
 }
 
@@ -52,12 +83,19 @@ const styles = StyleSheet.create({
     backgroundColor: "#0D0E10",
     justifyContent: "center",
     alignItems: "center",
-    paddingHorizontal: 60, // 🔑 SAME padding for everything
+    width: "100%",  // 🔑 SAME padding for everything
   },
 
   content: {
     width: "100%", // 🔑 forces same left/right edges
     alignItems: "center",
+    paddingHorizontal: 60
+  },
+  rocket: {
+    width: 140,
+    height: 140,
+    resizeMode: "contain",
+    marginBottom: 0,
   },
 
   title: {
@@ -96,4 +134,20 @@ const styles = StyleSheet.create({
     fontWeight: "600",
     letterSpacing: 0.3,
   },
+
+  backOnline: {
+    position: "absolute",
+    bottom: 0,
+    width: "100%",
+    paddingVertical: 2,
+    backgroundColor: "#1DB954", // ✅ green success
+    alignItems: "center",
+  },
+
+  backOnlineText: {
+    color: "#FFFFFF",
+    fontSize: 14,
+    fontWeight: "600",
+    letterSpacing: 0.4,
+  }
 });
