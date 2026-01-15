@@ -10,14 +10,17 @@ const Tab = createBottomTabNavigator();
 
 function CustomTabBar({ state, navigation }) {
   const insets = useSafeAreaInsets();
+
+  const TAB_HEIGHT = 50;
   return (
     <View
       style={{
         position: 'absolute',
-        bottom: 0,
         left: 0,
         right: 0,
-        height: 50, // 🔥 EXACT system bar height
+        bottom: 0,
+        height: TAB_HEIGHT + insets.bottom, // 🔥 KEY FIX
+        paddingBottom: insets.bottom,       // 🔥 KEY FIX
         flexDirection: 'row',
         backgroundColor: '#0D0E10',
         borderTopWidth: 1,
@@ -46,8 +49,7 @@ function CustomTabBar({ state, navigation }) {
             <Text
               style={{
                 fontSize: 11,
-                lineHeight: 8,
-                marginTop:4,   // 🔥 overlay text
+                marginTop: 4,
                 color: focused ? '#fff' : '#777',
               }}
             >
@@ -57,7 +59,6 @@ function CustomTabBar({ state, navigation }) {
         );
       })}
     </View>
-
   );
 }
 
