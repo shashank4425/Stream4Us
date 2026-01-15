@@ -22,11 +22,10 @@ export default function OfflineScreen({ navigation }) {
       if (hasInternet && !redirected.current) {
         redirected.current = true;
 
-        setBackOnline(true); // ✅ show bottom banner
-
+        setBackOnline(true); // 
         setTimeout(() => {
           navigation.replace("BottomAppNavigator");
-        }, 1200); // ⏱ smooth delay
+        }, 1200); 
       }
     });
 

@@ -18,6 +18,11 @@
         "backgroundImage": "./assets/images/stream4us/logo/stream4us_logo.png",
         "monochromeImage": "./assets/images/stream4us/logo/stream4us_logo.png"
       },
+      "navigationBar": {
+        "backgroundColor": "#0D0E10",
+        "barStyle": "light-content",
+        "visible": true
+      },
       "edgeToEdgeEnabled": true,
       "predictiveBackGestureEnabled": false,
       "package": "com.shashank4425.Stream4Us"
