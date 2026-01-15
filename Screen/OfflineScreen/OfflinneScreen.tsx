@@ -1,4 +1,6 @@
 import NetInfo from "@react-native-community/netinfo";
+import { useSafeAreaInsets } from "react-native-safe-area-context";
+
 import React, { useEffect, useRef, useState } from "react";
 import {
   Image,
@@ -11,6 +13,7 @@ import {
 } from "react-native";
 export default function OfflineScreen({ navigation }) {
   const redirected = useRef(false);
+  const insets = useSafeAreaInsets();
 
   const [backOnline, setBackOnline] = useState(false);
 
@@ -25,7 +28,7 @@ export default function OfflineScreen({ navigation }) {
         setBackOnline(true); // 
         setTimeout(() => {
           navigation.replace("BottomAppNavigator");
-        }, 1200); 
+        }, 1200);
       }
     });
 
@@ -67,7 +70,12 @@ export default function OfflineScreen({ navigation }) {
         </Pressable>
       </View>
       {backOnline && (
-        <View style={styles.backOnline}>
+        <View
+          style={[
+            styles.backOnline,
+            { marginBottom: insets.bottom } // ✅ APPLY HERE
+          ]}
+        >
           <Text style={styles.backOnlineText}>Back Online</Text>
         </View>
       )}
@@ -139,13 +147,14 @@ const styles = StyleSheet.create({
     bottom: 0,
     width: "100%",
     paddingVertical: 2,
-    backgroundColor: "#1DB954", // ✅ green success
-    alignItems: "center",
+    paddingBottom: 6,
+    backgroundColor: "#1DB954",
+    alignItems: "center"
   },
 
   backOnlineText: {
     color: "#FFFFFF",
-    fontSize: 14,
+    fontSize: 12,
     fontWeight: "600",
     letterSpacing: 0.4,
   }
