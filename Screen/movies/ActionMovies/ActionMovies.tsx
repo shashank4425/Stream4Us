@@ -1,12 +1,15 @@
 import { commonStyles } from "@/assets/commoncss/commoncss";
 import PreLoaderScreen from "@/components/splash/PreLoaderScreen";
+import NoInternetModal from "@/Screen/OfflineScreen/NoInternetModal";
+import NetInfo from "@react-native-community/netinfo";
 import { createStackNavigator } from '@react-navigation/stack';
-import { useEffect, useLayoutEffect, useState } from "react";
+import React, { useEffect, useLayoutEffect, useState } from "react";
 import { Image, ScrollView, StyleSheet, TouchableOpacity, View } from "react-native";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
 const Stack = createStackNavigator();
 
 export default function ActionMovies({ navigation, route }) {
+  const [showNoInternet, setShowNoInternet] = React.useState(false);
   const insets = useSafeAreaInsets();
   const [data, setData] = useState([]);
   const [loading, setLoading] = useState(true);
@@ -20,7 +23,7 @@ export default function ActionMovies({ navigation, route }) {
         "https://raw.githubusercontent.com/shashank4425/Stream4Us/refs/heads/movies/bollywood/action/movies.json"
       );
       const jsonData = await response.json();
-      
+
       setData(jsonData);
     } catch (error) {
       console.log("Error fetching JSON:", error);
@@ -34,20 +37,30 @@ export default function ActionMovies({ navigation, route }) {
     })
   }, [navigation]);
 
-  if (loading){
+  if (loading) {
     return (
-       <PreLoaderScreen/>
+      <PreLoaderScreen />
     )
   }
-  if (!loading){
-     return (
+  const onMoviePress = async (item) => {
+    const net = await NetInfo.fetch();
+
+    if (net.isConnected) {
+      navigation.navigate("MoviePlayer", item);
+    } else {
+      setShowNoInternet(true);
+    }
+  };
+
+  if (!loading) {
+    return (
       <ScrollView showsVerticalScrollIndicator={false}>
 
         <View style={commonStyles.container}>
           {data.map(item => {
             return (
               <View key={item.id} style={commonStyles.cards}>
-                <TouchableOpacity onPress={() => navigation.navigate("MoviePlayer", item)}>
+                <TouchableOpacity onPress={() => onMoviePress(item)}>
 
                   <Image source={{ uri: item.seo.ogImage }} style={commonStyles.imgSize} />
 
@@ -56,6 +69,10 @@ export default function ActionMovies({ navigation, route }) {
             )
           })}
         </View>
+        <NoInternetModal
+          visible={showNoInternet}
+          onClose={() => setShowNoInternet(false)}
+        />
       </ScrollView>
     )
   }

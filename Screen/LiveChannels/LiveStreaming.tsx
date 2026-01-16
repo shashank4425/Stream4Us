@@ -1,4 +1,6 @@
 import PreLoaderScreen from "@/components/splash/PreLoaderScreen";
+import NoInternetModal from "@/Screen/OfflineScreen/NoInternetModal";
+import NetInfo from "@react-native-community/netinfo";
 import React, { useEffect, useState } from "react";
 import {
   Dimensions,
@@ -22,7 +24,7 @@ const windowHeight = Dimensions.get('window').height;
 export default function LiveStreaming({ navigation, route }) {
   const [loading, setLoading] = useState(true);
   const [channels, setChannels] = useState([]);
-
+  const [showNoInternet, setShowNoInternet] = React.useState(false);
   // useLayoutEffect(() => {
   //   navigation.setOptions({
   //     headerTitle: route.params?.title || "Live TV",
@@ -56,6 +58,15 @@ export default function LiveStreaming({ navigation, route }) {
     fetchJSON();
   }, []);
 
+  const onTvPress = async (item) => {
+    const net = await NetInfo.fetch();
+
+    if (net.isConnected) {
+      navigation.navigate("MoviePlayer", item);
+    } else {
+      setShowNoInternet(true);
+    }
+  };
   if (loading) return <PreLoaderScreen />;
 
   return (
@@ -92,7 +103,7 @@ export default function LiveStreaming({ navigation, route }) {
                   <View style={{ alignItems: "center", marginHorizontal: 3 }}>
                     <TouchableOpacity
                       activeOpacity={1}
-                      onPress={() => navigation.navigate("MoviePlayer", item)}
+                      onPress={() => onTvPress(item)}
                     >
                       {item.logo ? (
                         <Image
@@ -139,6 +150,10 @@ export default function LiveStreaming({ navigation, route }) {
             </View>
           </View>
         )}
+      />
+      <NoInternetModal
+        visible={showNoInternet}
+        onClose={() => setShowNoInternet(false)}
       />
     </View>
   )

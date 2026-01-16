@@ -72,7 +72,7 @@ export default function Home({ navigation }) {
         const net = await NetInfo.fetch();
 
         if (net.isConnected) {
-            setShowNoInternet(true);
+            navigation.navigate("MoviePlayer", item );
         } else {
             setShowNoInternet(true);
         }
