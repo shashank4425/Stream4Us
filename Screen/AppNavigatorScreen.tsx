@@ -72,9 +72,11 @@ export default function AppNavigatorScreen() {
           }} />
         <Stack.Screen name="MoviePlayer" component={MoviePlayer}
           options={{
-            presentation: "card",
+            presentation: "transparentModal",
             animation: 'fade',
-            gestureEnabled: false,
+            gestureEnabled: true,
+            headerShown: false, cardStyle: { backgroundColor: "#0D0E10", width: "100%", height: "100%" }
+
           }} />
       </Stack.Navigator>
 

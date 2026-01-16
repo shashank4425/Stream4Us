@@ -1,19 +1,22 @@
 import TrendingMovies from "@/components/banner/TrendingMovies";
 import BannerPreLoaderScreen from "@/components/splash/BannerPreLoaderScreen";
 import { FontAwesome } from "@expo/vector-icons";
+import NetInfo from "@react-native-community/netinfo";
 import { useFocusEffect } from "@react-navigation/native";
 import Constants from "expo-constants";
-import { LinearGradient } from 'expo-linear-gradient';
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import { Animated, BackHandler, Dimensions, FlatList, Image, StatusBar, StyleSheet, Text, TouchableOpacity, View } from "react-native";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
-import MaterialIcon from "react-native-vector-icons/MaterialIcons";
-
+import NoInternetModal from "../Screen/OfflineScreen/NoInternetModal";
 const windowWidth = Dimensions.get('window').width;
 const windowHeight = Dimensions.get('window').height;
 
 export default function Home({ navigation }) {
+    const redirected = useRef(false);
+    const [showNoInternet, setShowNoInternet] = React.useState(false);
+
     const insets = useSafeAreaInsets();
+    const [backOnline, setBackOnline] = useState(false);
     const [data, setData] = useState([]);
     const [loading, setLoading] = useState(true);
     useEffect(() => {
@@ -64,7 +67,29 @@ export default function Home({ navigation }) {
         outputRange: [1, 0],      // show → hide
         extrapolate: "clamp",
     });
-    console.log("navigation  "+navigation )
+
+    const onMoviePress = async (item) => {
+        const net = await NetInfo.fetch();
+
+        if (net.isConnected) {
+            setShowNoInternet(true);
+        } else {
+            setShowNoInternet(true);
+        }
+    };
+
+    const onCategoryPress = async (item) => {
+        const net = await NetInfo.fetch();
+
+        if (net.isConnected) {
+            navigation.navigate(item.category, { title: item.category });
+        } else {
+            setShowNoInternet(true);
+        }
+    };
+
+
+
     return (
         <View style={{
             flex: 1, backgroundColor: "#0D0E10"
@@ -111,29 +136,6 @@ export default function Home({ navigation }) {
                 ListHeaderComponent={() => (
                     loading ? <BannerPreLoaderScreen /> : <TrendingMovies />
                 )}
-                ListFooterComponent={() => (
-                    !loading && <View style={{ paddingVertical: 30, alignItems: "center" }}>
-                        <TouchableOpacity
-                                activeOpacity={0.8}
-                                onPress={() => navigation.navigate('LiveStreaming', { title: "Live TV" })}
-                                style={Styles.buttonWrapper}   // 👈 MOVE style HERE
-                              >
-                                <LinearGradient
-                                  colors={['#028CF3', '#F4119E']}
-                                  start={{ x: 0, y: 0 }}
-                                  end={{ x: 1.1, y: 0 }}
-                                  style={Styles.button}
-                                >
-                                  <View style={Styles.buttonContent}>
-                                    <View style={Styles.iconWrapper}>
-                                      <MaterialIcon name="play-arrow" style={Styles.playIcon} size={30} color="white"></MaterialIcon>
-                                    </View>
-                                    <Text style={Styles.buttonText}>LIVE TV</Text>
-                                  </View>
-                                </LinearGradient>
-                              </TouchableOpacity>
-                    </View>
-                )}
                 renderItem={({ item }) => (
                     <View style={{ marginBottom: 12 }}>
                         <View style={Styles.cardContainer}>
@@ -150,7 +152,7 @@ export default function Home({ navigation }) {
                                 }}>
                                     {item.category}
                                 </Text>
-                                <TouchableOpacity activeOpacity={1} onPress={() => navigation.navigate(item.category, { title: item.category })}>
+                                <TouchableOpacity activeOpacity={1} onPress={() => onCategoryPress(item)}>
                                     <FontAwesome name="angle-right" size={22} color="#fff"></FontAwesome>
                                 </TouchableOpacity>
                             </View>
@@ -162,7 +164,7 @@ export default function Home({ navigation }) {
                                 showsHorizontalScrollIndicator={false}
                                 renderItem={({ item }) => (
                                     <TouchableOpacity activeOpacity={1}
-                                        onPress={() => navigation.navigate("MoviePlayer", item)}>
+                                        onPress={() => onMoviePress(item)}>
                                         <Image
                                             source={{ uri: item.seo.ogImage }}
                                             style={{
@@ -181,6 +183,10 @@ export default function Home({ navigation }) {
                     </View>
                 )}
             />
+            <NoInternetModal
+                visible={showNoInternet}
+                onClose={() => setShowNoInternet(false)}
+            />
         </View>
     )
 }
@@ -189,7 +195,6 @@ const Styles = StyleSheet.create({
         flex: 1,
         justifyContent: 'center',
         alignItems: 'center',
-
     },
     preLoadingImg: {
         resizeMode: "contain"
@@ -254,41 +259,41 @@ const Styles = StyleSheet.create({
 
     },
     buttonWrapper: {
-    position: 'absolute',
-    bottom: 10,
-    left: 0,
-    right: 0,
-    alignItems: 'center',
-    zIndex: 2,        // ✅ ABOVE gradient
-  },
-  button: {
-    height: 36,
-    paddingHorizontal: 32,
-    borderRadius: 6,
-    justifyContent: 'center',
-    alignItems: 'center',
-    elevation: 0,
-    shadowColor: 'transparent',
-  },
-  buttonContent: {
-    flexDirection: 'row',
-    alignItems: 'center',
-  },
+        position: 'absolute',
+        bottom: 10,
+        left: 0,
+        right: 0,
+        alignItems: 'center',
+        zIndex: 2,        // ✅ ABOVE gradient
+    },
+    button: {
+        height: 36,
+        paddingHorizontal: 32,
+        borderRadius: 6,
+        justifyContent: 'center',
+        alignItems: 'center',
+        elevation: 0,
+        shadowColor: 'transparent',
+    },
+    buttonContent: {
+        flexDirection: 'row',
+        alignItems: 'center',
+    },
 
-  iconWrapper: {
-    width: 32,
-    height: 30,
-    borderRadius: 4,          // 👈 subtle radius
-    justifyContent: 'center',
-    alignItems: 'center',
-    marginRight: 4,
-  },
-  playIcon: {
-    marginRight: 6, // 👈 tight spacing like OTT apps
-  },
-  buttonText: {
-    color: '#fff',
-    fontSize: 18,
-    fontWeight: '600',
-  }
+    iconWrapper: {
+        width: 32,
+        height: 30,
+        borderRadius: 4,          // 👈 subtle radius
+        justifyContent: 'center',
+        alignItems: 'center',
+        marginRight: 4,
+    },
+    playIcon: {
+        marginRight: 6, // 👈 tight spacing like OTT apps
+    },
+    buttonText: {
+        color: '#fff',
+        fontSize: 18,
+        fontWeight: '600',
+    }
 })
