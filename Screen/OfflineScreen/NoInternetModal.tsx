@@ -15,33 +15,32 @@ export default function NoInternetModal({ visible, onClose }) {
   };
 
   return (
-    <Modal transparent visible={visible} animationType="slide">
-      
-      {/* Tap above modal to close */}
+    <Modal transparent visible={visible} onRequestClose={onClose} animationType="slide">
+
       <Pressable style={{ flex: 1 }} onPress={onClose} />
 
-       <View style={nointernetStyles.modalContainer}>
-            <View style={nointernetStyles.content}>
-              <Image
-                source={require("../../assets/images/stream4us/logo/stream4us_rocket.png")}
-                style={nointernetStyles.rocket}
-              />
-              <Text style={nointernetStyles.title}>No Internet Connection</Text>
-              <Text style={nointernetStyles.subtitle}>
-                Please turn on your mobile data or connect to Wi-Fi to continue
-              </Text>
-              <Pressable
-                onPress={openWifiSettings}
-                style={({ pressed }) => [
-                  nointernetStyles.button,
-                  pressed && nointernetStyles.buttonPressed,
-                ]}
-                android_ripple={{ color: "#1A1A1A" }}
-              >
-                <Text style={nointernetStyles.buttonText}>Open Device Settings</Text>
-              </Pressable>
-            </View>
-          </View>
+      <View style={nointernetStyles.modalContainer}>
+        <View style={nointernetStyles.content}>
+          <Image
+            source={require("../../assets/images/stream4us/logo/stream4us_rocket.png")}
+            style={nointernetStyles.rocket}
+          />
+          <Text style={nointernetStyles.title}>No Internet Connection</Text>
+          <Text style={nointernetStyles.subtitle}>
+            Please turn on your mobile data or connect to Wi-Fi to continue
+          </Text>
+          <Pressable
+            onPress={openWifiSettings}
+            style={({ pressed }) => [
+              nointernetStyles.button,
+              pressed && nointernetStyles.buttonPressed,
+            ]}
+            android_ripple={{ color: "#1A1A1A" }}
+          >
+            <Text style={nointernetStyles.buttonText}>Open Device Settings</Text>
+          </Pressable>
+        </View>
+      </View>
     </Modal>
   );
 }
