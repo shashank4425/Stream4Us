@@ -1,6 +1,5 @@
+import { nointernetStyles } from "@/assets/commoncss/nointernextcss";
 import NetInfo from "@react-native-community/netinfo";
-import { useSafeAreaInsets } from "react-native-safe-area-context";
-
 import React, { useEffect, useRef, useState } from "react";
 import {
   Image,
@@ -11,6 +10,7 @@ import {
   Text,
   View,
 } from "react-native";
+import { useSafeAreaInsets } from "react-native-safe-area-context";
 export default function OfflineScreen({ navigation }) {
   const redirected = useRef(false);
   const insets = useSafeAreaInsets();
@@ -48,35 +48,35 @@ export default function OfflineScreen({ navigation }) {
   };
 
   return (
-    <View style={styles.container}>
-      <View style={styles.content}>
+    <View style={nointernetStyles.container}>
+      <View style={nointernetStyles.content}>
         <Image
           source={require("../../assets/images/stream4us/logo/stream4us_rocket.png")}
-          style={styles.rocket}
+          style={nointernetStyles.rocket}
         />
-        <Text style={styles.title}>No Internet Connection</Text>
-        <Text style={styles.subtitle}>
+        <Text style={nointernetStyles.title}>No Internet Connection</Text>
+        <Text style={nointernetStyles.subtitle}>
           Please turn on your mobile data or connect to Wi-Fi to continue
         </Text>
         <Pressable
           onPress={openWifiSettings}
           style={({ pressed }) => [
-            styles.button,
-            pressed && styles.buttonPressed,
+            nointernetStyles.button,
+            pressed && nointernetStyles.buttonPressed,
           ]}
           android_ripple={{ color: "#1A1A1A" }}
         >
-          <Text style={styles.buttonText}>Open Device Settings</Text>
+          <Text style={nointernetStyles.buttonText}>Open Device Settings</Text>
         </Pressable>
       </View>
       {backOnline && (
         <View
           style={[
-            styles.backOnline,
+            nointernetStyles.backOnline,
             { marginBottom: insets.bottom } // ✅ APPLY HERE
           ]}
         >
-          <Text style={styles.backOnlineText}>Back Online</Text>
+          <Text style={nointernetStyles.backOnlineText}>Back Online</Text>
         </View>
       )}
     </View>
