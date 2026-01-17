@@ -74,7 +74,7 @@ export default function AppNavigatorScreen() {
           options={{
             presentation: "card",
             animation: 'fade',
-            gestureEnabled: true,
+            gestureEnabled: false,
             headerShown: false, cardStyle: { backgroundColor: "#0D0E10", width: "100%", height: "100%" }
 
           }} />
