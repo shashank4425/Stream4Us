@@ -25,38 +25,51 @@ export default function LiveStreaming({ navigation, route }) {
   const [loading, setLoading] = useState(true);
   const [channels, setChannels] = useState([]);
   const [showNoInternet, setShowNoInternet] = React.useState(false);
-  // useLayoutEffect(() => {
-  //   navigation.setOptions({
-  //     headerTitle: route.params?.title || "Live TV",
-  //   });
-  // }, [navigation, route]);
+  useEffect(() => {
+  const init = async () => {
+    const net = await NetInfo.fetch();
+
+    // ❌ No internet on tab open → OfflineScreen
+    if (!net.isConnected) {
+      navigation.replace("OfflineScreen", {
+        redirectTo: "LiveStreaming",
+      });
+      return;
+    }
+
+    // ✅ Internet available → fetch API
+    fetchJSON();
+  };
+
+  init();
+}, []);
 
   const stream_list =
     "https://raw.githubusercontent.com/shashank4425/Stream4Us/refs/heads/movies/stream_list.json";
 
   // ---------------- FETCH JSON ----------------
-  useEffect(() => {
-    const fetchJSON = async () => {
-      try {
-        const response = await fetch(stream_list);
-        const jsonData = await response.json();
+  const fetchJSON = async () => {
+  try {
+    const response = await fetch(stream_list);
+    const jsonData = await response.json();
 
-        // Add unique id
-        const withId = jsonData.map((item, index) => ({
-          ...item,
-          id: `channel-${index}`,
-        }));
+    const withId = jsonData.map((item, index) => ({
+      ...item,
+      id: `channel-${index}`,
+    }));
 
-        setChannels(withId);
-      } catch (error) {
-        console.log("Error fetching JSON:", error);
-      } finally {
-        setLoading(false);
-      }
-    };
+    setChannels(withId);
+  } catch (error) {
+    console.log("Error fetching JSON:", error);
 
-    fetchJSON();
-  }, []);
+    // ❌ API failed → show OfflineScreen
+    navigation.replace("OfflineScreen", {
+      redirectTo: "LiveStreaming",
+    });
+  } finally {
+    setLoading(false);
+  }
+};
 
   const onTvPress = async (item) => {
     const net = await NetInfo.fetch();

@@ -11,7 +11,7 @@ import MoviePlayer from './VideoPlayer/MoviePlayerScreen';
 
 const Stack = createStackNavigator();
 const windowWidth = Dimensions.get('window').width;
-
+const windowHeight = Dimensions.get('window').height;
 export default function AppNavigatorScreen() {
   const insets = useSafeAreaInsets();
   const currentRoute = useRef("SplashScreen");
@@ -69,6 +69,7 @@ export default function AppNavigatorScreen() {
             animation: 'fade',
             gestureEnabled: false
           }} />
+        
         <Stack.Screen name="MoviePlayer" component={MoviePlayer}
           options={{
             presentation: "card",

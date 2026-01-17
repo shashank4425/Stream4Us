@@ -1,5 +1,6 @@
 import { nointernetStyles } from "@/assets/commoncss/nointernextcss";
 import NetInfo from "@react-native-community/netinfo";
+import { CommonActions } from "@react-navigation/native";
 import React, { useEffect, useRef, useState } from "react";
 import {
   Image,
@@ -8,31 +9,67 @@ import {
   Pressable,
   StyleSheet,
   Text,
-  View,
+  View
 } from "react-native";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
-export default function OfflineScreen({ navigation }) {
+
+export default function OfflineScreen({ navigation, route }) {
   const redirected = useRef(false);
   const insets = useSafeAreaInsets();
-
   const [backOnline, setBackOnline] = useState(false);
 
+  const redirectTo = route?.params?.redirectTo || "Home";
+
+  const redirect = () => {
+  navigation.dispatch(
+    CommonActions.reset({
+      index: 0,
+      routes: [
+        {
+          name: "BottomAppNavigator",
+          state: {
+            index: redirectTo === "LiveStreaming" ? 1 : 0,
+            routes: [
+              { name: "Home" },
+              { name: "LiveStreaming" },
+            ],
+          },
+        },
+      ],
+    })
+  );
+};
+
+
+  // ✅ IMPORTANT FIX
+  const isOnline = (state) =>
+    state.isConnected && state.isInternetReachable !== false;
+
   useEffect(() => {
-    const unsubscribe = NetInfo.addEventListener(state => {
-      const hasInternet =
-        state.isConnected && state.isInternetReachable;
+    let unsubscribe;
 
-      if (hasInternet && !redirected.current) {
-        redirected.current = true;
+    const init = async () => {
+      const state = await NetInfo.fetch();
 
-        setBackOnline(true); // 
-        setTimeout(() => {
-          navigation.replace("BottomAppNavigator");
-        }, 1200);
+      // ✅ If internet is already ON → leave immediately
+      if (isOnline(state)) {
+        redirect();
+        return;
       }
-    });
 
-    return () => unsubscribe();
+      // ❌ Offline → wait for reconnect
+      unsubscribe = NetInfo.addEventListener((state) => {
+        if (isOnline(state) && !redirected.current) {
+          redirected.current = true;
+          setBackOnline(true);
+
+          setTimeout(redirect, 1000);
+        }
+      });
+    };
+
+    init();
+    return () => unsubscribe && unsubscribe();
   }, []);
 
   const openWifiSettings = async () => {
@@ -42,7 +79,7 @@ export default function OfflineScreen({ navigation }) {
       } else {
         await Linking.openURL("App-Prefs:root=WIFI");
       }
-    } catch (e) {
+    } catch {
       Linking.openSettings();
     }
   };
@@ -54,35 +91,44 @@ export default function OfflineScreen({ navigation }) {
           source={require("../../assets/images/stream4us/logo/stream4us_rocket.png")}
           style={nointernetStyles.rocket}
         />
-        <Text style={nointernetStyles.title}>No Internet Connection</Text>
+
+        <Text style={nointernetStyles.title}>
+          No Internet Connection
+        </Text>
+
         <Text style={nointernetStyles.subtitle}>
           Please turn on your mobile data or connect to Wi-Fi to continue
         </Text>
+
         <Pressable
           onPress={openWifiSettings}
           style={({ pressed }) => [
             nointernetStyles.button,
             pressed && nointernetStyles.buttonPressed,
           ]}
-          android_ripple={{ color: "#1A1A1A" }}
         >
-          <Text style={nointernetStyles.buttonText}>Open Device Settings</Text>
+          <Text style={nointernetStyles.buttonText}>
+            Open Device Settings
+          </Text>
         </Pressable>
       </View>
+
       {backOnline && (
         <View
           style={[
             nointernetStyles.backOnline,
-            { marginBottom: insets.bottom } // ✅ APPLY HERE
+            { marginBottom: insets.bottom },
           ]}
         >
-          <Text style={nointernetStyles.backOnlineText}>Back Online</Text>
+          <Text style={nointernetStyles.backOnlineText}>
+            Back Online
+          </Text>
         </View>
       )}
     </View>
-
   );
 }
+
 
 const styles = StyleSheet.create({
   container: {
