@@ -11,7 +11,7 @@ import MoviePlayer from './VideoPlayer/MoviePlayerScreen';
 
 const Stack = createStackNavigator();
 const windowWidth = Dimensions.get('window').width;
-
+const windowHeight = Dimensions.get('window').height;
 export default function AppNavigatorScreen() {
   const insets = useSafeAreaInsets();
   const currentRoute = useRef("SplashScreen");
@@ -33,7 +33,6 @@ export default function AppNavigatorScreen() {
       await NavigationBar.setBackgroundColorAsync("#0D0E10");
     }
   };
-
 
   return (
     <>
@@ -70,11 +69,12 @@ export default function AppNavigatorScreen() {
             animation: 'fade',
             gestureEnabled: false
           }} />
+        
         <Stack.Screen name="MoviePlayer" component={MoviePlayer}
           options={{
-            presentation: "transparentModal",
+            presentation: "card",
             animation: 'fade',
-            gestureEnabled: true,
+            gestureEnabled: false,
             headerShown: false, cardStyle: { backgroundColor: "#0D0E10", width: "100%", height: "100%" }
 
           }} />

@@ -72,7 +72,7 @@ export default function Home({ navigation }) {
         const net = await NetInfo.fetch();
 
         if (net.isConnected) {
-            setShowNoInternet(true);
+            navigation.navigate("MoviePlayer", item );
         } else {
             setShowNoInternet(true);
         }
@@ -92,7 +92,7 @@ export default function Home({ navigation }) {
 
     return (
         <View style={{
-            flex: 1, backgroundColor: "#0D0E10"
+            flex: 1, backgroundColor: "#0D0E10", marginBottom:84
         }}>
             <Animated.View
                 style={{
@@ -137,7 +137,7 @@ export default function Home({ navigation }) {
                     loading ? <BannerPreLoaderScreen /> : <TrendingMovies />
                 )}
                 renderItem={({ item }) => (
-                    <View style={{ marginBottom: 12 }}>
+                    <View style={{ marginBottom: 16 }}>
                         <View style={Styles.cardContainer}>
                             <View
                                 style={{

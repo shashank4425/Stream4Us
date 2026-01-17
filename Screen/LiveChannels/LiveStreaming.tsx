@@ -1,4 +1,6 @@
 import PreLoaderScreen from "@/components/splash/PreLoaderScreen";
+import NoInternetModal from "@/Screen/OfflineScreen/NoInternetModal";
+import NetInfo from "@react-native-community/netinfo";
 import React, { useEffect, useState } from "react";
 import {
   Dimensions,
@@ -22,40 +24,62 @@ const windowHeight = Dimensions.get('window').height;
 export default function LiveStreaming({ navigation, route }) {
   const [loading, setLoading] = useState(true);
   const [channels, setChannels] = useState([]);
+  const [showNoInternet, setShowNoInternet] = React.useState(false);
+  useEffect(() => {
+  const init = async () => {
+    const net = await NetInfo.fetch();
 
-  // useLayoutEffect(() => {
-  //   navigation.setOptions({
-  //     headerTitle: route.params?.title || "Live TV",
-  //   });
-  // }, [navigation, route]);
+    // ❌ No internet on tab open → OfflineScreen
+    if (!net.isConnected) {
+      navigation.replace("OfflineScreen", {
+        redirectTo: "LiveStreaming",
+      });
+      return;
+    }
+
+    // ✅ Internet available → fetch API
+    fetchJSON();
+  };
+
+  init();
+}, []);
 
   const stream_list =
     "https://raw.githubusercontent.com/shashank4425/Stream4Us/refs/heads/movies/stream_list.json";
 
   // ---------------- FETCH JSON ----------------
-  useEffect(() => {
-    const fetchJSON = async () => {
-      try {
-        const response = await fetch(stream_list);
-        const jsonData = await response.json();
+  const fetchJSON = async () => {
+  try {
+    const response = await fetch(stream_list);
+    const jsonData = await response.json();
 
-        // Add unique id
-        const withId = jsonData.map((item, index) => ({
-          ...item,
-          id: `channel-${index}`,
-        }));
+    const withId = jsonData.map((item, index) => ({
+      ...item,
+      id: `channel-${index}`,
+    }));
 
-        setChannels(withId);
-      } catch (error) {
-        console.log("Error fetching JSON:", error);
-      } finally {
-        setLoading(false);
-      }
-    };
+    setChannels(withId);
+  } catch (error) {
+    console.log("Error fetching JSON:", error);
 
-    fetchJSON();
-  }, []);
+    // ❌ API failed → show OfflineScreen
+    navigation.replace("OfflineScreen", {
+      redirectTo: "LiveStreaming",
+    });
+  } finally {
+    setLoading(false);
+  }
+};
 
+  const onTvPress = async (item) => {
+    const net = await NetInfo.fetch();
+
+    if (net.isConnected) {
+      navigation.navigate("MoviePlayer", item);
+    } else {
+      setShowNoInternet(true);
+    }
+  };
   if (loading) return <PreLoaderScreen />;
 
   return (
@@ -92,7 +116,7 @@ export default function LiveStreaming({ navigation, route }) {
                   <View style={{ alignItems: "center", marginHorizontal: 3 }}>
                     <TouchableOpacity
                       activeOpacity={1}
-                      onPress={() => navigation.navigate("MoviePlayer", item)}
+                      onPress={() => onTvPress(item)}
                     >
                       {item.logo ? (
                         <Image
@@ -139,6 +163,10 @@ export default function LiveStreaming({ navigation, route }) {
             </View>
           </View>
         )}
+      />
+      <NoInternetModal
+        visible={showNoInternet}
+        onClose={() => setShowNoInternet(false)}
       />
     </View>
   )
