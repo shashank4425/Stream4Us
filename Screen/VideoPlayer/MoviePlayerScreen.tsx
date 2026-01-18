@@ -40,6 +40,7 @@ const MoviePlayer = ({ route }) => {
   const [speedMenuVisible, setSpeedMenuVisible] = useState(false);
   const [playbackRate, setPlaybackRate] = useState(1.0);
   const [playerReady, setPlayerReady] = useState(false);
+  const [videoRatio, setVideoRatio] = useState(null);
 
   const hideTimer = useRef(null);
   const movieLink = route.params;
@@ -124,7 +125,7 @@ const MoviePlayer = ({ route }) => {
     hideTimer.current = setTimeout(() => {
       setControlsVisible(false);
       setSpeedMenuVisible(false);
-    }, 4000);
+    }, 400000);
   };
 
   const onVideoPress = () => {
@@ -142,6 +143,9 @@ const MoviePlayer = ({ route }) => {
     setIsLockScreen(!islockScreen);
     setControlsVisible(islockScreen);
   };
+const screen = Dimensions.get("window");
+
+const videoMode = movieLink.seo ? "cover" : "contain";
 
   return (
     <>
@@ -162,10 +166,16 @@ const MoviePlayer = ({ route }) => {
               ref={videoRef}
               source={videoSource}
               paused={!isPlaying}
-              resizeMode="cover"
+              resizeMode= {videoMode}
               repeat
+              onLoad={(data) => {
+                setDuration(data.duration);
+                setIsLoading(false);
+                setVideoLoaded(true);
+                setIsPlaying(true);
+                setPlayerReady(true);
+              }}
               style={StyleSheet.absoluteFill}
-
               disableFocus={true}
               maxBitRate={2500000}
 
@@ -179,14 +189,6 @@ const MoviePlayer = ({ route }) => {
               onLoadStart={() => {
                 setIsLoading(true);
                 setVideoLoaded(false);
-              }}
-
-              onLoad={(data) => {
-                setDuration(data.duration);
-                setIsLoading(false);
-                setVideoLoaded(true);
-                setIsPlaying(true);
-                setPlayerReady(true);
               }}
 
               onBuffer={({ isBuffering }) => setBuffering(isBuffering)}
@@ -235,15 +237,12 @@ const MoviePlayer = ({ route }) => {
                   >
                     <FontAwesome name="angle-left" size={30} color="#fff" />
                   </TouchableOpacity>)}
-
-                  {/* Movie Title - Flex 1 makes it take available space */}
+                
                   <View style={{ flex: 1, justifyContent: "flex-start", alignItems: "flex-start" }}>
                     <Text style={styles.lsTitleText} numberOfLines={1}>
                       {movieLink.seo ? movieLink.seo.page : movieLink.name}
                     </Text>
                   </View>
-
-                  {/* Lock Icon - Now on the right side */}
                   <TouchableOpacity
                     style={{ padding: 0, zIndex: 20 }}
                     onPress={lockScreen}
@@ -265,17 +264,17 @@ const MoviePlayer = ({ route }) => {
                 <View style={orientation === "portrait" ? styles.potraitControle : styles.lsControle}>
                   {!isLoading && movieLink.seo && (
                     <TouchableOpacity onPress={moveVideoBack}>
-                      <MaterialIcon name="replay-10" size={36} color="white" />
+                      <MaterialIcon name="replay-10" size={32} color="white" />
                     </TouchableOpacity>
                   )}
                   {!isLoading && movieLink.seo && (
                     <TouchableOpacity onPress={handlePlayPause}>
-                      <MaterialIcon name={!isPlaying ? "play-circle-outline" : "pause-circle-outline"} size={60} color="white" />
+                      <MaterialIcon name={!isPlaying ? "play-circle-outline" : "pause-circle-outline"} size={52} color="white" />
                     </TouchableOpacity>
                   )}
                   {!isLoading && movieLink.seo && (
                     <TouchableOpacity onPress={moveVideoForward}>
-                      <MaterialIcon name="forward-10" size={36} color="white" />
+                      <MaterialIcon name="forward-10" size={32} color="white" />
                     </TouchableOpacity>
                   )}
                 </View>
@@ -371,7 +370,7 @@ const styles = StyleSheet.create({
     top: 0,
     left: 0,
     right: 0,
-    bottom: 0,
+    bottom: 0
   },
 
   videoBox: {
@@ -390,8 +389,6 @@ const styles = StyleSheet.create({
     left: 0,
     right: 0,
     bottom: 0,
-    paddingTop: 30,
-    paddingBottom: 30,
     backgroundColor: "#000",
   },
 
@@ -406,13 +403,13 @@ const styles = StyleSheet.create({
     flexDirection: "row",
     alignItems: "center",
     justifyContent: "space-evenly",
-    width: "100%",
-    height: 200,
+    width: "100%"
   },
   lsControle: {
     flexDirection: "row",
     justifyContent: "center",
     alignItems: "center",
+    paddingTop:30,
     gap: 100, // Keeps icons spread out in landscape
   },
   bottomController: {
@@ -437,8 +434,8 @@ const styles = StyleSheet.create({
   sliderController: {
     position: "absolute",
     bottom: -20,
-    left: 10,
-    right: 10,
+    left: 0,
+    right: 0,
   },
   lsSliderController: {
     position: "absolute",
