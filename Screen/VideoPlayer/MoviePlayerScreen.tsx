@@ -44,8 +44,14 @@ const MoviePlayer = ({ route }) => {
 
   const hideTimer = useRef(null);
   const movieLink = route.params;
-  const videoSource = movieLink.seo ?
-    require(`../../assets/video/bhojpuri/kalamchaba-gaini.mp4`) : { uri: movieLink.url };
+  //const videoSource = movieLink.seo ?
+  //  require(`../../assets/video/bhojpuri/kalamchaba-gaini.mp4`) : { uri: movieLink.url };
+
+  const videoSource = movieLink?.seo
+    ? movieLink.seo.ogVideo && movieLink.seo.ogVideo.trim() !== ""
+      ? { uri: movieLink.seo.ogVideo } // remote video
+      : require("../../assets/video/bhojpuri/kalamchaba-gaini.mp4")
+    : { uri: movieLink.url };
 
 
   useEffect(() => {
@@ -143,9 +149,8 @@ const MoviePlayer = ({ route }) => {
     setIsLockScreen(!islockScreen);
     setControlsVisible(islockScreen);
   };
-const screen = Dimensions.get("window");
 
-const videoMode = movieLink.seo ? "cover" : "contain";
+  const videoMode = movieLink.seo ? "cover" : "contain";
 
   return (
     <>
@@ -166,7 +171,7 @@ const videoMode = movieLink.seo ? "cover" : "contain";
               ref={videoRef}
               source={videoSource}
               paused={!isPlaying}
-              resizeMode= {videoMode}
+              resizeMode={videoMode}
               repeat
               onLoad={(data) => {
                 setDuration(data.duration);
@@ -237,7 +242,7 @@ const videoMode = movieLink.seo ? "cover" : "contain";
                   >
                     <FontAwesome name="angle-left" size={30} color="#fff" />
                   </TouchableOpacity>)}
-                
+
                   <View style={{ flex: 1, justifyContent: "flex-start", alignItems: "flex-start" }}>
                     <Text style={styles.lsTitleText} numberOfLines={1}>
                       {movieLink.seo ? movieLink.seo.page : movieLink.name}
@@ -409,7 +414,7 @@ const styles = StyleSheet.create({
     flexDirection: "row",
     justifyContent: "center",
     alignItems: "center",
-    paddingTop:30,
+    paddingTop: 30,
     gap: 100, // Keeps icons spread out in landscape
   },
   bottomController: {
