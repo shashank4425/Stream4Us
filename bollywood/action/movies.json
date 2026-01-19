@@ -1,19 +1,32 @@
 [
     {
-        "id": "3486540",
+        "id": "01111",
         "defaultLanguage": "Hindi",
-        "line2": "Thriller, Crime, Mystery, Action",
-        "durationFormatted": "2h 23m",
+        "line2": "U/A 16+ • Action • Adventure • Thriller",
+        "durationFormatted": "2h 53m",
         "seo": {
-            "page": "Sikandar Ka Muqaddar",
-            "title": "Sikandar Ka Muqaddar (2024)",
-            "description": "After an unsolved diamond heist, a hard-nosed cop’s pursuit of his key suspect turns into obsession, until they finally face each other — and the truth.",
-            "ogImage": "https://media.themoviedb.org/t/p/w300_and_h450_bestv2/eWUh4rgxtgypgnOa6uGMn0Ut01ux.jpg",
+            "page": "War 2 (2025)",
+            "title": "War 2 (2025)",
+            "description": "Years ago Agent Kabir went rogue, became India’s greatest villain ever. As he descends further into the deepest shadows... India sends its deadliest, most lethal agent after him, Agent Vikram A Special Units Officer who is more than Kabir’s equal and a relentless Terminator driven by his own demons, determined to put a bullet into Kabir’s skull.",
+            "ogImage": "https://media.themoviedb.org/t/p/w600_and_h900_face/2Yc8Kl2ldPpDzLrG2M5Ddv62FXB.jpg",
             "ogVideo":""
         }
     },
     {
-        "id": "3837010",
+        "id": "01112",
+        "defaultLanguage": "Hindi",
+        "line2": "A • Action • Thriller",
+        "durationFormatted": "3h 32m",
+        "seo": {
+            "page": "Dhurandhar (2025)",
+            "title": "Dhurandhar (2025)",
+            "description": "After the hijacking of IC-814 in 1999 and the Parliament attack in 2001, India’s Intelligence Bureau Chief, Ajay Sanyal, devises an indomitable mission to intrude and rupture the terrorist network in Pakistan, by infiltrating the underworld mafia of Karachi with the help of a 20-year-old boy from Punjab, held captive for a revenge crime.",
+            "ogImage": "https://media.themoviedb.org/t/p/w600_and_h900_face/8FHOtUpNIk5ZPEay2N2EY5lrxkv.jpg",
+            "ogVideo":""
+        }
+    },
+    {
+        "id": "01113",
         "defaultLanguage": "Hindi",
         "line2": "Action, Thriller",
         "durationFormatted": "2h 7m",
@@ -26,7 +39,7 @@
         }
     },
     {
-        "id": "3489693",
+        "id": "01114",
         "defaultLanguage": "Hindi",
         "line2": "Action, Drama, War",
         "durationFormatted": "2h 18m",
@@ -39,7 +52,7 @@
         }
     },
     {
-        "id": "3488973",
+        "id": "01115",
         "defaultLanguage": "Hindi",
         "line2": "Crime, Thriller, Action",
         "durationFormatted": "2h 32m",
@@ -52,7 +65,7 @@
         }
     },
     {
-        "id": "3754021",
+        "id": "01116",
         "defaultLanguage": "Hindi",
         "fullTitle": "Bhediya",
         "line1": "Bhediya",
@@ -69,7 +82,7 @@
         }
     },
     {
-        "id": "3502658",
+        "id": "01117",
         "defaultLanguage": "Hindi",
         "line2": "Action",
         "durationFormatted": "3h",
