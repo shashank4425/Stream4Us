@@ -123,10 +123,9 @@ export default function LiveStreaming({ navigation, route }) {
                           source={{ uri: item.logo }}
                           style={{
                             resizeMode: "contain",
-                            height: 100,
+                            height: 75,
                             width: windowWidth / 3.4,
-                            borderRadius: 8,
-                            backgroundColor: "#333",
+                            borderRadius: 8
                           }}
                         />
                       ) : (

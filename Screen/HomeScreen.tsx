@@ -1,5 +1,6 @@
 import TrendingMovies from "@/components/banner/TrendingMovies";
 import BannerPreLoaderScreen from "@/components/splash/BannerPreLoaderScreen";
+import PreLoaderScreen from "@/components/splash/PreLoaderScreen";
 import { FontAwesome } from "@expo/vector-icons";
 import NetInfo from "@react-native-community/netinfo";
 import { useFocusEffect } from "@react-navigation/native";
@@ -34,7 +35,9 @@ export default function Home({ navigation }) {
         } catch (error) {
             console.log("Error fetching JSON:", error);
         } finally {
-            setLoading(false);
+           setTimeout(function(){
+             setLoading(false);
+           },400) 
         }
     };
     useFocusEffect(
@@ -137,7 +140,7 @@ export default function Home({ navigation }) {
                     loading ? <BannerPreLoaderScreen /> : <TrendingMovies />
                 )}
                 renderItem={({ item }) => (
-                    <View style={{ marginBottom: 16 }}>
+                   loading ? <PreLoaderScreen/>  : <View style={{ marginBottom: 16 }}>
                         <View style={Styles.cardContainer}>
                             <View
                                 style={{

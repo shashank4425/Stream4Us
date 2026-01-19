@@ -89,7 +89,7 @@ const TrendingMovies = () => {
         <LinearGradient
           colors={['#0496FF', '#F20089']}
           start={{ x: 0, y: 0 }}
-          end={{ x: 1.1, y: 0 }}
+          end={{ x: 1.2, y: 0 }}
           style={styles.button}
         >
           <View style={styles.buttonContent}>

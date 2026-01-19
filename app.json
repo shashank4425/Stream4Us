@@ -2,7 +2,7 @@
   "expo": {
     "name": "Stream4Us",
     "slug": "Stream4Us",
-    "version": "1.2.3",
+    "version": "1.2.4",
     "orientation": "portrait",
     "icon": "./assets/images/stream4us/logo/stream4us_logo.png",
     "scheme": "com.example.streamus",
