@@ -4,21 +4,21 @@
                 "id":"22441",
                 "category":"South Dubbed Movies",
                 "Movies": [                   
-                    {
-                     "id": "00111",
-                     "defaultLanguage": "Hindi",
-                     "slug":"",
-                     "line2": "UA • Action • Adventure • Drama",
-                     "durationFormatted": "3h 5m",
-                     "duration":"",
-                     "seo": {
-                         "page": "RRR (2022)",
-                         "title": "RRR (2022)",
-                         "description": "A fictional history of two legendary revolutionaries' journey away from home before they began fighting for their country in the 1920s.",
-                         "ogImage": "https://media.themoviedb.org/t/p/w600_and_h900_face/u0XUBNQWlOvrh0Gd97ARGpIkL0.jpg",
-                         "ogVideo":""
-                       }
-                    },
+                     {
+                        "id": "4058381",
+                        "defaultLanguage": "Hindi",
+                        "slug": "",
+                        "line2": "Hindi ∙ Action ∙ U/A 13+",
+                        "durationFormatted": "2h 11m",
+                        "duration":"",
+                        "seo": {
+                            "page": "Buddy",
+                            "title": "Buddy (2024) Hindi Movie: Watch Full HD Movie Online On JioCinema",
+                            "description": "Buddy (2024) Is A Action Hindi Film Starring Gayatri Bhardwaj,Allu Sirish,Prisha Rajesh Singh,Ajmal Ameer In The Lead Roles, Directed By Sam Anton. Watch Now Or Download To Watch Later!",
+                            "ogImage": "https://v3img.voot.com/v3Storage/assets/3x4-1731737957414.jpg",
+                            "ogVideo":""
+                        }
+                    },
                     {
                         "id": "00112",
                         "defaultLanguage": "Hindi",
