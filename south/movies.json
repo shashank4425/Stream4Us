@@ -38,5 +38,18 @@
       "ogImage":"https://media.themoviedb.org/t/p/w600_and_h900_face/jFwdKKDmgzKjZGFnSJma7I5XMpk.jpg",
       "ogVideo":""
     }
+  },
+  {
+    "id": "3200114",
+    "defaultLanguage": "Hindi",
+    "line2": "UA • Action • Drama",
+    "durationFormatted": "2h 56m",
+    "seo": {
+      "page": "Maharshi (2019)",
+      "title": "Maharshi (2019)",
+      "description":"Rishi Kumar is a billionaire and the CEO of Origins, someone who has always strived for the success he now owns. His friend Ravi needs help, how will he come through?",
+      "ogImage":"https://media.themoviedb.org/t/p/w600_and_h900_face/pV6xLQh54ga8oaQqJtUqLp12LwQ.jpg",
+      "ogVideo":""
+    }
   }
 ]
