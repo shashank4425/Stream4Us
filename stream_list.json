@@ -130,5 +130,36 @@
                 "url": "https://live-dangal.akamaized.net/liveabr/playlist.m3u8"
             }
         ]
+    },
+    {
+        "id": "22223",
+        "category": "Kids",
+        "Movies": [
+            {
+                "id": "301",
+                "logo": "",
+                "name": "Doraemon",
+                "url": "https://cloudfrontnet.vercel.app/tplay/playout/209902/master.m3u8"
+            },
+            {
+                "id": "302",
+                "logo": "https://i.postimg.cc/d3j5T2F8/Cartoon-Network.jpg",
+                "name": "Cartoon Network",
+                "url": "https://live20.bozztv.com/giatvplayout7/giatv-209624/index.m3u8"
+            },
+            {
+                "id": "303",
+                "logo": "https://i.postimg.cc/d3j5T2F8/Cartoon-Network.jpg",
+                "name": "Tom & Jerry",
+                "url": "https://live20.bozztv.com/giatvplayout7/giatv-208314/playlist.m3u8"
+            },
+            {
+                "id": "304",
+                "logo": "https://i.postimg.cc/d3j5T2F8/Cartoon-Network.jpg",
+                "name": "Motu Patlu",
+                "url": "https://cloudfrontnet.vercel.app/tplay/playout/209622/master.m3u8"
+            }
+        ]
     }
+    
 ]
