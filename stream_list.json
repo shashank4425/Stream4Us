@@ -17,13 +17,13 @@
             },
             {
                 "id": "003",
-                "logo": "https://raw.githubusercontent.com/shashank4425/Stream4Us/refs/heads/movies/channel_logo/star-sport-select-hd1.png",
+                "logo": "https://raw.githubusercontent.com/shashank4425/Stream4Us/refs/heads/movies/channel_logo/star-sports-select-hd1.png",
                 "name": "Star Sports 1 HD",
                 "url": "https://allinonedev.top/apis/stream/rz/stream.m3u8?id=edge2/star-sports-select-1"
             },
             {
                 "id": "004",
-                "logo": "https://raw.githubusercontent.com/shashank4425/Stream4Us/refs/heads/movies/channel_logo/star-sport-select-hd2.png",
+                "logo": "https://raw.githubusercontent.com/shashank4425/Stream4Us/refs/heads/movies/channel_logo/star-sports-select-hd2.png",
                 "name": "Star Sports 2 HD",
                 "url": "https://allinonedev.top/apis/stream/rz/stream.m3u8?id=edge2/star-sports-select-2"
             },
