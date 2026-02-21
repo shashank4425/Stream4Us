@@ -40,11 +40,18 @@ const MoviePlayer = ({ route }) => {
   const [speedMenuVisible, setSpeedMenuVisible] = useState(false);
   const [playbackRate, setPlaybackRate] = useState(1.0);
   const [playerReady, setPlayerReady] = useState(false);
+  const [videoRatio, setVideoRatio] = useState(null);
 
   const hideTimer = useRef(null);
   const movieLink = route.params;
-  const videoSource = movieLink.seo ?
-    require(`../../assets/video/bhojpuri/kalamchaba-gaini.mp4`) : { uri: movieLink.url };
+  //const videoSource = movieLink.seo ?
+  //  require(`../../assets/video/bhojpuri/kalamchaba-gaini.mp4`) : { uri: movieLink.url };
+
+  const videoSource = movieLink?.seo
+    ? movieLink.seo.ogVideo && movieLink.seo.ogVideo.trim() !== ""
+      ? { uri: movieLink.seo.ogVideo } // remote video
+      : require("../../assets/video/bhojpuri/kalamchaba-gaini.mp4")
+    : { uri: movieLink.url };
 
 
   useEffect(() => {
@@ -143,6 +150,8 @@ const MoviePlayer = ({ route }) => {
     setControlsVisible(islockScreen);
   };
 
+  //const videoMode = movieLink.seo ? "contain" : "cover";
+
   return (
     <>
       <View style={styles.root}>
@@ -159,14 +168,27 @@ const MoviePlayer = ({ route }) => {
                 : styles.landscapeFullscreen
             ]}>
             <Video
+              useTextureView={false}
+              controls={false}
               ref={videoRef}
               source={videoSource}
               paused={!isPlaying}
               resizeMode="cover"
-              repeat
-              style={StyleSheet.absoluteFill}
-
               disableFocus={true}
+              hideShutterView={true}
+              ignoreSilentSwitch="ignore"
+              mixWithOthers="inherit"
+              playInBackground={false}
+              playWhenInactive={false}
+              repeat
+              onLoad={(data) => {
+                setDuration(data.duration);
+                setIsLoading(false);
+                setVideoLoaded(true);
+                setIsPlaying(true);
+                setPlayerReady(true);
+              }}
+              style={StyleSheet.absoluteFill}
               maxBitRate={2500000}
 
               bufferConfig={{
@@ -175,30 +197,16 @@ const MoviePlayer = ({ route }) => {
                 bufferForPlaybackMs: 3000,
                 bufferForPlaybackAfterRebufferMs: 5000,
               }}
-
               onLoadStart={() => {
                 setIsLoading(true);
                 setVideoLoaded(false);
               }}
-
-              onLoad={(data) => {
-                setDuration(data.duration);
-                setIsLoading(false);
-                setVideoLoaded(true);
-                setIsPlaying(true);
-                setPlayerReady(true);
-              }}
-
               onBuffer={({ isBuffering }) => setBuffering(isBuffering)}
-
               rate={playbackRate}
-
               onProgress={(data) => {
                 if (!isSeeking) setCurrentTime(data.currentTime);
               }}
-
               onEnd={() => videoRef.current?.seek(0)}
-
               onError={(e) => console.log("Video error", e)}
             />
             <Pressable
@@ -236,16 +244,13 @@ const MoviePlayer = ({ route }) => {
                     <FontAwesome name="angle-left" size={30} color="#fff" />
                   </TouchableOpacity>)}
 
-                  {/* Movie Title - Flex 1 makes it take available space */}
                   <View style={{ flex: 1, justifyContent: "flex-start", alignItems: "flex-start" }}>
                     <Text style={styles.lsTitleText} numberOfLines={1}>
                       {movieLink.seo ? movieLink.seo.page : movieLink.name}
                     </Text>
                   </View>
-
-                  {/* Lock Icon - Now on the right side */}
                   <TouchableOpacity
-                    style={{ padding: 0, zIndex: 20 }}
+                    style={{ position:"absolute", zIndex: 20 }}
                     onPress={lockScreen}
                   >
                     <MaterialIcon
@@ -257,25 +262,23 @@ const MoviePlayer = ({ route }) => {
                 </View>
               </View>
             )}
-
-
             {playerReady && isConnected && !islockScreen && controlsVisible && (
               <View style={[
                 styles.controlsOverlay, { paddingBottom: Platform.OS === "android" ? 40 : 0 }]}>
                 <View style={orientation === "portrait" ? styles.potraitControle : styles.lsControle}>
                   {!isLoading && movieLink.seo && (
                     <TouchableOpacity onPress={moveVideoBack}>
-                      <MaterialIcon name="replay-10" size={36} color="white" />
+                      <MaterialIcon name="replay-10" size={32} color="white" />
                     </TouchableOpacity>
                   )}
                   {!isLoading && movieLink.seo && (
                     <TouchableOpacity onPress={handlePlayPause}>
-                      <MaterialIcon name={!isPlaying ? "play-circle-outline" : "pause-circle-outline"} size={60} color="white" />
+                      <MaterialIcon name={!isPlaying ? "play-circle-outline" : "pause-circle-outline"} size={52} color="white" />
                     </TouchableOpacity>
                   )}
                   {!isLoading && movieLink.seo && (
                     <TouchableOpacity onPress={moveVideoForward}>
-                      <MaterialIcon name="forward-10" size={36} color="white" />
+                      <MaterialIcon name="forward-10" size={32} color="white" />
                     </TouchableOpacity>
                   )}
                 </View>
@@ -298,16 +301,27 @@ const MoviePlayer = ({ route }) => {
                   </View>
                 </View>
 
-                {/* SLIDER */}
-                {movieLink.seo && playerReady &&
+                {movieLink.seo && (
                   <View style={orientation === "portrait" ? styles.sliderController : styles.lsSliderController}>
                     <Slider
                       value={currentTime}
                       minimumValue={0}
                       maximumValue={duration}
+
                       minimumTrackTintColor="#b41313ff"
                       maximumTrackTintColor="#b6b3b3ff"
-                      thumbTintColor="#b41313ff"
+
+                      trackStyle={{ height: 3 }}
+                      minimumTrackStyle={{ height: 3 }}
+                      maximumTrackStyle={{ height: 3 }}
+
+                      thumbStyle={{
+                        width: 10,
+                        height: 10,
+                        borderRadius: 5,
+                        backgroundColor: "#b41313ff",
+                      }}
+
                       onSlidingStart={() => setIsSeeking(true)}
                       onValueChange={(val) => {
                         setCurrentTime(val[0]);
@@ -318,7 +332,7 @@ const MoviePlayer = ({ route }) => {
                         videoRef.current.seek(val[0]);
                       }}
                     />
-                  </View>}
+                  </View>)}
               </View>
             )}
           </View>
@@ -371,7 +385,7 @@ const styles = StyleSheet.create({
     top: 0,
     left: 0,
     right: 0,
-    bottom: 0,
+    bottom: 0
   },
 
   videoBox: {
@@ -390,8 +404,6 @@ const styles = StyleSheet.create({
     left: 0,
     right: 0,
     bottom: 0,
-    paddingTop: 30,
-    paddingBottom: 30,
     backgroundColor: "#000",
   },
 
@@ -406,13 +418,13 @@ const styles = StyleSheet.create({
     flexDirection: "row",
     alignItems: "center",
     justifyContent: "space-evenly",
-    width: "100%",
-    height: 200,
+    width: "100%"
   },
   lsControle: {
     flexDirection: "row",
     justifyContent: "center",
     alignItems: "center",
+    paddingTop: 30,
     gap: 100, // Keeps icons spread out in landscape
   },
   bottomController: {
@@ -437,8 +449,8 @@ const styles = StyleSheet.create({
   sliderController: {
     position: "absolute",
     bottom: -20,
-    left: 10,
-    right: 10,
+    left: 0,
+    right: 0,
   },
   lsSliderController: {
     position: "absolute",

@@ -3,6 +3,7 @@ import NoInternetModal from "@/Screen/OfflineScreen/NoInternetModal";
 import NetInfo from "@react-native-community/netinfo";
 import React, { useEffect, useState } from "react";
 import {
+  Animated,
   Dimensions,
   FlatList,
   Image,
@@ -26,51 +27,51 @@ export default function LiveStreaming({ navigation, route }) {
   const [channels, setChannels] = useState([]);
   const [showNoInternet, setShowNoInternet] = React.useState(false);
   useEffect(() => {
-  const init = async () => {
-    const net = await NetInfo.fetch();
+    const init = async () => {
+      const net = await NetInfo.fetch();
 
-    // ❌ No internet on tab open → OfflineScreen
-    if (!net.isConnected) {
-      navigation.replace("OfflineScreen", {
-        redirectTo: "LiveStreaming",
-      });
-      return;
-    }
+      // ❌ No internet on tab open → OfflineScreen
+      if (!net.isConnected) {
+        navigation.replace("OfflineScreen", {
+          redirectTo: "LiveStreaming",
+        });
+        return;
+      }
 
-    // ✅ Internet available → fetch API
-    fetchJSON();
-  };
+      // ✅ Internet available → fetch API
+      fetchJSON();
+    };
 
-  init();
-}, []);
+    init();
+  }, []);
 
   const stream_list =
     "https://raw.githubusercontent.com/shashank4425/Stream4Us/refs/heads/movies/stream_list.json";
 
   // ---------------- FETCH JSON ----------------
   const fetchJSON = async () => {
-  try {
-    const response = await fetch(stream_list);
-    const jsonData = await response.json();
+    try {
+      const response = await fetch(stream_list);
+      const jsonData = await response.json();
 
-    const withId = jsonData.map((item, index) => ({
-      ...item,
-      id: `channel-${index}`,
-    }));
+      const withId = jsonData.map((item, index) => ({
+        ...item,
+        id: `channel-${index}`,
+      }));
 
-    setChannels(withId);
-  } catch (error) {
-    console.log("Error fetching JSON:", error);
+      setChannels(withId);
+    } catch (error) {
+      console.log("Error fetching JSON:", error);
 
-    // ❌ API failed → show OfflineScreen
-    navigation.replace("OfflineScreen", {
-      redirectTo: "LiveStreaming",
-    });
-  } finally {
-    setLoading(false);
-  }
-};
-
+      // ❌ API failed → show OfflineScreen
+      navigation.replace("OfflineScreen", {
+        redirectTo: "LiveStreaming",
+      });
+    } finally {
+      setLoading(false);
+    }
+  };
+  const [scrollY] = useState(new Animated.Value(0));
   const onTvPress = async (item) => {
     const net = await NetInfo.fetch();
 
@@ -86,17 +87,22 @@ export default function LiveStreaming({ navigation, route }) {
     <View style={{
       flex: 1, backgroundColor: "#0D0E10"
     }}>
-      <FlatList
+      <Animated.FlatList
         showsVerticalScrollIndicator={false}
+        // 🟢 TRACK SCROLL POSITION
+        onScroll={Animated.event(
+          [{ nativeEvent: { contentOffset: { y: scrollY } } }],
+          { useNativeDriver: false }
+        )}
         data={channels}
         keyExtractor={(item, index) => index.toString()}
         renderItem={({ item }) => (
-          <View style={{ marginBottom: 10 }}>
+          loading ? <PreLoaderScreen /> : <View style={{ marginBottom: 16 }}>
             <View style={Styles.cardContainer}>
               <View
                 style={{
                   flexDirection: "row", alignItems: "center", justifyContent: "space-between",
-                  paddingHorizontal: 15, marginBottom: 6,
+                  paddingHorizontal: 10, marginBottom: 4,
                 }}>
                 <Text style={{
                   color: "white",
@@ -107,62 +113,46 @@ export default function LiveStreaming({ navigation, route }) {
                   {item.category}
                 </Text>
               </View>
+
               <FlatList
                 data={item.Movies}
-                keyExtractor={(movie) => movie.id.toString()}
+                keyExtractor={(movie) => movie.id}
                 horizontal
                 showsHorizontalScrollIndicator={false}
                 renderItem={({ item }) => (
-                  <View style={{ alignItems: "center", marginHorizontal: 3 }}>
-                    <TouchableOpacity
-                      activeOpacity={1}
-                      onPress={() => onTvPress(item)}
-                    >
-                      {item.logo ? (
+                  <TouchableOpacity activeOpacity={1}
+                    onPress={() => onTvPress(item)}>
+                    {item.logo ? (
                         <Image
                           source={{ uri: item.logo }}
                           style={{
                             resizeMode: "contain",
-                            height: 100,
+                            height: 75,
                             width: windowWidth / 3.4,
-                            borderRadius: 8,
-                            backgroundColor: "#333",
+                            borderRadius: 8
                           }}
                         />
                       ) : (
                         <View
                           style={{
-                            height: 100,
+                            height: 75,
+                            margin:8,
                             width: windowWidth / 3.4,
                             borderRadius: 8,
                             backgroundColor: "#333",
                           }}
                         />
                       )}
-                    </TouchableOpacity>
-
-                    {/* 🔹 NAME JUST BELOW IMAGE */}
-                    <Text
-                      numberOfLines={2}
-                      style={{
-                        marginTop: 6,
-                        width: windowWidth / 3.4,
-                        color: "#fff",
-                        fontSize: 12,
-                        textAlign: "center",
-                        fontWeight: "600",
-                      }}
-                    >
-                      {item.name}
-                    </Text>
-                  </View>
+                  </TouchableOpacity>
                 )}
               />
-
-
             </View>
           </View>
         )}
+      />
+      <NoInternetModal
+        visible={showNoInternet}
+        onClose={() => setShowNoInternet(false)}
       />
       <NoInternetModal
         visible={showNoInternet}

@@ -2,7 +2,7 @@
   "expo": {
     "name": "Stream4Us",
     "slug": "Stream4Us",
-    "version": "1.2.2",
+    "version": "1.2.5",
     "orientation": "portrait",
     "icon": "./assets/images/stream4us/logo/stream4us_logo.png",
     "scheme": "com.example.streamus",
@@ -48,12 +48,6 @@
     "experiments": {
       "typedRoutes": true,
       "reactCompiler": true
-    },
-    "extra": {
-      "router": {},
-      "eas": {
-        "projectId": "b43ce736-be96-4ed0-a7fa-84326db8e428"
-      }
     }
   }
 }
