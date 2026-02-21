@@ -30,17 +30,23 @@
             {
                 "id": "005",
                 "logo": "",
-                "name": "Sky sports cricket",
+                "name": "Sky sports 1",
                 "url": "https://bl.rutube.ru/livestream/9585fdae92af45f113fdcc9f6c4ba442/index.m3u8?s=KgZtccuHrnaljGaN7cmUwA&e=2068506973&scheme=https"
             },
             {
-                "id": "008",
+                "id": "006",
                 "logo": "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRPCvTmUhiKDs4ehoVpFLh7xwdCNK2-N_gNFqnaOM4YRQ&s=10",
-                "name": "TNT Sports 2",
-                "url": "http://178.33.239.54:8080/510/index.m3u8"
+                "name": " A Sports",
+                "url": "https://allinonedev.top/apis/stream/rz/stream.m3u8?id=edge2/a-sports"
             },
             {
-                "id": "009",
+                "id": "007",
+                "logo": "",
+                "name": "PTV Sports",
+                "url": "https://allinonedev.top/apis/stream/rz/stream.m3u8?id=edge2/ptv-sports"
+            },
+            {
+                "id": "008",
                 "logo": "",
                 "name": "TNT Sports 3",
                 "url": "http://178.33.239.54:8080/511/index.m3u8"
