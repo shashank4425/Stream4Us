@@ -150,7 +150,7 @@ const MoviePlayer = ({ route }) => {
     setControlsVisible(islockScreen);
   };
 
-  const videoMode = movieLink.seo ? "cover" : "contain";
+  //const videoMode = movieLink.seo ? "contain" : "cover";
 
   return (
     <>
@@ -168,11 +168,15 @@ const MoviePlayer = ({ route }) => {
                 : styles.landscapeFullscreen
             ]}>
             <Video
+              useTextureView={false}
               controls={false}
               ref={videoRef}
               source={videoSource}
               paused={!isPlaying}
-              resizeMode={videoMode}
+              resizeMode="cover"
+              disableFocus={true}
+              hideShutterView={true}
+              ignoreSilentSwitch="ignore"
               repeat
               onLoad={(data) => {
                 setDuration(data.duration);
@@ -182,7 +186,6 @@ const MoviePlayer = ({ route }) => {
                 setPlayerReady(true);
               }}
               style={StyleSheet.absoluteFill}
-              disableFocus={true}
               maxBitRate={2500000}
 
               bufferConfig={{
@@ -191,22 +194,16 @@ const MoviePlayer = ({ route }) => {
                 bufferForPlaybackMs: 3000,
                 bufferForPlaybackAfterRebufferMs: 5000,
               }}
-
               onLoadStart={() => {
                 setIsLoading(true);
                 setVideoLoaded(false);
               }}
-
               onBuffer={({ isBuffering }) => setBuffering(isBuffering)}
-
               rate={playbackRate}
-
               onProgress={(data) => {
                 if (!isSeeking) setCurrentTime(data.currentTime);
               }}
-
               onEnd={() => videoRef.current?.seek(0)}
-
               onError={(e) => console.log("Video error", e)}
             />
             <Pressable
@@ -250,7 +247,7 @@ const MoviePlayer = ({ route }) => {
                     </Text>
                   </View>
                   <TouchableOpacity
-                    style={{ padding: 0, zIndex: 20 }}
+                    style={{ position:"absolute", zIndex: 20 }}
                     onPress={lockScreen}
                   >
                     <MaterialIcon
