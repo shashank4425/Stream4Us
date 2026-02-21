@@ -13,19 +13,19 @@
                 "id": "002",
                 "logo": "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRPCvTmUhiKDs4ehoVpFLh7xwdCNK2-N_gNFqnaOM4YRQ&s=10",
                 "name": "T Sports",
-                "url": "https://satoshi-cors.herokuapp.com/http://103.96.235.18:9090/sports1/index.m3u8"
+                "url": "https://allinonedev.top/apis/stream/amrbd20/stream.m3u8?id=1"
             },
             {
                 "id": "003",
                 "logo": "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRPCvTmUhiKDs4ehoVpFLh7xwdCNK2-N_gNFqnaOM4YRQ&s=10",
                 "name": "Star Sports 1 HD",
-                "url": "https://bongoflixbd.top/bk/27.m3u8?user=bongoflix&pass=eaminvai"
+                "url": "https://allinonedev.top/apis/stream/rz/stream.m3u8?id=edge2/star-sports-select-1"
             },
             {
                 "id": "004",
                 "logo": "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRPCvTmUhiKDs4ehoVpFLh7xwdCNK2-N_gNFqnaOM4YRQ&s=10",
                 "name": "Star Sports 2 HD",
-                "url": "https://bongoflixbd.top/bk/28.m3u8?user=bongoflix&pass=eaminvai"
+                "url": "https://allinonedev.top/apis/stream/rz/stream.m3u8?id=edge2/star-sports-select-2"
             },
             {
                 "id": "005",
