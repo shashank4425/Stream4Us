@@ -177,6 +177,9 @@ const MoviePlayer = ({ route }) => {
               disableFocus={true}
               hideShutterView={true}
               ignoreSilentSwitch="ignore"
+              mixWithOthers="inherit"
+              playInBackground={false}
+              playWhenInactive={false}
               repeat
               onLoad={(data) => {
                 setDuration(data.duration);
