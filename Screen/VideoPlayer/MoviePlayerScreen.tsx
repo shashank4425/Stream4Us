@@ -266,17 +266,17 @@ const MoviePlayer = ({ route }) => {
               <View style={[
                 styles.controlsOverlay, { paddingBottom: Platform.OS === "android" ? 40 : 0 }]}>
                 <View style={orientation === "portrait" ? styles.potraitControle : styles.lsControle}>
-                  {!isLoading && movieLink.seo && (
+                  {!isLoading && (
                     <TouchableOpacity onPress={moveVideoBack}>
                       <MaterialIcon name="replay-10" size={32} color="white" />
                     </TouchableOpacity>
                   )}
-                  {!isLoading && movieLink.seo && (
+                  {!isLoading && (
                     <TouchableOpacity onPress={handlePlayPause}>
                       <MaterialIcon name={!isPlaying ? "play-circle-outline" : "pause-circle-outline"} size={52} color="white" />
                     </TouchableOpacity>
                   )}
-                  {!isLoading && movieLink.seo && (
+                  {!isLoading && (
                     <TouchableOpacity onPress={moveVideoForward}>
                       <MaterialIcon name="forward-10" size={32} color="white" />
                     </TouchableOpacity>
