@@ -23,8 +23,9 @@ import MaterialIcon from "react-native-vector-icons/MaterialIcons";
 import Video from "react-native-video";
 const windowWidth = Dimensions.get("window").width;
 
-const MoviePlayer = ({ route }) => {
+const MoviePlayer = ({ navigation, route }) => {
   const videoRef = useRef(null);
+  const [maxBitrate, setMaxBitrate] = useState(2500000);
   const [isConnected, setIsConnected] = useState(true);
   const [isLoading, setIsLoading] = useState(true);
   const [videoLoaded, setVideoLoaded] = useState(false);
@@ -55,21 +56,35 @@ const MoviePlayer = ({ route }) => {
 
 
   useEffect(() => {
-    if (Platform.OS === "android") {
-      NavigationBar.setBehaviorAsync("overlay-swipe");
-      NavigationBar.setPositionAsync("absolute");
-    }
-  }, []);
-
-  useEffect(() => {
-
     const unsub = NetInfo.addEventListener(state => {
       setIsConnected(state.isConnected);
-      if (!state.isConnected) setIsLoading(true);
+
+      if (!state.isConnected) {
+        setIsLoading(true);
+        return;
+      }
+
+      if (state.type === "wifi") {
+        setMaxBitrate(5000000); // 5 Mbps
+      } else if (state.type === "cellular") {
+        const gen = state.details?.cellularGeneration;
+
+        if (gen === "2g") {
+          setMaxBitrate(500000);
+        } else if (gen === "3g") {
+          setMaxBitrate(1200000);
+        } else if (gen === "4g") {
+          setMaxBitrate(2500000);
+        } else if (gen === "5g") {
+          setMaxBitrate(6000000);
+        } else {
+          setMaxBitrate(2000000);
+        }
+      }
     });
+
     return unsub;
   }, []);
-
 
   useEffect(() => {
     setIsLoading(!(videoLoaded && !buffering));
@@ -110,21 +125,34 @@ const MoviePlayer = ({ route }) => {
 
       InteractionManager.runAfterInteractions(async () => {
         setOrientation("portrait");
-        StatusBar.setHidden(false, "fade");
+        StatusBar.setHidden(true, "fade");
         await NavigationBar.setVisibilityAsync("visible");
       });
     }
   };
+
   useEffect(() => {
-    const backHandle = BackHandler.addEventListener("hardwareBackPress", () => {
-      if (orientation === "landscape") {
-        toggleScreen();
-        return true;
+    const backHandle = BackHandler.addEventListener(
+      "hardwareBackPress",
+      () => {
+
+        if (orientation === "landscape") {
+          toggleScreen();
+          return true; // handled by JS
+        }
+
+        // If portrait AND video is playing → allow native PiP
+        if (orientation === "portrait" && isPlaying) {
+          return false;
+          // Returning false lets Android call onBackPressed()
+          // which enters PiP
+        }
+        return false;
       }
-      return false;
-    });
+    );
     return () => backHandle.remove();
-  }, [orientation]);
+  }, [orientation, isPlaying]);
+
 
   const startHideTimer = () => {
     if (hideTimer.current) clearTimeout(hideTimer.current);
@@ -168,7 +196,7 @@ const MoviePlayer = ({ route }) => {
                 : styles.landscapeFullscreen
             ]}>
             <Video
-              useTextureView={false}
+              useTextureView={true}
               controls={false}
               ref={videoRef}
               source={videoSource}
@@ -178,9 +206,10 @@ const MoviePlayer = ({ route }) => {
               hideShutterView={true}
               ignoreSilentSwitch="ignore"
               mixWithOthers="inherit"
-              playInBackground={false}
-              playWhenInactive={false}
+              playInBackground={true}
+              playWhenInactive={true}
               repeat
+
               onLoad={(data) => {
                 setDuration(data.duration);
                 setIsLoading(false);
@@ -189,13 +218,12 @@ const MoviePlayer = ({ route }) => {
                 setPlayerReady(true);
               }}
               style={StyleSheet.absoluteFill}
-              maxBitRate={2500000}
-
+              maxBitRate={maxBitrate}
               bufferConfig={{
-                minBufferMs: 20000,
-                maxBufferMs: 60000,
-                bufferForPlaybackMs: 3000,
-                bufferForPlaybackAfterRebufferMs: 5000,
+                minBufferMs: 5000,
+                maxBufferMs: 20000,
+                bufferForPlaybackMs: 1000,
+                bufferForPlaybackAfterRebufferMs: 2000,
               }}
               onLoadStart={() => {
                 setIsLoading(true);
@@ -250,7 +278,7 @@ const MoviePlayer = ({ route }) => {
                     </Text>
                   </View>
                   <TouchableOpacity
-                    style={{ position:"absolute", zIndex: 20 }}
+                    style={{ position: "absolute", zIndex: 20 }}
                     onPress={lockScreen}
                   >
                     <MaterialIcon
@@ -266,17 +294,17 @@ const MoviePlayer = ({ route }) => {
               <View style={[
                 styles.controlsOverlay, { paddingBottom: Platform.OS === "android" ? 40 : 0 }]}>
                 <View style={orientation === "portrait" ? styles.potraitControle : styles.lsControle}>
-                  {!isLoading && movieLink.seo && (
+                  {!isLoading && (
                     <TouchableOpacity onPress={moveVideoBack}>
                       <MaterialIcon name="replay-10" size={32} color="white" />
                     </TouchableOpacity>
                   )}
-                  {!isLoading && movieLink.seo && (
+                  {!isLoading && (
                     <TouchableOpacity onPress={handlePlayPause}>
                       <MaterialIcon name={!isPlaying ? "play-circle-outline" : "pause-circle-outline"} size={52} color="white" />
                     </TouchableOpacity>
                   )}
-                  {!isLoading && movieLink.seo && (
+                  {!isLoading && (
                     <TouchableOpacity onPress={moveVideoForward}>
                       <MaterialIcon name="forward-10" size={32} color="white" />
                     </TouchableOpacity>
