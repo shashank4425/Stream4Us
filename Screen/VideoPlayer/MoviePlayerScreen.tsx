@@ -1,6 +1,7 @@
 import { FontAwesome } from "@expo/vector-icons";
 import { Slider } from "@miblanchard/react-native-slider";
 import NetInfo from "@react-native-community/netinfo";
+import * as NavigationBar from "expo-navigation-bar";
 import * as ScreenOrientation from "expo-screen-orientation";
 import throttle from "lodash.throttle";
 import React, { useEffect, useRef, useState } from "react";
@@ -113,6 +114,8 @@ const MoviePlayer = ({ navigation, route }) => {
 
       InteractionManager.runAfterInteractions(async () => {
         setOrientation("landscape");
+        StatusBar.setHidden(true, "fade");
+        await NavigationBar.setVisibilityAsync("hidden");
       });
 
     } else {
@@ -122,21 +125,17 @@ const MoviePlayer = ({ navigation, route }) => {
 
       InteractionManager.runAfterInteractions(async () => {
         setOrientation("portrait");
+        StatusBar.setHidden(true, "fade");
+        await NavigationBar.setVisibilityAsync("visible");
       });
     }
   };
-  useEffect(() => {
-    navigation.setOptions({
-      gestureEnabled: false,
-    });
-  }, []);
 
   useEffect(() => {
     const backHandle = BackHandler.addEventListener(
       "hardwareBackPress",
       () => {
 
-        // If landscape → just rotate to portrait
         if (orientation === "landscape") {
           toggleScreen();
           return true; // handled by JS
