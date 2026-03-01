@@ -5,13 +5,14 @@ import { FontAwesome } from "@expo/vector-icons";
 import NetInfo from "@react-native-community/netinfo";
 import { useFocusEffect } from "@react-navigation/native";
 import Constants from "expo-constants";
+
 import React, { useEffect, useRef, useState } from "react";
-import { Animated, BackHandler, Dimensions, FlatList, Image, StatusBar, StyleSheet, Text, TouchableOpacity, View } from "react-native";
+import { Animated, BackHandler, Dimensions, FlatList, Image, NativeModules, StatusBar, StyleSheet, Text, TouchableOpacity, View } from "react-native";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
 import NoInternetModal from "../Screen/OfflineScreen/NoInternetModal";
 const windowWidth = Dimensions.get('window').width;
 const windowHeight = Dimensions.get('window').height;
-
+const { PipModule } = NativeModules;
 export default function Home({ navigation }) {
     const redirected = useRef(false);
     const [showNoInternet, setShowNoInternet] = React.useState(false);
@@ -35,14 +36,22 @@ export default function Home({ navigation }) {
         } catch (error) {
             console.log("Error fetching JSON:", error);
         } finally {
-           setTimeout(function(){
-             setLoading(false);
-           },400) 
+            setTimeout(function () {
+                setLoading(false);
+            }, 400)
         }
     };
     useFocusEffect(
         React.useCallback(() => {
-            const backAction = () => {
+            const backAction = async () => {
+                const inPip = await PipModule.isInPip();
+
+                // ✅ If PiP active → let Android close PiP
+                if (inPip) {
+                    return false;
+                }
+
+                // ✅ Normal case → exit app (avoid splash)
                 BackHandler.exitApp();
                 return true;
             };
@@ -52,7 +61,7 @@ export default function Home({ navigation }) {
                 backAction
             );
 
-            return () => handler.remove(); // remove when leaving Home
+            return () => handler.remove();
         }, [])
     );
 
@@ -75,7 +84,7 @@ export default function Home({ navigation }) {
         const net = await NetInfo.fetch();
 
         if (net.isConnected) {
-            navigation.navigate("MoviePlayer", item );
+            navigation.navigate("MoviePlayer", item);
         } else {
             setShowNoInternet(true);
         }
@@ -95,7 +104,7 @@ export default function Home({ navigation }) {
 
     return (
         <View style={{
-            flex: 1, backgroundColor: "#0D0E10", marginBottom:84
+            flex: 1, backgroundColor: "#0D0E10", marginBottom: 84
         }}>
             <Animated.View
                 style={{
@@ -140,7 +149,7 @@ export default function Home({ navigation }) {
                     loading ? <BannerPreLoaderScreen /> : <TrendingMovies />
                 )}
                 renderItem={({ item }) => (
-                   loading ? <PreLoaderScreen/>  : <View style={{ marginBottom: 16 }}>
+                    loading ? <PreLoaderScreen /> : <View style={{ marginBottom: 16 }}>
                         <View style={Styles.cardContainer}>
                             <View
                                 style={{
