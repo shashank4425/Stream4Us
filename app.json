@@ -32,7 +32,6 @@
       "favicon": "./assets/images/stream4us/logo/stream4us_logo.png"
     },
     "plugins": [
-      "./plugins/withPipBackHandler",
       "expo-router",
       [
         "expo-splash-screen",
