@@ -5,7 +5,7 @@ const {
 
 module.exports = function withPipBackHandler(config) {
 
-  // Enable PiP
+  // ---------- Enable PiP ----------
   config = withAndroidManifest(config, config => {
     const activity =
       config.modResults.manifest.application[0].activity.find(
@@ -18,37 +18,39 @@ module.exports = function withPipBackHandler(config) {
     return config;
   });
 
-  // Add PiP method into MainActivity
+  // ---------- Modify MainActivity.kt safely ----------
   config = withMainActivity(config, config => {
+    let contents = config.modResults.contents;
 
-    if (!config.modResults.contents.includes("enterPipFromRN")) {
-
-      config.modResults.contents =
-        config.modResults.contents.replace(
-          "class MainActivity",
-          `
-import android.os.Build;
-import android.app.PictureInPictureParams;
-
-class MainActivity`
-        );
-
-      config.modResults.contents =
-        config.modResults.contents.replace(
-          "}",
-          `
-  public void enterPipFromRN() {
-    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-      enterPictureInPictureMode(
-        new PictureInPictureParams.Builder().build()
+    // add import once
+    if (!contents.includes("android.app.PictureInPictureParams")) {
+      contents = contents.replace(
+        "import android.os.Bundle",
+        `import android.os.Bundle
+import android.os.Build
+import android.app.PictureInPictureParams`
       );
     }
-  }
-}
-`
-        );
+
+    // override onBackPressed safely
+    if (!contents.includes("onBackPressed")) {
+      contents = contents.replace(
+        "super.onCreate(null)",
+        `super.onCreate(null)
+
+    override fun onBackPressed() {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+            enterPictureInPictureMode(
+                PictureInPictureParams.Builder().build()
+            )
+        } else {
+            super.onBackPressed()
+        }
+    }`
+      );
     }
 
+    config.modResults.contents = contents;
     return config;
   });
 

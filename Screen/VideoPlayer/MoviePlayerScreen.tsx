@@ -135,16 +135,11 @@ const MoviePlayer = ({ navigation, route }) => {
     const backHandle = BackHandler.addEventListener(
       "hardwareBackPress",
       () => {
-
-        // LANDSCAPE → exit fullscreen
-        if (orientation === "landscape") {
+       if (orientation === "landscape") {
           toggleScreen();
           return true;
         }
-
-        // PORTRAIT → ENTER PiP
-        if (orientation === "portrait" && isPlaying) {
-          PipModule.enterPip();
+         if (orientation === "portrait" && isPlaying) {
           return true;
         }
 
