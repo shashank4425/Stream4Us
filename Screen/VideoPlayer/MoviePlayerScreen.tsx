@@ -1,3 +1,4 @@
+import { enterPip } from "@/handler/piphandler";
 import { FontAwesome } from "@expo/vector-icons";
 import { Slider } from "@miblanchard/react-native-slider";
 import NetInfo from "@react-native-community/netinfo";
@@ -132,24 +133,29 @@ const MoviePlayer = ({ navigation, route }) => {
   };
 
   useEffect(() => {
-    const backHandle = BackHandler.addEventListener(
-      "hardwareBackPress",
-      () => {
-       if (orientation === "landscape") {
-          toggleScreen();
-          return true;
-        }
-         if (orientation === "portrait" && isPlaying) {
-          return true;
-        }
+  const backHandle = BackHandler.addEventListener(
+    "hardwareBackPress",
+    () => {
 
-        return false;
+      // 1️⃣ Landscape → exit fullscreen
+      if (orientation === "landscape") {
+        toggleScreen();
+        return true;
       }
-    );
 
-    return () => backHandle.remove();
-  }, [orientation, isPlaying]);
+      // 2️⃣ Portrait + playing → ENTER PIP
+      if (orientation === "portrait" && isPlaying) {
+        enterPip();   // 👈 native module call
+        return true;  // IMPORTANT: block default back
+      }
 
+      // 3️⃣ Otherwise normal back
+      return false;
+    }
+  );
+
+  return () => backHandle.remove();
+}, [orientation, isPlaying]);
   const startHideTimer = () => {
     if (hideTimer.current) clearTimeout(hideTimer.current);
     hideTimer.current = setTimeout(() => {
