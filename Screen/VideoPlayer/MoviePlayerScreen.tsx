@@ -136,23 +136,24 @@ const MoviePlayer = ({ navigation, route }) => {
       "hardwareBackPress",
       () => {
 
+        // LANDSCAPE → exit fullscreen
         if (orientation === "landscape") {
           toggleScreen();
-          return true; // handled by JS
+          return true;
         }
 
-        // If portrait AND video is playing → allow native PiP
+        // PORTRAIT → ENTER PiP
         if (orientation === "portrait" && isPlaying) {
-          return false;
-          // Returning false lets Android call onBackPressed()
-          // which enters PiP
+          PipModule.enterPip();
+          return true;
         }
+
         return false;
       }
     );
+
     return () => backHandle.remove();
   }, [orientation, isPlaying]);
-
 
   const startHideTimer = () => {
     if (hideTimer.current) clearTimeout(hideTimer.current);
