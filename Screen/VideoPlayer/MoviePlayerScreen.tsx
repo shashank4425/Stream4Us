@@ -1,4 +1,3 @@
-import { enterPip } from "@/handler/piphandler";
 import { FontAwesome } from "@expo/vector-icons";
 import { Slider } from "@miblanchard/react-native-slider";
 import NetInfo from "@react-native-community/netinfo";
@@ -11,6 +10,7 @@ import {
   BackHandler,
   Dimensions,
   InteractionManager,
+  NativeModules,
   Platform,
   Pressable,
   ScrollView,
@@ -23,7 +23,7 @@ import {
 import MaterialIcon from "react-native-vector-icons/MaterialIcons";
 import Video from "react-native-video";
 const windowWidth = Dimensions.get("window").width;
-
+const { PipModule } = NativeModules;
 const MoviePlayer = ({ navigation, route }) => {
   const videoRef = useRef(null);
   const [maxBitrate, setMaxBitrate] = useState(2500000);
@@ -44,6 +44,7 @@ const MoviePlayer = ({ navigation, route }) => {
   const [playerReady, setPlayerReady] = useState(false);
   const [videoRatio, setVideoRatio] = useState(null);
 
+  console.log("All NativeModules =>", Object.keys(NativeModules));
   const hideTimer = useRef(null);
   const movieLink = route.params;
   //const videoSource = movieLink.seo ?
@@ -143,12 +144,6 @@ const MoviePlayer = ({ navigation, route }) => {
         return true;
       }
 
-      // 2️⃣ Portrait + playing → ENTER PIP
-      if (orientation === "portrait" && isPlaying) {
-        enterPip();   // 👈 native module call
-        return true;  // IMPORTANT: block default back
-      }
-
       // 3️⃣ Otherwise normal back
       return false;
     }
@@ -156,6 +151,8 @@ const MoviePlayer = ({ navigation, route }) => {
 
   return () => backHandle.remove();
 }, [orientation, isPlaying]);
+
+  
   const startHideTimer = () => {
     if (hideTimer.current) clearTimeout(hideTimer.current);
     hideTimer.current = setTimeout(() => {
