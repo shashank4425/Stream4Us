@@ -44,7 +44,6 @@ const MoviePlayer = ({ navigation, route }) => {
   const [playerReady, setPlayerReady] = useState(false);
   const [videoRatio, setVideoRatio] = useState(null);
 
-  console.log("All NativeModules =>", Object.keys(NativeModules));
   const hideTimer = useRef(null);
   const movieLink = route.params;
   //const videoSource = movieLink.seo ?

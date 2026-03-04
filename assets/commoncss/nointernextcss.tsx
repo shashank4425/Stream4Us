@@ -27,8 +27,8 @@ export const nointernetStyles = StyleSheet.create({
     paddingHorizontal: 60
   },
   rocket: {
-    width: 140,
-    height: 140,
+    width: 180,
+    height: 180,
     resizeMode: "contain",
     marginBottom: 0,
   },
@@ -55,7 +55,7 @@ export const nointernetStyles = StyleSheet.create({
     borderRadius: 10,
     justifyContent: "center",
     alignItems: "center",
-    backgroundColor: "#16181C",
+    backgroundColor: "#2A2D33",
   },
 
   buttonPressed: {
