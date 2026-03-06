@@ -35,9 +35,9 @@ export default function SplashScreen({ navigation }) {
   return (
     <Animated.View style={[styles.root, { opacity: fadeAnim }]}>
       <LinearGradient
-        colors={["#0496FF", "#7B3FE4", "#FF007F"]}
-        locations={[0, 0.5, 1]}
-        start={{ x: 0, y: 0 }}   // TOP LEFT
+        colors={["#00A6FB", "#7B3FE4", "#FF007F"]}
+        locations={[0, 0.4, 1]}
+        start={{ x: 0, y: 0.3 }}   // TOP LEFT
         end={{ x: 1, y: 1 }}     // BOTTOM RIGHT
         style={styles.gradient}
       >

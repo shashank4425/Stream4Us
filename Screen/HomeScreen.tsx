@@ -1,11 +1,11 @@
-import TrendingMovies from "@/components/banner/TrendingMovies";
-import BannerPreLoaderScreen from "@/components/splash/BannerPreLoaderScreen";
 import PreLoaderScreen from "@/components/splash/PreLoaderScreen";
 import { FontAwesome } from "@expo/vector-icons";
 import NetInfo from "@react-native-community/netinfo";
 import { useFocusEffect } from "@react-navigation/native";
 import Constants from "expo-constants";
 
+import TrendingMovies from "@/components/banner/TrendingMovies";
+import BannerPreLoaderScreen from "@/components/splash/BannerPreLoaderScreen";
 import React, { useEffect, useRef, useState } from "react";
 import { Animated, BackHandler, Dimensions, FlatList, Image, NativeModules, StatusBar, StyleSheet, Text, TouchableOpacity, View } from "react-native";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
