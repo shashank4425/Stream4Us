@@ -14,8 +14,9 @@ import { bannerList } from "../../assets/bannerList/bannerList";
 
 const { width, height } = Dimensions.get('window');
 
-const CARD_WIDTH = width * 0.82;
-const CARD_HEIGHT = height * 0.42;
+const CARD_WIDTH = width * 0.86;
+const SCROLL_GAP = 16;
+const CARD_HEIGHT = height * 0.46;
 
 const STACK_X = 15;
 const STACK_Y = 5;
@@ -25,93 +26,98 @@ const TrendingMovies = () => {
   const navigation = useNavigation();
   const [index, setIndex] = useState(0);
 
-  const AUTO_SCROLL_INTERVAL = 3500;
+  const AUTO_SCROLL_INTERVAL = 3600;
 
   /* Auto loop scroll */
 
- useEffect(() => {
+  useEffect(() => {
 
-  const interval = setInterval(() => {
+    const interval = setInterval(() => {
 
-    let next = index + 1;
-    if (next >= bannerList.length) next = 0;
+      setIndex(prev => {
 
-    Animated.timing(animatedIndex, {
-      toValue: next,
-      duration: 600,   // smooth speed
-      useNativeDriver: true
-    }).start();
+        const next = (prev + 1) % bannerList.length;
 
-    setIndex(next);
+        Animated.timing(animatedIndex, {
+          toValue: next,
+          duration: 800,
+          useNativeDriver: true
+        }).start();
 
-  }, AUTO_SCROLL_INTERVAL);
+        return next;
 
-  return () => clearInterval(interval);
+      });
 
-}, [index]);
+    }, AUTO_SCROLL_INTERVAL);
 
- 
+    return () => clearInterval(interval);
+
+  }, []);
   const renderCard = (item, i) => {
 
-  const position = Animated.subtract(i, animatedIndex);
+    const position = Animated.subtract(i, animatedIndex);
 
-  const translateX = position.interpolate({
-    inputRange: [-1, 0, 1, 2],
-    outputRange: [-CARD_WIDTH, 0, STACK_X, STACK_X * 2],
-    extrapolate: "clamp"
-  });
+    const translateX = position.interpolate({
+      inputRange: [-1, 0, 1, 2],
+      outputRange: [-(CARD_WIDTH + SCROLL_GAP), 0, STACK_X, STACK_X * 2],
+      extrapolate: "clamp"
+    });
+    const translateY = position.interpolate({
+      inputRange: [-1, 0, 1, 2],
+      outputRange: [0, 0, STACK_Y, STACK_Y * 2],
+      extrapolate: "clamp"
+    });
 
-  const translateY = position.interpolate({
-    inputRange: [-1, 0, 1, 2],
-    outputRange: [0, 0, STACK_Y, STACK_Y * 2],
-    extrapolate: "clamp"
-  });
+    const scale = position.interpolate({
+      inputRange: [-1, 0, 1, 2],
+      outputRange: [1, 1, 0.95, 0.9],
+      extrapolate: "clamp"
+    });
 
-  const scale = position.interpolate({
-    inputRange: [-1, 0, 1, 2],
-    outputRange: [1, 1, 0.95, 0.9],
-    extrapolate: "clamp"
-  });
+    const opacity = position.interpolate({
+      inputRange: [-2, -1, 0, 1, 2],
+      outputRange: [0, 1, 1, 1, 1],
+      extrapolate: "clamp"
+    });
 
-  const opacity = position.interpolate({
-    inputRange: [-1, 0, 1, 2, 3],
-    outputRange: [0, 1, 1, 1, 0],
-    extrapolate: "clamp"
-  });
-
-  return (
-    <Animated.View
-      key={item.id}
-      style={[
-        styles.card,
-        {
-          zIndex: bannerList.length - i,
-          opacity,
-          transform: [
-            { translateX },
-            { translateY },
-            { scale }
-          ]
-        }
-      ]}
-    >
-
-      <Image
-        source={{ uri: item?.seo?.ogImage }}
-        style={styles.image}
-      />
-
-      <TouchableOpacity
-        style={styles.playButton}
-        activeOpacity={0.85}
-        onPress={() => navigation.navigate('MoviePlayer', item)}
+     const zIndex = position.interpolate({
+      inputRange: [-1, 0, 1, 2],
+      outputRange: [2, 4, 3, 2],
+      extrapolate: "clamp"
+    });
+    return (
+      <Animated.View
+        key={item.id}
+        style={[
+          styles.card,
+          {
+            zIndex: zIndex,
+            opacity,
+            transform: [
+              { translateX },
+              { translateY },
+              { scale }
+            ]
+          }
+        ]}
       >
-        <MaterialIcon name="play-arrow" size={30} color="#fff" />
-      </TouchableOpacity>
 
-    </Animated.View>
-  );
-};
+        <Image
+          source={{ uri: item?.seo?.ogImage }}
+          style={styles.image}
+        />
+
+        <TouchableOpacity
+          style={styles.playButton}
+          activeOpacity={0.85}
+          onPress={() => navigation.navigate('MoviePlayer', item)}
+        >
+          <MaterialIcon name="play-arrow" size={30} color="#fff" />
+        </TouchableOpacity>
+
+      </Animated.View>
+    );
+  };
   return (
 
     <View style={styles.container}>
