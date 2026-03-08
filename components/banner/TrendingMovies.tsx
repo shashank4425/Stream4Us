@@ -1,10 +1,12 @@
 import { useNavigation } from '@react-navigation/native';
+import { LinearGradient } from "expo-linear-gradient";
 import React, { useEffect, useRef, useState } from 'react';
 import {
   Animated,
   Dimensions,
   Image,
   StyleSheet,
+  Text,
   TouchableOpacity,
   View
 } from 'react-native';
@@ -64,9 +66,7 @@ const TrendingMovies = () => {
     }, AUTO_SCROLL_INTERVAL);
 
     return () => clearInterval(interval);
-
   }, []);
-
   return (
 
     <View style={styles.container}>
@@ -85,7 +85,6 @@ const TrendingMovies = () => {
         {data.map((item, i) => (
 
           <View key={i} style={styles.cardWrapper}>
-
             <View style={styles.card}>
 
               <Image
@@ -98,16 +97,25 @@ const TrendingMovies = () => {
                 onLoad={() => handleLoad(i)}
               />
 
+              {/* Bottom Gradient */}
+              <LinearGradient
+                colors={['transparent', 'rgba(0,0,0,0.85)']}
+                style={styles.gradient}
+              />
+
+              {/* LEFT TEXT */}
+              <View style={styles.textContainer}>
+                <Text style={styles.pageText}>{item.seo.page}</Text>
+                <Text style={styles.bannerInfo}>{item.bannerInfo}</Text>
+              </View>
               <TouchableOpacity
                 style={styles.playButton}
                 activeOpacity={0.85}
                 onPress={() => navigation.navigate('MoviePlayer', item)}
               >
-                <MaterialIcon name="play-arrow" size={30} color="#fff" />
+                <MaterialIcon name="play-arrow" size={30} color="#000000" />
               </TouchableOpacity>
-
             </View>
-
           </View>
 
         ))}
@@ -153,7 +161,33 @@ const styles = StyleSheet.create({
     height: '100%',
     resizeMode: 'cover'
   },
+  textContainer: {
+    position: 'absolute',
+    left: 16,
+    bottom: 18,
+    right: 80   // leave space for play button
+  },
 
+  gradient: {
+    position: 'absolute',
+    bottom: 0,
+    left: 0,
+    right: 0,
+    height: '45%'
+  },
+
+  bannerInfo: {
+    fontWeight: 700,
+    fontSize: 14,
+    color: '#A9A9A9',
+    marginTop: 4
+  },
+
+  pageText: {
+    fontSize: 26,
+    fontWeight: 'bold',
+    color: '#FFFFFF'
+  },
   playButton: {
     position: 'absolute',
     bottom: 18,
@@ -161,7 +195,7 @@ const styles = StyleSheet.create({
     width: 52,
     height: 52,
     borderRadius: 26,
-    backgroundColor: '#F20089',
+    backgroundColor: '#A9A9A9', // dim gray
     justifyContent: 'center',
     alignItems: 'center',
     elevation: 8
