@@ -90,8 +90,7 @@ const TrendingMovies = () => {
               <Image
                 source={{ uri: item?.seo?.ogImage }}
                 style={[
-                  styles.image,
-                  { opacity: loadedImages[i] ? 1 : 0.4 }
+                  styles.image
                 ]}
                 fadeDuration={0}
                 onLoad={() => handleLoad(i)}
@@ -110,10 +109,10 @@ const TrendingMovies = () => {
               </View>
               <TouchableOpacity
                 style={styles.playButton}
-                activeOpacity={0.85}
+                activeOpacity={0.9}
                 onPress={() => navigation.navigate('MoviePlayer', item)}
               >
-                <MaterialIcon name="play-arrow" size={30} color="#000000" />
+                <MaterialIcon name="play-arrow" size={32} color="#333" style={{ marginLeft: 2 }} />
               </TouchableOpacity>
             </View>
           </View>
@@ -132,7 +131,7 @@ const styles = StyleSheet.create({
 
   container: {
     width: '100%',
-    height: CARD_HEIGHT+70,
+    height: CARD_HEIGHT + 70,
     justifyContent: 'center',
     marginTop: 60,
     overflow: 'hidden'
@@ -144,7 +143,8 @@ const styles = StyleSheet.create({
 
   cardWrapper: {
     width: CARD_WIDTH,
-    marginRight: SPACING
+    marginRight: SPACING,
+    elevation: 6
   },
 
   card: {
@@ -152,8 +152,7 @@ const styles = StyleSheet.create({
     height: CARD_HEIGHT,
     borderRadius: 16,
     overflow: 'hidden',
-    elevation: 6,
-    backgroundColor:"1A1A1A"
+    backgroundColor: 'transparent'
   },
 
   image: {
@@ -192,13 +191,25 @@ const styles = StyleSheet.create({
     position: 'absolute',
     bottom: 18,
     right: 18,
-    width: 52,
-    height: 52,
-    borderRadius: 26,
-    backgroundColor: 'rgba(255,255,255,0.7)', // dim gray
+    width: 48,
+    height: 48,
+    borderRadius: 28,
+    backgroundColor: '#dcdcdc',
+
     justifyContent: 'center',
     alignItems: 'center',
-    elevation: 8
+
+    // bottom shadow
+    shadowColor: '#9a9a9a',
+    shadowOffset: { width: 6, height: 6 },
+    shadowOpacity: 0.6,
+    shadowRadius: 6,
+
+    // highlight
+    borderWidth: 1,
+    borderColor: '#f5f5f5',
+
+    elevation: 6
   }
 
 });
