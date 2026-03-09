@@ -91,7 +91,7 @@ const TrendingMovies = () => {
                 source={{ uri: item?.seo?.ogImage }}
                 style={[
                   styles.image,
-                  { opacity: loadedImages[i] ? 1 : 0 }
+                  { opacity: loadedImages[i] ? 1 : 0.4 }
                 ]}
                 fadeDuration={0}
                 onLoad={() => handleLoad(i)}
@@ -99,7 +99,7 @@ const TrendingMovies = () => {
 
               {/* Bottom Gradient */}
               <LinearGradient
-                colors={['transparent', 'rgba(0,0,0,0.85)']}
+                colors={['transparent', 'rgba(0,0,0,0.8)']}
                 style={styles.gradient}
               />
 
@@ -132,7 +132,7 @@ const styles = StyleSheet.create({
 
   container: {
     width: '100%',
-    height: CARD_HEIGHT + 80,
+    height: CARD_HEIGHT+70,
     justifyContent: 'center',
     marginTop: 60,
     overflow: 'hidden'
@@ -152,8 +152,8 @@ const styles = StyleSheet.create({
     height: CARD_HEIGHT,
     borderRadius: 16,
     overflow: 'hidden',
-    backgroundColor: '#0D0E10',
-    elevation: 6
+    elevation: 6,
+    backgroundColor:"1A1A1A"
   },
 
   image: {
@@ -177,7 +177,7 @@ const styles = StyleSheet.create({
   },
 
   bannerInfo: {
-    fontWeight: 700,
+    fontWeight: 600,
     fontSize: 14,
     color: '#A9A9A9',
     marginTop: 4
@@ -195,7 +195,7 @@ const styles = StyleSheet.create({
     width: 52,
     height: 52,
     borderRadius: 26,
-    backgroundColor: '#A9A9A9', // dim gray
+    backgroundColor: 'rgba(255,255,255,0.7)', // dim gray
     justifyContent: 'center',
     alignItems: 'center',
     elevation: 8

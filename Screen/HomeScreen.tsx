@@ -120,12 +120,12 @@ export default function Home({ navigation }) {
             {!loading && <Animated.Image
                 source={require('../assets/images/stream4us/logo/stream4us.png')}
                 style={{
-                    marginTop: windowHeight / 20,
-                    width: windowWidth / 4.5,
-                    padding: 2,
+                    marginTop: windowHeight / 28,
+                    width: windowWidth / 4.7,
+                    padding: 0,
                     position: "absolute",
                     zIndex: 1,
-                    height: 38, resizeMode: "contain",
+                    height: 60, resizeMode: "contain",
                     opacity: iconOpacity, // 👈 animate visibility
                 }}
                 resizeMode="contain"
