@@ -108,11 +108,13 @@ const TrendingMovies = () => {
                 <Text style={styles.bannerInfo}>{item.bannerInfo}</Text>
               </View>
               <TouchableOpacity
-                style={styles.playButton}
+                style={styles.playButtonOuter}
                 activeOpacity={0.9}
                 onPress={() => navigation.navigate('MoviePlayer', item)}
               >
-                <MaterialIcon name="play-arrow" size={32} color="#333" style={{ marginLeft: 2 }} />
+                <View style={styles.playButtonInner}>
+                  <MaterialIcon name="play-arrow" size={32} color="#333" style={{ marginLeft: 2 }} />
+                </View>
               </TouchableOpacity>
             </View>
           </View>
@@ -187,29 +189,38 @@ const styles = StyleSheet.create({
     fontWeight: 'bold',
     color: '#FFFFFF'
   },
-  playButton: {
+  playButtonOuter: {
     position: 'absolute',
     bottom: 18,
     right: 18,
-    width: 48,
-    height: 48,
+    width: 56,
+    height: 56,
     borderRadius: 28,
-    backgroundColor: '#dcdcdc',
+    backgroundColor: '#e5e5e5',
 
     justifyContent: 'center',
     alignItems: 'center',
 
-    // bottom shadow
+    shadowColor: '#ffffff',
+    shadowOffset: { width: -2, height: -2 },
+    shadowOpacity: 1,
+    shadowRadius: 4,
+    elevation: 12
+  },
+
+  playButtonInner: {
+    width: 48,
+    height: 48,
+    borderRadius: 36,
+    backgroundColor: '#dcdcdc',
+
+    justifyContent: 'center',
+    alignItems: 'center',
     shadowColor: '#9a9a9a',
-    shadowOffset: { width: 6, height: 6 },
-    shadowOpacity: 0.6,
+    shadowOffset: { width: 2, height: 2 },
+    shadowOpacity: 0.4,
     shadowRadius: 6,
-
-    // highlight
-    borderWidth: 1,
-    borderColor: '#f5f5f5',
-
-    elevation: 6
+    elevation: 4
   }
 
 });
