@@ -113,7 +113,7 @@ const TrendingMovies = () => {
                 onPress={() => navigation.navigate('MoviePlayer', item)}
               >
                 <View style={styles.playButtonInner}>
-                  <MaterialIcon name="play-arrow" size={32} color="#333" style={{ marginLeft: 2 }} />
+                  <MaterialIcon name="play-arrow" size={28} color="#333" style={{ marginLeft: 2 }} />
                 </View>
               </TouchableOpacity>
             </View>
@@ -193,8 +193,8 @@ const styles = StyleSheet.create({
     position: 'absolute',
     bottom: 18,
     right: 18,
-    width: 56,
-    height: 56,
+    width: 48,
+    height: 48,
     borderRadius: 28,
     backgroundColor: '#e5e5e5',
 
@@ -202,10 +202,10 @@ const styles = StyleSheet.create({
     alignItems: 'center',
 
     shadowColor: '#ffffff',
-    shadowOffset: { width: -2, height: -2 },
+    shadowOffset: { width: 8, height: 8 },
     shadowOpacity: 1,
-    shadowRadius: 4,
-    elevation: 12
+    shadowRadius: 10,
+    elevation: 8
   },
 
   playButtonInner: {

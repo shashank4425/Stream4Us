@@ -43,15 +43,7 @@ export default function Home({ navigation }) {
     };
     useFocusEffect(
         React.useCallback(() => {
-            const backAction = async () => {
-                const inPip = await PipModule.isInPip();
-
-                // ✅ If PiP active → let Android close PiP
-                if (inPip) {
-                    return false;
-                }
-
-                // ✅ Normal case → exit app (avoid splash)
+            const backAction = () => {
                 BackHandler.exitApp();
                 return true;
             };
@@ -61,7 +53,7 @@ export default function Home({ navigation }) {
                 backAction
             );
 
-            return () => handler.remove();
+            return () => handler.remove(); // remove when leaving Home
         }, [])
     );
 
@@ -121,11 +113,11 @@ export default function Home({ navigation }) {
                 source={require('../assets/images/stream4us/logo/stream4us.png')}
                 style={{
                     marginTop: windowHeight / 28,
-                    width: windowWidth / 4.7,
+                    width: windowWidth / 4,
                     padding: 0,
                     position: "absolute",
                     zIndex: 1,
-                    height: 60, resizeMode: "contain",
+                    height: 64, resizeMode: "contain",
                     opacity: iconOpacity, // 👈 animate visibility
                 }}
                 resizeMode="contain"
