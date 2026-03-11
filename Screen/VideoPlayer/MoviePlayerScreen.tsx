@@ -9,7 +9,6 @@ import {
   ActivityIndicator,
   BackHandler,
   Dimensions,
-  InteractionManager,
   NativeModules,
   Platform,
   Pressable,
@@ -43,7 +42,7 @@ const MoviePlayer = ({ navigation, route }) => {
   const [playbackRate, setPlaybackRate] = useState(1.0);
   const [playerReady, setPlayerReady] = useState(false);
   const [videoRatio, setVideoRatio] = useState(null);
-
+  const [layoutReady, setLayoutReady] = useState(false);
   const hideTimer = useRef(null);
   const movieLink = route.params;
   //const videoSource = movieLink.seo ?
@@ -112,46 +111,41 @@ const MoviePlayer = ({ navigation, route }) => {
       await ScreenOrientation.lockAsync(
         ScreenOrientation.OrientationLock.LANDSCAPE
       );
-
-      InteractionManager.runAfterInteractions(async () => {
-        setOrientation("landscape");
-        StatusBar.setHidden(true, "fade");
-        await NavigationBar.setVisibilityAsync("hidden");
-      });
+      setOrientation("landscape");
+      StatusBar.setHidden(true, "fade");
+      await NavigationBar.setVisibilityAsync("hidden");
 
     } else {
       await ScreenOrientation.lockAsync(
         ScreenOrientation.OrientationLock.PORTRAIT_UP
       );
+      setOrientation("portrait");
+      StatusBar.setHidden(false, "fade");
+      await NavigationBar.setVisibilityAsync("visible");
 
-      InteractionManager.runAfterInteractions(async () => {
-        setOrientation("portrait");
-        StatusBar.setHidden(true, "fade");
-        await NavigationBar.setVisibilityAsync("visible");
-      });
     }
   };
 
   useEffect(() => {
-  const backHandle = BackHandler.addEventListener(
-    "hardwareBackPress",
-    () => {
+    const backHandle = BackHandler.addEventListener(
+      "hardwareBackPress",
+      () => {
 
-      // 1️⃣ Landscape → exit fullscreen
-      if (orientation === "landscape") {
-        toggleScreen();
-        return true;
+        // 1️⃣ Landscape → exit fullscreen
+        if (orientation === "landscape") {
+          toggleScreen();
+          return true;
+        }
+
+        // 3️⃣ Otherwise normal back
+        return false;
       }
+    );
 
-      // 3️⃣ Otherwise normal back
-      return false;
-    }
-  );
+    return () => backHandle.remove();
+  }, [orientation, isPlaying]);
 
-  return () => backHandle.remove();
-}, [orientation, isPlaying]);
 
-  
   const startHideTimer = () => {
     if (hideTimer.current) clearTimeout(hideTimer.current);
     hideTimer.current = setTimeout(() => {
@@ -190,7 +184,11 @@ const MoviePlayer = ({ navigation, route }) => {
             style={[
               styles.videoBox,
               orientation === "portrait"
-                ? styles.portraitVideoBox
+                ? {
+                  height: 180,
+                  marginTop: StatusBar.currentHeight,
+                  width: windowWidth
+                }
                 : styles.landscapeFullscreen
             ]}>
             <Video
@@ -418,22 +416,21 @@ const styles = StyleSheet.create({
     width: '100%',
     backgroundColor: '#0D0E10',
   },
+  // landscapeFullscreen: {
+  //   position: "absolute",
+  //   top: 0,
+  //   left: 0,
+  //   right: 0,
+  //   bottom: 0,
+  //   backgroundColor: "#000",
+  // },
 
-  portraitVideoBox: {
-    marginTop: StatusBar.currentHeight,
-    aspectRatio: 16 / 9,
-    width: '100%',
-  },
   landscapeFullscreen: {
-    position: "absolute",
-    top: 0,
-    left: 0,
-    right: 0,
-    bottom: 0,
+    ...StyleSheet.absoluteFillObject,
+    width: "100%",
+    height: "100%",
     backgroundColor: "#000",
   },
-
-
   controlsOverlay: {
     ...StyleSheet.absoluteFillObject,
     backgroundColor: 'rgba(0,0,0,0.2)',

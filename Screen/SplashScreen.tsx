@@ -27,7 +27,7 @@ export default function SplashScreen({ navigation }) {
       } else {
         navigation.replace("OfflineScreen");
       }
-    }, 4000);
+    },4000);
 
     return () => clearTimeout(timeout);
   }, []);
@@ -36,8 +36,8 @@ export default function SplashScreen({ navigation }) {
     <Animated.View style={[styles.root, { opacity: fadeAnim }]}>
       <LinearGradient
         colors={["#00A6FB", "#7B3FE4", "#FF007F"]}
-        locations={[0, 0.4, 1]}
-        start={{ x: 0, y: 0.3 }}   // TOP LEFT
+        locations={[0, 0.3, 1]}
+        start={{ x: 0, y: 0.1 }}   // TOP LEFT
         end={{ x: 1, y: 1 }}     // BOTTOM RIGHT
         style={styles.gradient}
       >
@@ -69,11 +69,11 @@ const styles = StyleSheet.create({
   },
 
   title: {
-    marginTop: -32,
-    fontSize: 48,
+    marginTop: -44,
+    fontSize: 52,
     fontWeight: "700",
     color: "#ffffff",
-    textShadowColor: "rgba(255,255,255,0.7)",
+    //textShadowColor: "rgba(255,255,255,0.7)",
     textShadowOffset: { width: 0, height: 0 },
     textShadowRadius: 8,
   },
