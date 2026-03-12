@@ -2,6 +2,7 @@ import { FontAwesome } from "@expo/vector-icons";
 import NetInfo from "@react-native-community/netinfo";
 import { useFocusEffect } from "@react-navigation/native";
 import Constants from "expo-constants";
+import { FONTS } from "../app/src/theme/fonts";
 
 import TrendingMovies from "@/components/banner/TrendingMovies";
 import React, { useRef, useState } from "react";
@@ -126,7 +127,7 @@ export default function Home({ navigation, route }) {
                                 <Text style={{
                                     color: "white",
                                     fontSize: 16,
-                                    fontWeight: "bold",
+                                    fontFamily:FONTS.semiBold,
                                     marginBottom: 10
                                 }}>
                                     {item.category}

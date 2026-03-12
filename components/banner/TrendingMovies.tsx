@@ -1,5 +1,7 @@
 import { useNavigation } from '@react-navigation/native';
 import { LinearGradient } from "expo-linear-gradient";
+import { FONTS } from "../../app/src/theme/fonts";
+
 import React, { useEffect, useRef, useState } from 'react';
 import {
   Animated,
@@ -180,13 +182,14 @@ const styles = StyleSheet.create({
   bannerInfo: {
     fontWeight: 600,
     fontSize: 14,
+    fontFamily:FONTS.semiBold,
     color: '#A9A9A9',
     marginTop: 4
   },
 
   pageText: {
     fontSize: 26,
-    fontWeight: 'bold',
+    fontFamily:FONTS.semiBold,
     color: '#FFFFFF'
   },
   playButtonOuter: {
