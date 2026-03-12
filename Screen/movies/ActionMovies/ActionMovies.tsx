@@ -3,12 +3,12 @@ import PreLoaderScreen from "@/components/splash/PreLoaderScreen";
 import NoInternetModal from "@/Screen/OfflineScreen/NoInternetModal";
 import NetInfo from "@react-native-community/netinfo";
 import React, { useEffect, useLayoutEffect, useState } from "react";
-import { Image, ScrollView, TouchableOpacity, View } from "react-native";
+import { FlatList, Image, TouchableOpacity, View } from "react-native";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
 
 export default function ActionMovies({ navigation, route }) {
 
-  const { title, movies } = route.params;
+ const { title, movies } = route.params;
 
   const insets = useSafeAreaInsets();
 
@@ -22,7 +22,6 @@ export default function ActionMovies({ navigation, route }) {
     });
   }, [navigation, title]);
 
-  // Load movies from params
   useEffect(() => {
     if (movies) {
       setData(movies);
@@ -39,7 +38,6 @@ export default function ActionMovies({ navigation, route }) {
     } else {
       setShowNoInternet(true);
     }
-
   };
 
   if (loading) {
@@ -47,37 +45,33 @@ export default function ActionMovies({ navigation, route }) {
   }
 
   return (
-    <ScrollView showsVerticalScrollIndicator={false}>
-
-      <View style={commonStyles.container}>
-
-        {data.map((item) => (
-
-          <View key={item.id} style={commonStyles.cards}>
-
-            <TouchableOpacity
-              activeOpacity={1}
-              onPress={() => onMoviePress(item)}
-            >
-
+    <View style={{ flex: 1 }}>
+      <FlatList
+        data={data}
+        keyExtractor={(item, index) => item.id?.toString() || index.toString()}
+        numColumns={3}
+        showsVerticalScrollIndicator={false}
+        contentContainerStyle={{
+          paddingHorizontal: 6,
+          paddingBottom: 120   // 👈 important
+        }}
+        renderItem={({ item }) => (
+          <View style={commonStyles.cards}>
+            <TouchableOpacity activeOpacity={1} onPress={() => onMoviePress(item)}>
               <Image
-                source={{ uri: item.seo.ogImage }}
+                source={{ uri: item?.seo?.ogImage }}
                 style={commonStyles.imgSize}
               />
-
             </TouchableOpacity>
-
           </View>
-
-        ))}
-
-      </View>
+        )}
+      />
 
       <NoInternetModal
         visible={showNoInternet}
         onClose={() => setShowNoInternet(false)}
       />
 
-    </ScrollView>
+    </View>
   );
 }

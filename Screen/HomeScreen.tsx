@@ -1,46 +1,20 @@
-import PreLoaderScreen from "@/components/splash/PreLoaderScreen";
 import { FontAwesome } from "@expo/vector-icons";
 import NetInfo from "@react-native-community/netinfo";
 import { useFocusEffect } from "@react-navigation/native";
 import Constants from "expo-constants";
 
 import TrendingMovies from "@/components/banner/TrendingMovies";
-import BannerPreLoaderScreen from "@/components/splash/BannerPreLoaderScreen";
-import React, { useEffect, useRef, useState } from "react";
+import React, { useRef, useState } from "react";
 import { Animated, BackHandler, Dimensions, FlatList, Image, NativeModules, StatusBar, StyleSheet, Text, TouchableOpacity, View } from "react-native";
-import { useSafeAreaInsets } from "react-native-safe-area-context";
 import NoInternetModal from "../Screen/OfflineScreen/NoInternetModal";
 const windowWidth = Dimensions.get('window').width;
 const windowHeight = Dimensions.get('window').height;
 const { PipModule } = NativeModules;
-export default function Home({ navigation }) {
+export default function Home({ navigation, route }) {
+   const jsonResponse = route?.params?.jsonResponse || [];
     const redirected = useRef(false);
     const [showNoInternet, setShowNoInternet] = React.useState(false);
 
-    const insets = useSafeAreaInsets();
-    const [backOnline, setBackOnline] = useState(false);
-    const [data, setData] = useState([]);
-    const [loading, setLoading] = useState(true);
-    useEffect(() => {
-        fetchJSON();
-    }, []);
-
-    const fetchJSON = async () => {
-        try {
-            const response = await fetch(
-                "https://raw.githubusercontent.com/shashank4425/Stream4Us/refs/heads/movies/common.json"
-            );
-
-            const jsonData = await response.json();
-            setData(jsonData)
-        } catch (error) {
-            console.log("Error fetching JSON:", error);
-        } finally {
-            setTimeout(function () {
-                setLoading(false);
-            }, 400)
-        }
-    };
     useFocusEffect(
         React.useCallback(() => {
             const backAction = () => {
@@ -112,7 +86,7 @@ export default function Home({ navigation }) {
                     zIndex: 10,
                 }}
             />
-            {!loading && <Animated.Image
+            {<Animated.Image
                 source={require('../assets/images/stream4us/logo/stream4us.png')}
                 style={{
                     marginTop: windowHeight / 28,
@@ -137,14 +111,12 @@ export default function Home({ navigation }) {
                     [{ nativeEvent: { contentOffset: { y: scrollY } } }],
                     { useNativeDriver: false }
                 )}
-                data={data}
-
+                data={jsonResponse || []}
                 keyExtractor={(item, index) => index.toString()}
-                ListHeaderComponent={() => (
-                    loading ? <BannerPreLoaderScreen /> : <TrendingMovies />
+                ListHeaderComponent={() => (<TrendingMovies />
                 )}
                 renderItem={({ item }) => (
-                    loading ? <PreLoaderScreen /> : <View style={{ marginBottom: 16 }}>
+                    <View style={{ marginBottom: 16 }}>
                         <View style={Styles.cardContainer}>
                             <View
                                 style={{
@@ -165,8 +137,8 @@ export default function Home({ navigation }) {
                             </View>
 
                             <FlatList
-                                data={item.Movies}
-                                keyExtractor={(movie) => movie.id}
+                                data={item?.Movies || []}
+                                keyExtractor={(movie, index) => movie.id?.toString() || index.toString()}
                                 horizontal
                                 showsHorizontalScrollIndicator={false}
                                 renderItem={({ item }) => (

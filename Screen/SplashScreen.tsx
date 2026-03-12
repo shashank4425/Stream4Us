@@ -1,6 +1,6 @@
 import NetInfo from "@react-native-community/netinfo";
 import { LinearGradient } from "expo-linear-gradient";
-import React, { useEffect, useRef } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import {
   Animated,
   Image,
@@ -10,7 +10,8 @@ import {
 
 export default function SplashScreen({ navigation }) {
   const fadeAnim = useRef(new Animated.Value(0)).current;
-
+  const [loading, setLoading] = useState(true);
+  const [data, setData] = useState([]);
   useEffect(() => {
     // Fade animation
     Animated.timing(fadeAnim, {
@@ -19,18 +20,32 @@ export default function SplashScreen({ navigation }) {
       useNativeDriver: true,
     }).start();
 
-    const timeout = setTimeout(async () => {
+    fetchJSON();
+  }, []);
+
+  const fetchJSON = async () => {
+    try {
       const state = await NetInfo.fetch();
 
-      if (state.isConnected && state.isInternetReachable) {
-        navigation.replace("BottomAppNavigator");
-      } else {
+      if (!state.isConnected) {
         navigation.replace("OfflineScreen");
+        return;
       }
-    },4000);
 
-    return () => clearTimeout(timeout);
-  }, []);
+      const response = await fetch(
+        "https://raw.githubusercontent.com/shashank4425/Stream4Us/refs/heads/movies/common.json"
+      );
+
+      const jsonData = await response.json();
+      navigation.replace("BottomAppNavigator", {
+        jsonResponse: jsonData,
+      });
+
+    } catch (error) {
+      console.log("Error fetching JSON:", error);
+      navigation.replace("OfflineScreen");
+    }
+  };
 
   return (
     <Animated.View style={[styles.root, { opacity: fadeAnim }]}>
