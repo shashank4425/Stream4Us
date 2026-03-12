@@ -1,6 +1,7 @@
 import NetInfo from "@react-native-community/netinfo";
+import * as Font from "expo-font";
 import { LinearGradient } from "expo-linear-gradient";
-import React, { useEffect, useRef, useState } from "react";
+import React, { useEffect, useRef } from "react";
 import {
   Animated,
   Image,
@@ -10,8 +11,15 @@ import {
 
 export default function SplashScreen({ navigation }) {
   const fadeAnim = useRef(new Animated.Value(0)).current;
-  const [loading, setLoading] = useState(true);
-  const [data, setData] = useState([]);
+  const loadFonts = async () => {
+    await Font.loadAsync({
+      "Poppins-Regular": require("../assets/fonts/Poppins-Regular.ttf"),
+      "Poppins-Bold": require("../assets/fonts/Poppins-Bold.ttf"),
+      "Poppins-SemiBold": require("../assets/fonts/Poppins-SemiBold.ttf"),
+      "Poppins-Medium": require("../assets/fonts/Poppins-Medium.ttf"),
+      "Poppins-Light": require("../assets/fonts/Poppins-Light.ttf"),
+    });
+  };
   useEffect(() => {
     // Fade animation
     Animated.timing(fadeAnim, {
@@ -37,6 +45,7 @@ export default function SplashScreen({ navigation }) {
       );
 
       const jsonData = await response.json();
+      await loadFonts();
       navigation.replace("BottomAppNavigator", {
         jsonResponse: jsonData,
       });
@@ -85,8 +94,8 @@ const styles = StyleSheet.create({
 
   title: {
     marginTop: -44,
-    fontSize: 52,
-    fontWeight: "700",
+    fontSize: 50,
+    fontFamily: "Poppins-SemiBold",
     color: "#ffffff",
     //textShadowColor: "rgba(255,255,255,0.7)",
     textShadowOffset: { width: 0, height: 0 },

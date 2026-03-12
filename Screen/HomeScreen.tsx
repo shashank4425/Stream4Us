@@ -61,7 +61,7 @@ export default function Home({ navigation, route }) {
 
     if (net.isConnected) {
 
-        navigation.navigate(item.category, {
+        navigation.navigate("CategoryBasedMovies", {
             title: item.category,
             movies: item.Movies
         });
@@ -90,11 +90,11 @@ export default function Home({ navigation, route }) {
                 source={require('../assets/images/stream4us/logo/stream4us.png')}
                 style={{
                     marginTop: windowHeight / 28,
-                    width: windowWidth / 4,
+                    width: windowWidth / 4.5,
                     padding: 0,
                     position: "absolute",
                     zIndex: 1,
-                    height: 64, resizeMode: "contain",
+                    height: 56, resizeMode: "contain",
                     opacity: iconOpacity, // 👈 animate visibility
                 }}
                 resizeMode="contain"

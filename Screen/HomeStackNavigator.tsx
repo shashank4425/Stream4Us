@@ -1,14 +1,9 @@
 import Home from "@/Screen/HomeScreen";
-import ActionMovies from "@/Screen/movies/ActionMovies/ActionMovies";
-import BhojpuriBhaukalMovies from "@/Screen/movies/BhojpuriMovies/BhojpuriBhaukalMovies";
-import GlobalHitsMovies from "@/Screen/movies/GlobalHitsMovies/GlobalHitsMoviesScreen";
-import HorrorMovies from "@/Screen/movies/HorrorMovies/HorrorMovies";
-import RomanticMovies from "@/Screen/movies/RemanceMovies/RomanticMovies";
-import SouthDubbedMovies from "@/Screen/movies/SouthMovies/SouthDubbedMoviesScreen";
 import { createStackNavigator } from '@react-navigation/stack';
 import React from "react";
-import { Dimensions, StyleSheet } from "react-native";
+import { Dimensions } from "react-native";
 import BottomAppNavigator from "./BottomAppNavigator";
+import CategoryBasedMovies from "./movies/CategoryBasedMovies";
 
 const Stack = createStackNavigator();
 const windowWidth = Dimensions.get('window').width;
@@ -40,55 +35,14 @@ export default function HomeStackNavigator({ route }) {
             animation: 'fade',
           }}
         />
-          <Stack.Screen name="Action Movies" component={ActionMovies} options={{
+        <Stack.Screen name="CategoryBasedMovies" component={CategoryBasedMovies} options={{
             presentation: "card",
             animation: 'fade',
             gestureEnabled: false,
             headerTitle: () => null, headerTintColor: "#FFF",
             headerStyle: { backgroundColor: "#0D0E10", height: windowHeight / 10 },
           }} />
-          <Stack.Screen name="Global Hits Movies" component={GlobalHitsMovies} options={{
-            presentation: "card",
-            animation: 'fade',
-            gestureEnabled: false,
-            headerTitle: () => null, headerTintColor: "#FFF",
-            headerStyle: { backgroundColor: "#0D0E10", height: windowHeight / 10 },
-          }} />
-          <Stack.Screen name="Romantic Movies" component={RomanticMovies} options={{
-            presentation: "card",
-            animation: 'fade',
-            gestureEnabled: false,
-            headerTitle: () => null, headerTintColor: "#FFF",
-            headerStyle: { backgroundColor: "#0D0E10", height: windowHeight / 10 },
-          }} />
-          <Stack.Screen name="South Dubbed Movies" component={SouthDubbedMovies} options={{
-            presentation: "card",
-            animation: 'fade',
-            gestureEnabled: false,
-            headerTitle: () => null, headerTintColor: "#FFF",
-            headerStyle: { backgroundColor: "#0D0E10", height: windowHeight / 10 },
-          }} />
-          <Stack.Screen name="Bhojpuri Bhaukal" component={BhojpuriBhaukalMovies} options={{
-            presentation: "card",
-            animation: 'fade',
-            gestureEnabled: false,
-            headerTitle: () => null, headerTintColor: "#FFF",
-            headerStyle: { backgroundColor: "#0D0E10", height: windowHeight / 10 },
-          }} />
-          <Stack.Screen name="Horror" component={HorrorMovies} options={{
-            presentation: "card",
-            animation: 'fade',
-            gestureEnabled: false,
-            headerTitle: () => null, headerTintColor: "#FFF",
-            headerStyle: { backgroundColor: "#0D0E10", height: windowHeight / 10 },
-          }} />          
-          
         </Stack.Navigator>
     </>
   )
 }
-
-const Styles = StyleSheet.create({
-  // background: rgb(63,94,251);
-  // background: linear-gradient(130deg, rgba(63,94,251,1) 40%, rgba(233,11,110,1) 90%);
-})
