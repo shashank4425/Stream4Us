@@ -83,16 +83,19 @@ export default function Home({ navigation }) {
     };
 
     const onCategoryPress = async (item) => {
-        const net = await NetInfo.fetch();
+    const net = await NetInfo.fetch();
 
-        if (net.isConnected) {
-            navigation.navigate(item.category, { title: item.category });
-        } else {
-            setShowNoInternet(true);
-        }
-    };
+    if (net.isConnected) {
 
+        navigation.navigate(item.category, {
+            title: item.category,
+            movies: item.Movies
+        });
 
+    } else {
+        setShowNoInternet(true);
+    }
+};
 
     return (
         <View style={{
