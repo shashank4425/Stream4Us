@@ -78,7 +78,10 @@ export default function AppNavigatorScreen() {
             left: 0,
             right: 0,
             height: insets.bottom,
-            backgroundColor: "#000000",
+            backgroundColor:
+            Platform.OS === "android" && Platform.Version <= 29
+            ? "#0D0E10"   // Android 10 and below (ex: Redmi 9 Prime)
+            : "#000000",  // Newer devices (ex: Nord CE 3)
           }}
         />
       )}

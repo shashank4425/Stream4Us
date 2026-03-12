@@ -9,7 +9,7 @@ import {
   ActivityIndicator,
   BackHandler,
   Dimensions,
-  InteractionManager,
+  NativeModules,
   Platform,
   Pressable,
   ScrollView,
@@ -22,7 +22,7 @@ import {
 import MaterialIcon from "react-native-vector-icons/MaterialIcons";
 import Video from "react-native-video";
 const windowWidth = Dimensions.get("window").width;
-
+const { PipModule } = NativeModules;
 const MoviePlayer = ({ navigation, route }) => {
   const videoRef = useRef(null);
   const [maxBitrate, setMaxBitrate] = useState(2500000);
@@ -42,7 +42,7 @@ const MoviePlayer = ({ navigation, route }) => {
   const [playbackRate, setPlaybackRate] = useState(1.0);
   const [playerReady, setPlayerReady] = useState(false);
   const [videoRatio, setVideoRatio] = useState(null);
-
+  const [layoutReady, setLayoutReady] = useState(false);
   const hideTimer = useRef(null);
   const movieLink = route.params;
   //const videoSource = movieLink.seo ?
@@ -111,23 +111,18 @@ const MoviePlayer = ({ navigation, route }) => {
       await ScreenOrientation.lockAsync(
         ScreenOrientation.OrientationLock.LANDSCAPE
       );
-
-      InteractionManager.runAfterInteractions(async () => {
-        setOrientation("landscape");
-        StatusBar.setHidden(true, "fade");
-        await NavigationBar.setVisibilityAsync("hidden");
-      });
+      setOrientation("landscape");
+      StatusBar.setHidden(true, "fade");
+      await NavigationBar.setVisibilityAsync("hidden");
 
     } else {
       await ScreenOrientation.lockAsync(
         ScreenOrientation.OrientationLock.PORTRAIT_UP
       );
+      setOrientation("portrait");
+      StatusBar.setHidden(false, "fade");
+      await NavigationBar.setVisibilityAsync("visible");
 
-      InteractionManager.runAfterInteractions(async () => {
-        setOrientation("portrait");
-        StatusBar.setHidden(true, "fade");
-        await NavigationBar.setVisibilityAsync("visible");
-      });
     }
   };
 
@@ -136,20 +131,17 @@ const MoviePlayer = ({ navigation, route }) => {
       "hardwareBackPress",
       () => {
 
+        // 1️⃣ Landscape → exit fullscreen
         if (orientation === "landscape") {
           toggleScreen();
-          return true; // handled by JS
+          return true;
         }
 
-        // If portrait AND video is playing → allow native PiP
-        if (orientation === "portrait" && isPlaying) {
-          return false;
-          // Returning false lets Android call onBackPressed()
-          // which enters PiP
-        }
+        // 3️⃣ Otherwise normal back
         return false;
       }
     );
+
     return () => backHandle.remove();
   }, [orientation, isPlaying]);
 
@@ -192,7 +184,11 @@ const MoviePlayer = ({ navigation, route }) => {
             style={[
               styles.videoBox,
               orientation === "portrait"
-                ? styles.portraitVideoBox
+                ? {
+                  height: 180,
+                  marginTop: StatusBar.currentHeight,
+                  width: windowWidth
+                }
                 : styles.landscapeFullscreen
             ]}>
             <Video
@@ -420,22 +416,21 @@ const styles = StyleSheet.create({
     width: '100%',
     backgroundColor: '#0D0E10',
   },
+  // landscapeFullscreen: {
+  //   position: "absolute",
+  //   top: 0,
+  //   left: 0,
+  //   right: 0,
+  //   bottom: 0,
+  //   backgroundColor: "#000",
+  // },
 
-  portraitVideoBox: {
-    marginTop: StatusBar.currentHeight,
-    aspectRatio: 16 / 9,
-    width: '100%',
-  },
   landscapeFullscreen: {
-    position: "absolute",
-    top: 0,
-    left: 0,
-    right: 0,
-    bottom: 0,
+    ...StyleSheet.absoluteFillObject,
+    width: "100%",
+    height: "100%",
     backgroundColor: "#000",
   },
-
-
   controlsOverlay: {
     ...StyleSheet.absoluteFillObject,
     backgroundColor: 'rgba(0,0,0,0.2)',

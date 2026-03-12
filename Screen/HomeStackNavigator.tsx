@@ -22,7 +22,7 @@ export default function HomeStackNavigator({ route }) {
             backgroundColor: "#0D0E10",
             width: windowWidth
           }}}>
-          <Stack.Screen name="Home" component={Home} options={{
+          <Stack.Screen name="Home" initialParams={{ jsonResponse: route?.params?.jsonResponse }} component={Home} options={{
             presentation: "card",
             animation: 'fade',
             gestureEnabled: false,
