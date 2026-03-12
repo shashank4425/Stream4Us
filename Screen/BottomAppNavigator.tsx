@@ -8,7 +8,7 @@ import LiveStackNavigator from './LiveStackNavigator';
 
 const Tab = createBottomTabNavigator();
 
-function CustomTabBar({ state, navigation }) {
+function CustomTabBar({ state, navigation}) {
   const insets = useSafeAreaInsets();
 
   const TAB_HEIGHT = 50;
@@ -63,15 +63,26 @@ function CustomTabBar({ state, navigation }) {
 }
 
 /* ---------------- TAB NAVIGATOR ---------------- */
-export default function BottomAppNavigator() {
+export default function BottomAppNavigator({ route }) {
+
+  const jsonResponse = route?.params?.jsonResponse;
   return (
     <Tab.Navigator
       initialRouteName="Home"
       screenOptions={{ headerShown: false }}
       tabBar={(props) => <CustomTabBar {...props} />}
     >
-      <Tab.Screen name="Home" component={HomeStackNavigator} />
-      <Tab.Screen name="LiveStreaming" component={LiveStackNavigator} />
+      <Tab.Screen
+        name="Home"
+        component={HomeStackNavigator}
+        initialParams={{ jsonResponse: jsonResponse }}
+      />
+
+      <Tab.Screen
+        name="LiveStreaming"
+        component={LiveStackNavigator}
+        initialParams={{ jsonResponse: jsonResponse }}
+      />
     </Tab.Navigator>
   );
 }

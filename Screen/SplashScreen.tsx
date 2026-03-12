@@ -1,57 +1,95 @@
 import NetInfo from "@react-native-community/netinfo";
-import React, { useEffect, useRef } from "react";
+import { LinearGradient } from "expo-linear-gradient";
+import React, { useEffect, useRef, useState } from "react";
 import {
   Animated,
-  ImageBackground,
-  Platform,
+  Image,
   StyleSheet,
-  View
+  Text
 } from "react-native";
-import { useSafeAreaInsets } from "react-native-safe-area-context";
 
 export default function SplashScreen({ navigation }) {
   const fadeAnim = useRef(new Animated.Value(0)).current;
-  const insets = useSafeAreaInsets();
-
+  const [loading, setLoading] = useState(true);
+  const [data, setData] = useState([]);
   useEffect(() => {
+    // Fade animation
     Animated.timing(fadeAnim, {
       toValue: 1,
-      duration: 1500,
+      duration: 1000,
       useNativeDriver: true,
     }).start();
 
-    const timeout = setTimeout(async () => {
-      const state = await NetInfo.fetch();
-      if (state.isConnected && state.isInternetReachable) {
-        navigation.replace("BottomAppNavigator");
-      } else {
-        navigation.replace("OfflineScreen");
-      }
-    }, 4000);
-
-    return () => clearTimeout(timeout);
+    fetchJSON();
   }, []);
 
+  const fetchJSON = async () => {
+    try {
+      const state = await NetInfo.fetch();
+
+      if (!state.isConnected) {
+        navigation.replace("OfflineScreen");
+        return;
+      }
+
+      const response = await fetch(
+        "https://raw.githubusercontent.com/shashank4425/Stream4Us/refs/heads/movies/common.json"
+      );
+
+      const jsonData = await response.json();
+      navigation.replace("BottomAppNavigator", {
+        jsonResponse: jsonData,
+      });
+
+    } catch (error) {
+      console.log("Error fetching JSON:", error);
+      navigation.replace("OfflineScreen");
+    }
+  };
+
   return (
-    <View style={{ flex: 1 }}>
-      <Animated.View style={{ flex: 1, opacity: fadeAnim }}>
-        <ImageBackground
-          source={require("../assets/images/stream4us/logo/stream4us_splash.png")}
-          resizeMode="cover"
-          style={[
-            styles.image,
-            Platform.OS === "android" && {
-              marginBottom: -insets.bottom,
-            },
-          ]}
+    <Animated.View style={[styles.root, { opacity: fadeAnim }]}>
+      <LinearGradient
+        colors={["#00A6FB", "#7B3FE4", "#FF007F"]}
+        locations={[0, 0.3, 1]}
+        start={{ x: 0, y: 0.1 }}   // TOP LEFT
+        end={{ x: 1, y: 1 }}     // BOTTOM RIGHT
+        style={styles.gradient}
+      >
+        <Image
+          source={require("../assets/images/stream4us/logo/stream4us.png")}
+          style={styles.logo}
         />
-      </Animated.View>
-    </View>
+        <Text style={styles.title}>Stream4Us</Text>
+      </LinearGradient>
+    </Animated.View>
   );
 }
 
 const styles = StyleSheet.create({
-  image: {
+  root: {
     flex: 1,
+  },
+
+  gradient: {
+    flex: 1,                 // IMPORTANT: must fill screen
+    justifyContent: "center",
+    alignItems: "center",
+  },
+
+  logo: {
+    width: 222,
+    height: 222,
+    resizeMode: "contain",
+  },
+
+  title: {
+    marginTop: -44,
+    fontSize: 52,
+    fontWeight: "700",
+    color: "#ffffff",
+    //textShadowColor: "rgba(255,255,255,0.7)",
+    textShadowOffset: { width: 0, height: 0 },
+    textShadowRadius: 8,
   },
 });

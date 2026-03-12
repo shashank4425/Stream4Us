@@ -1,7 +1,8 @@
 export const bannerList = [
   {
     id: "1",
-    line2: "Action, Drama, Thriller",
+    line2: "Action • Drama • Thriller",
+    bannerInfo: "2024 • Action • Drama • Thriller",
     durationFormatted: "2h 31m",
     seo: {
               "page": "Vedaa",
@@ -14,6 +15,7 @@ export const bannerList = [
   {
     id: "2",
     line2: "Adventure, Family, Animation",
+    bannerInfo: "2024 • Adventure • Family • Animation",
     durationFormatted: "1h 58m",
     seo: {
               "page": "Mufasa: The Lion King",
@@ -25,7 +27,8 @@ export const bannerList = [
   },
   {
     id: "3",
-    line2: "Drama",
+    line2: "Action • Drama",
+    bannerInfo: "2024 • Action • Drama",
     durationFormatted: "2h 11m",
     seo: {
               "page": "The Sabarmati Report",
@@ -37,7 +40,8 @@ export const bannerList = [
   },
   {
     id: "4",
-    line2: "Action, Drama",
+    line2: "Action • Drama",
+    bannerInfo: "2024 • Action • Drama",
     durationFormatted: "2h 15m",
     seo: {
               "page": "Bhaiyya Ji",
@@ -49,7 +53,8 @@ export const bannerList = [
   },
   {
     id: "5",
-    line2: "Horror, Comedy",
+    line2: "Horror • Comedy",
+    bannerInfo: "2024 • Horror • Comedy",
     durationFormatted: "2h 23m",
     seo: {
               "page": "Stree 2",
