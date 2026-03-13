@@ -88,7 +88,7 @@ const styles = StyleSheet.create({
   title: {
     marginTop: -44,
     fontSize: 50,
-    fontFamily: FONTS.semiBold,
+    fontFamily: FONTS["Roboto-Bold"],
     color: "#ffffff",
     //textShadowColor: "rgba(255,255,255,0.7)",
     textShadowOffset: { width: 0, height: 0 },

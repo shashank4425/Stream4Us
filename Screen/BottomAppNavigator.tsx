@@ -3,9 +3,9 @@ import React from 'react';
 import { Text, TouchableOpacity, View } from 'react-native';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import MaterialIcon from 'react-native-vector-icons/MaterialIcons';
+import { FONTS } from "../app/src/theme/fonts";
 import HomeStackNavigator from './HomeStackNavigator';
 import LiveStackNavigator from './LiveStackNavigator';
-
 const Tab = createBottomTabNavigator();
 
 function CustomTabBar({ state, navigation}) {
@@ -50,6 +50,7 @@ function CustomTabBar({ state, navigation}) {
               style={{
                 fontSize: 11,
                 marginTop: 4,
+                fontFamily:FONTS['Roboto-Bold'],
                 color: focused ? '#fff' : '#777',
               }}
             >

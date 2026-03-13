@@ -545,9 +545,9 @@ const styles = StyleSheet.create({
     textAlign: "center",
     justifyContent: "space-between",
   },
-  mtitle: { color: "#FFF", fontFamily: FONTS.bold, fontSize: 18 },
-  mline: { color: "#dcdcdc", fontSize: 13, fontFamily:FONTS.semiBold, paddingVertical: 10 },
-  contentDes: { color: "#dcdcdc", fontSize: 12, fontFamily:FONTS.regular, lineHeight: 18 },
+  mtitle: { color: "#FFF", fontFamily: FONTS["Roboto-Bold"], fontSize: 20 },
+  mline: { color: "#dcdcdc", fontSize: 13, fontFamily:FONTS["Roboto-Bold"], paddingVertical: 10 },
+  contentDes: { color: "#dcdcdc", fontSize: 12, fontFamily:FONTS["Roboto-Medium"], lineHeight: 18 },
   lsDurationTxt: { color: "white", backgroundColor: "rgba(0,0,0,0.5)", padding: 4, borderRadius: 5 }
 });
 

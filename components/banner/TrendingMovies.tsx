@@ -182,14 +182,14 @@ const styles = StyleSheet.create({
   bannerInfo: {
     fontWeight: 600,
     fontSize: 14,
-    fontFamily:FONTS.semiBold,
+    fontFamily:FONTS['Roboto-Bold'],
     color: '#A9A9A9',
     marginTop: 4
   },
 
   pageText: {
     fontSize: 26,
-    fontFamily:FONTS.semiBold,
+    fontFamily:FONTS['Roboto-Medium'],
     color: '#FFFFFF'
   },
   playButtonOuter: {
