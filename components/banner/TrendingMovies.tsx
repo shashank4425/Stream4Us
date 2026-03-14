@@ -106,7 +106,10 @@ const TrendingMovies = () => {
 
               {/* LEFT TEXT */}
               <View style={styles.textContainer}>
-                <Text style={styles.pageText}>{item.seo.page}</Text>
+                {/* <Text style={styles.pageText}>{item.seo.page}</Text> */}
+                <Image
+                  source={{ uri: item.seo?.ogLogo }}   // or any field you have
+                  style={styles.ogImage} />
                 <Text style={styles.bannerInfo}>{item.bannerInfo}</Text>
               </View>
               <TouchableOpacity
@@ -164,6 +167,12 @@ const styles = StyleSheet.create({
     height: '100%',
     resizeMode: 'cover'
   },
+  ogImage: {
+    width: 200,
+    height: 100,
+    resizeMode: "contain",
+    marginBottom: 6
+  },
   textContainer: {
     position: 'absolute',
     left: 16,
@@ -182,14 +191,14 @@ const styles = StyleSheet.create({
   bannerInfo: {
     fontWeight: 600,
     fontSize: 14,
-    fontFamily:FONTS['Roboto-Bold'],
+    fontFamily: FONTS['Roboto-Bold'],
     color: '#A9A9A9',
     marginTop: 4
   },
 
   pageText: {
     fontSize: 26,
-    fontFamily:FONTS['Roboto-Medium'],
+    fontFamily: FONTS['Roboto-Medium'],
     color: '#FFFFFF'
   },
   playButtonOuter: {
