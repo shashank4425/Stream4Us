@@ -57,15 +57,15 @@ export const bannerList = [
   },
   {
     id: "5",
-    line2: "U/A 13+ (IN) • 2025 • Action • War",
-    bannerInfo: "2025 • Action • War",
-    durationFormatted: "2h 17m",
+    line2: "U/A 16+ (IN) • 2025 • Action • Adventure • Thriller",
+    bannerInfo: "2025 • Action • Adventure • Thriller",
+    durationFormatted: "2h 53m",
     seo: {
-      "page": "120 Bahadur",
-      "title": "120 Bahadur",
-      "description": "Valiant Indian soldiers fight against Chinese troops during the 1962 Sino-Indian War, preventing a potential occupation of Ladakh region in the Battle of Rezang La.",
-      "ogImage": "https://media.themoviedb.org/t/p/w1066_and_h600_face/oIc8dHzYmPRwrRB7mF03m1Erm6x.jpg",
-      "ogLogo": "https://raw.githubusercontent.com/shashank4425/Stream4Us/refs/heads/movies/bollywood/movietitle/120bahadur.png",
+      "page": "War 2",
+      "title": "War 2",
+      "description": "Years ago Agent Kabir went rogue, became India’s greatest villain ever. As he descends further into the deepest shadows... India sends its deadliest, most lethal agent after him, Agent Vikram A Special Units Officer who is more than Kabir’s equal and a relentless Terminator driven by his own demons, determined to put a bullet into Kabir’s skull.",
+      "ogImage": "https://media.themoviedb.org/t/p/w1066_and_h600_face/pKIRUTnwY3YYU9urSdsuobdcliP.jpg",
+      "ogLogo": "https://raw.githubusercontent.com/shashank4425/Stream4Us/refs/heads/movies/bollywood/movietitle/war2.png",
       "ogVideo": ""
     }
   }
