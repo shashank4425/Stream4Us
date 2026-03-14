@@ -142,14 +142,14 @@ export default function Home({ navigation, route }) {
                                     {item.category}
                                 </Text>
 
-                                {arrowIndex === index && (
+                                {/* {arrowIndex === index && ( */}
                                     <TouchableOpacity
                                         onPress={() => onCategoryPress(item)}
                                         activeOpacity={0.8}
                                     >
                                         <FontAwesome name="angle-right" size={24} color="#fff" />
                                     </TouchableOpacity>
-                                )}
+                                {/* )} */}
                             </View>
 
                             {/* Horizontal Movies */}
