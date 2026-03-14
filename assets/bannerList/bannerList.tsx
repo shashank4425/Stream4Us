@@ -1,7 +1,7 @@
 export const bannerList = [
   {
     id: "1",
-    line2: "U/A 16+ (IN) • 2025 • Romance • Drama • Comedy",
+    line2: "2025 • Romance • Drama • Comedy • U/A 16+ • Hindi",
     bannerInfo: "2025 • Romance • Drama • Comedy",
     durationFormatted: "2h 22m",
     seo: {
@@ -15,7 +15,7 @@ export const bannerList = [
   },
   {
     id: "2",
-    line2: "U/A 16+ (IN) • 2026 • Crime • Drama • Thriller",
+    line2: "2026 • Crime • Drama • Thriller • U/A 16+ • Hindi ",
     bannerInfo: "2025 • Crime • Drama • Thriller",
     durationFormatted: "2h 17m",
     seo: {
@@ -29,7 +29,7 @@ export const bannerList = [
   },
   {
     id: "3",
-    line2: "U/A 16+ (IN) • 2025 • Action • Crime",
+    line2: "2025 • Action • Crime • U/A 16+ • Hindi",
     bannerInfo: "2025 • Action • Crime",
     durationFormatted: "2h 10m",
     seo: {
@@ -43,7 +43,7 @@ export const bannerList = [
   },
   {
     id: "4",
-    ine2: "U/A 16+ (IN) • 2025 • Action • Crime • Thriller",
+    ine2: "2025 • Action • Crime • Thriller • U/A 16+ • Hindi",
     bannerInfo: "2025 • Action • Crime • Thriller",
     durationFormatted: "3h 32m",
     seo: {
@@ -57,7 +57,7 @@ export const bannerList = [
   },
   {
     id: "5",
-    line2: "U/A 16+ (IN) • 2025 • Action • Adventure • Thriller",
+    line2: "2025 • Action • Adventure • Thriller • U/A 16+ • Hindi",
     bannerInfo: "2025 • Action • Adventure • Thriller",
     durationFormatted: "2h 53m",
     seo: {
