@@ -9,7 +9,7 @@ export const bannerList = [
       "title": "Kis Kisko Pyaar Karoon 2",
       "description": "Mohan wants to marry the love of his life, Sania, but destiny has a madcap plan! He ends up marrying three women of different religions and chaos follows.",
       "ogImage": "https://media.themoviedb.org/t/p/w1066_and_h600_face/ggjK0Xg2Qc4MOppEpTroFBGhrM3.jpg",
-      "ogLogo": "https://raw.githubusercontent.com/shashank4425/Stream4Us/refs/heads/movies/bollywood/movietitle/kis_kis_ko_pyar_karoon2.png",
+      "ogLogo": "https://raw.githubusercontent.com/shashank4425/Stream4Us/refs/heads/movies/bollywood/movielogo/kis_kis_ko_pyar_karoon2.png",
       "ogVideo": ""
     }
   },
@@ -23,7 +23,7 @@ export const bannerList = [
       "title": "Vadh 2",
       "description": "A police officer's pursuit of truth in a shocking prison crime intertwines with the lives of a widowed prison guard and a soon to be released inmate, unravelling a web of morality and redemption.",
       "ogImage": "https://media.themoviedb.org/t/p/w1066_and_h600_face/5z7eorMubo7nB11P8s5a0GMXf2D.jpg",
-      "ogLogo": "https://raw.githubusercontent.com/shashank4425/Stream4Us/refs/heads/movies/bollywood/movietitle/vadh2.png",
+      "ogLogo": "https://raw.githubusercontent.com/shashank4425/Stream4Us/refs/heads/movies/bollywood/movielogo/vadh2.png",
       "ogVideo": ""
     }
   },
@@ -37,7 +37,7 @@ export const bannerList = [
       "title": "Mardaani 3",
       "description": "Officer Shivani Shivaji Roy returns to hunt down those behind the disappearance of young girls, risking everything to bring them back alive.",
       "ogImage": "https://media.themoviedb.org/t/p/w1066_and_h600_face/iqqnhMLaS94Fw4rpAQB6jHx0y9E.jpg",
-      "ogLogo": "https://raw.githubusercontent.com/shashank4425/Stream4Us/refs/heads/movies/bollywood/movietitle/mardani3.png",
+      "ogLogo": "https://raw.githubusercontent.com/shashank4425/Stream4Us/refs/heads/movies/bollywood/movielogo/mardani3.png",
       "ogVideo": ""
     }
   },
@@ -51,7 +51,7 @@ export const bannerList = [
       "title": "Dhurandhar",
       "description": "A mysterious traveler slips into the heart of Karachi's underbelly and rises through its ranks with lethal precision, only to tear the notorious ISI-Underworld nexus apart from within.",
       "ogImage": "https://media.themoviedb.org/t/p/w1066_and_h600_face/snYOXem8pUGOffnLbbGq4aB1pg4.jpg",
-      "ogLogo": "https://raw.githubusercontent.com/shashank4425/Stream4Us/refs/heads/movies/bollywood/movietitle/dhurandhar.png",
+      "ogLogo": "https://raw.githubusercontent.com/shashank4425/Stream4Us/refs/heads/movies/bollywood/movielogo/dhurandhar.png",
       "ogVideo": ""
     }
   },
@@ -65,7 +65,7 @@ export const bannerList = [
       "title": "War 2",
       "description": "Years ago Agent Kabir went rogue, became India’s greatest villain ever. As he descends further into the deepest shadows... India sends its deadliest, most lethal agent after him, Agent Vikram A Special Units Officer who is more than Kabir’s equal and a relentless Terminator driven by his own demons, determined to put a bullet into Kabir’s skull.",
       "ogImage": "https://media.themoviedb.org/t/p/w1066_and_h600_face/pKIRUTnwY3YYU9urSdsuobdcliP.jpg",
-      "ogLogo": "https://raw.githubusercontent.com/shashank4425/Stream4Us/refs/heads/movies/bollywood/movietitle/war2.png",
+      "ogLogo": "https://raw.githubusercontent.com/shashank4425/Stream4Us/refs/heads/movies/bollywood/movielogo/war2.png",
       "ogVideo": ""
     }
   }

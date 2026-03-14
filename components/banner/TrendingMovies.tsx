@@ -168,8 +168,8 @@ const styles = StyleSheet.create({
     resizeMode: 'cover'
   },
   ogImage: {
-    width: 200,
-    height: 100,
+    width: 180,
+    height: 80,
     resizeMode: "contain",
     marginBottom: 6
   },
