@@ -138,7 +138,7 @@
             {
                 "id": "00211",
                 "defaultLanguage": "Hindi",
-                "line2": "2015 • Drama • Thriller • Action • Crime • UA • Hindi"
+                "line2": "2015 • Drama • Thriller • Action • Crime • UA • Hindi",
                 "durationFormatted": "2h 15m",
                 "duration": "02:14:47",
                 "seo": {
@@ -152,7 +152,7 @@
             {
                 "id": "00212",
                 "defaultLanguage": "Hindi",
-                "line2": "Hindi ∙ Action ∙ A",
+                "line2": "2013 • Action • Adventure • UA • Hindi",
                 "durationFormatted": "1h 42m",
                 "duration": "01:42:09",
                 "seo": {
@@ -166,7 +166,7 @@
             {
                 "id": "00213",
                 "defaultLanguage": "Hindi",
-                "line2": "Hindi ∙ Action ∙ U/A 13+",
+                "line2": "Hindi • Action • U/A 13+",
                 "durationFormatted": "2h 26m",
                 "duration": "02:25:38",
                 "seo": {
@@ -180,7 +180,7 @@
             {
                 "id": "00214",
                 "defaultLanguage": "Hindi",
-                "line2": "हि, म, +6 more ∙ Action, Drama ∙ U/A 16+",
+                "line2": "2023 • Action • Drama •  UA • Hindi",
                 "durationFormatted": "2h 2m",
                 "duration": "02:01:50",
                 "seo": {
@@ -194,12 +194,12 @@
             {
                 "id": "00215",
                 "defaultLanguage": "Hindi",
-                "line2": "U/A 16+ • Action • Adventure • Thriller",
+                "line2": "2025 • Action • Adventure • Thriller • UA • Hindi ",
                 "durationFormatted": "2h 53m",
                 "duration": "02:54:00",
                 "seo": {
-                    "page": "War 2 (2025)",
-                    "title": "War 2 (2025)",
+                    "page": "War 2",
+                    "title": "War 2",
                     "description": "Years ago Agent Kabir went rogue, became India’s greatest villain ever. As he descends further into the deepest shadows... India sends its deadliest, most lethal agent after him, Agent Vikram A Special Units Officer who is more than Kabir’s equal and a relentless Terminator driven by his own demons, determined to put a bullet into Kabir’s skull.",
                     "ogImage": "https://media.themoviedb.org/t/p/w600_and_h900_face/2Yc8Kl2ldPpDzLrG2M5Ddv62FXB.jpg",
                     "ogVideo": ""
