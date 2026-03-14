@@ -588,26 +588,46 @@
     },
     {
         "id": "00500",
-        "category": "Bhojpuri Bhaukal",
+        "category": "Best in Comedy",
         "Movies": [
             {
                 "id": "00511",
+                "defaultLanguage": "Hindi",
+                "line2": "2025 ∙ U/A 16+ ∙  Hindi ∙ Drama",
+                "durationFormatted": "2h 36m",
+                "duration": "",
+                "seo": {
+                    "page": "Jolly LLB 3",
+                    "title": "Jolly LLB 3",
+                    "description": "The third part of the Jolly LLB trilogy brings back Jagdish Tyagi and Jagdishwar Mishra for the biggest face-off as penurious widow Janki Devi Solanki awaits justice against business tycoon Haribhai Khaitan in a satire on the judiciary, justice and the gulf between the privileged and the people on the other side of the spectrum.",
+                    "ogImage": "https://media.themoviedb.org/t/p/w600_and_h900_face/bwRoU9p5GvjxgPfmIgsfcJ4ydng.jpg",
+                    "ogVideo": ""
+                }
+            }
+        ]
+    },
+    {
+        "id": "00600",
+        "category": "Bhojpuri Bhaukal",
+        "Movies": [
+            {
+                "id": "00611",
                 "defaultLanguage": "Bhojpuri",
-                "line2": "Bhojpuri ∙ Drama ∙ U/A 16+",
+                "line2": "2023 • U/A 16+ • Bhojpuri • Drama",
                 "durationFormatted": "2h 25m",
                 "duration": "",
                 "seo": {
                     "page": "Khiladi",
-                    "title": "Khiladi (2023) Bhojpuri Movie",
+                    "title": "Khiladi",
                     "description": "Khiladi (2023) Is A Drama Bhojpuri Film Starring Pradeep Pandey,Sahar Afsha,Bipin Kumar Giri In The Lead Roles, Directed By Ananjay Raghuraj. Watch Now Or Download To Watch Later!",
                     "ogImage": "https://v3img.voot.com/resizeMedium,w_256,h_341/v3Storage/assets/3x4-1734588344070.jpg",
                     "ogVideo": ""
                 }
             },
             {
-                "id": "00512",
+                "id": "00612",
                 "defaultLanguage": "Bhojpuri",
-                "line2": "Bhojpuri ∙ Comedy ∙ U/A 13+",
+                "line2": "U/A 13+ • Bhojpuri • Comedy",
                 "durationFormatted": "2h 31m",
                 "duration": "",
                 "seo": {
@@ -619,9 +639,9 @@
                 }
             },
             {
-                "id": "00513",
+                "id": "00613",
                 "defaultLanguage": "Bhojpuri",
-                "line2": "Bhojpuri ∙ Comedy ∙ U/A 13+",
+                "line2": "U/A 13+ • Bhojpuri • Comedy",
                 "durationFormatted": "2h 31m",
                 "duration": "",
                 "seo": {
@@ -635,11 +655,11 @@
         ]
     },
     {
-        "id": "00600",
+        "id": "00700",
         "category": "Horror",
         "Movies": [
             {
-                "id": "00611",
+                "id": "00711",
                 "defaultLanguage": "Hindi",
                 "line2": "Horror, Comedy ∙ U/A 16+",
                 "durationFormatted": "2h 23m",
@@ -653,7 +673,7 @@
                 }
             },
             {
-                "id": "00612",
+                "id": "00712",
                 "defaultLanguage": "Hindi",
                 "line2": "Hindi ∙ Drama ∙ U/A 16+",
                 "durationFormatted": "1h 53m",
@@ -667,7 +687,7 @@
                 }
             },
             {
-                "id": "00613",
+                "id": "00713",
                 "defaultLanguage": "Hindi",
                 "line2": "Horror, Comedy ∙ U/A 16+",
                 "durationFormatted": "2h 23m",
@@ -681,7 +701,7 @@
                 }
             },
             {
-                "id": "00614",
+                "id": "00714",
                 "defaultLanguage": "Hindi",
                 "line2": "Comedy, Horror, Thriller ∙ U/A 16+",
                 "durationFormatted": "2h 38m",
@@ -695,7 +715,7 @@
                 }
             },
             {
-                "id": "00615",
+                "id": "00715",
                 "defaultLanguage": "Hindi",
                 "line2": "Thriller, Horror ∙ U/A 16+",
                 "durationFormatted": "2h 12m",
@@ -709,7 +729,7 @@
                 }
             },
             {
-                "id": "00616",
+                "id": "00716",
                 "defaultLanguage": "Hindi",
                 "fullTitle": "Tumbbad",
                 "line2": "Horror ∙ Drama ∙ U/A 16+",
@@ -724,7 +744,7 @@
                 }
             },
             {
-                "id": "00617",
+                "id": "00717",
                 "defaultLanguage": "Hindi",
                 "line2": "Horror, Comedy ∙ U/A 16+",
                 "durationFormatted": "2h 23m",
@@ -738,7 +758,7 @@
                 }
             },
             {
-                "id": "00618",
+                "id": "00718",
                 "defaultLanguage": "Hindi",
                 "line2": "Comedy, Horror, Thriller ∙ U/A 16+",
                 "durationFormatted": "2h 38m",
@@ -752,7 +772,7 @@
                 }
             },
             {
-                "id": "00619",
+                "id": "00719",
                 "defaultLanguage": "Hindi",
                 "line2": "Thriller, Horror ∙ U/A 16+",
                 "durationFormatted": "2h 12m",
@@ -766,7 +786,7 @@
                 }
             },
             {
-                "id": "00620",
+                "id": "00720",
                 "defaultLanguage": "Hindi",
                 "line2": "Thriller, Horror ∙ U/A 16+",
                 "durationFormatted": "2h",
@@ -780,7 +800,7 @@
                 }
             },
             {
-                "id": "00621",
+                "id": "00721",
                 "defaultLanguage": "Hindi",
                 "line2": "Thriller, Horror ∙ U/A 16+",
                 "durationFormatted": "2h",
@@ -794,7 +814,7 @@
                 }
             },
             {
-                "id": "00622",
+                "id": "00722",
                 "defaultLanguage": "Hindi",
                 "line2": "Thriller, Horror, Romance. U/A 16+",
                 "durationFormatted": "2h 10m",
@@ -808,7 +828,7 @@
                 }
             },
             {
-                "id": "006223",
+                "id": "00723",
                 "defaultLanguage": "Hindi",
                 "line2": "Thriller, Horror . U/A 16+",
                 "durationFormatted": "2h 32m",
