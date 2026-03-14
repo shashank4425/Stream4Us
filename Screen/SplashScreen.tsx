@@ -1,17 +1,18 @@
 import NetInfo from "@react-native-community/netinfo";
 import { LinearGradient } from "expo-linear-gradient";
-import React, { useEffect, useRef, useState } from "react";
+import React, { useEffect, useRef } from "react";
 import {
   Animated,
   Image,
   StyleSheet,
   Text
 } from "react-native";
+import { FONTS } from "../app/src/theme/fonts";
+import { loadFonts } from "../app/src/utils/loadFonts";
 
 export default function SplashScreen({ navigation }) {
   const fadeAnim = useRef(new Animated.Value(0)).current;
-  const [loading, setLoading] = useState(true);
-  const [data, setData] = useState([]);
+ 
   useEffect(() => {
     // Fade animation
     Animated.timing(fadeAnim, {
@@ -37,6 +38,7 @@ export default function SplashScreen({ navigation }) {
       );
 
       const jsonData = await response.json();
+      await loadFonts();
       navigation.replace("BottomAppNavigator", {
         jsonResponse: jsonData,
       });
@@ -51,7 +53,7 @@ export default function SplashScreen({ navigation }) {
     <Animated.View style={[styles.root, { opacity: fadeAnim }]}>
       <LinearGradient
         colors={["#00A6FB", "#7B3FE4", "#FF007F"]}
-        locations={[0, 0.3, 1]}
+        locations={[0, 0.5, 1]}
         start={{ x: 0, y: 0.1 }}   // TOP LEFT
         end={{ x: 1, y: 1 }}     // BOTTOM RIGHT
         style={styles.gradient}
@@ -85,8 +87,8 @@ const styles = StyleSheet.create({
 
   title: {
     marginTop: -44,
-    fontSize: 52,
-    fontWeight: "700",
+    fontSize: 50,
+    fontFamily: FONTS["Roboto-Bold"],
     color: "#ffffff",
     //textShadowColor: "rgba(255,255,255,0.7)",
     textShadowOffset: { width: 0, height: 0 },

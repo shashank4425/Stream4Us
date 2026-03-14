@@ -6,7 +6,7 @@ import React, { useEffect, useLayoutEffect, useState } from "react";
 import { FlatList, Image, TouchableOpacity, View } from "react-native";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
 
-export default function ActionMovies({ navigation, route }) {
+export default function CategoryBasedMovies({ navigation, route }) {
 
  const { title, movies } = route.params;
 

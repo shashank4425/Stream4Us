@@ -1,19 +1,30 @@
+import TrendingMovies from "@/components/banner/TrendingMovies";
 import { FontAwesome } from "@expo/vector-icons";
 import NetInfo from "@react-native-community/netinfo";
 import { useFocusEffect } from "@react-navigation/native";
 import Constants from "expo-constants";
-
-import TrendingMovies from "@/components/banner/TrendingMovies";
-import React, { useRef, useState } from "react";
-import { Animated, BackHandler, Dimensions, FlatList, Image, NativeModules, StatusBar, StyleSheet, Text, TouchableOpacity, View } from "react-native";
+import React, { useState } from "react";
+import {
+    Animated,
+    BackHandler,
+    Dimensions,
+    Image,
+    StatusBar,
+    StyleSheet,
+    Text,
+    TouchableOpacity,
+    View
+} from "react-native";
+import { FONTS } from "../app/src/theme/fonts";
 import NoInternetModal from "../Screen/OfflineScreen/NoInternetModal";
+
 const windowWidth = Dimensions.get('window').width;
 const windowHeight = Dimensions.get('window').height;
-const { PipModule } = NativeModules;
 export default function Home({ navigation, route }) {
-   const jsonResponse = route?.params?.jsonResponse || [];
-    const redirected = useRef(false);
-    const [showNoInternet, setShowNoInternet] = React.useState(false);
+    const jsonResponse = route?.params?.jsonResponse || [];
+    const [showNoInternet, setShowNoInternet] = useState(false);
+
+    const [arrowIndex, setArrowIndex] = useState(null);
 
     useFocusEffect(
         React.useCallback(() => {
@@ -27,9 +38,13 @@ export default function Home({ navigation, route }) {
                 backAction
             );
 
-            return () => handler.remove(); // remove when leaving Home
+            return () => handler.remove();
         }, [])
     );
+
+    const cardWidth = windowWidth / 3.4;
+    const cardMargin = 3;
+
 
     const [scrollY] = useState(new Animated.Value(0));
     const STATUS_BAR_HEIGHT = Constants.statusBarHeight;
@@ -48,28 +63,19 @@ export default function Home({ navigation, route }) {
 
     const onMoviePress = async (item) => {
         const net = await NetInfo.fetch();
-
-        if (net.isConnected) {
-            navigation.navigate("MoviePlayer", item);
-        } else {
-            setShowNoInternet(true);
-        }
+        if (net.isConnected) navigation.navigate("MoviePlayer", item);
+        else setShowNoInternet(true);
     };
 
     const onCategoryPress = async (item) => {
-    const net = await NetInfo.fetch();
-
-    if (net.isConnected) {
-
-        navigation.navigate(item.category, {
-            title: item.category,
-            movies: item.Movies
-        });
-
-    } else {
-        setShowNoInternet(true);
-    }
-};
+        const net = await NetInfo.fetch();
+        if (net.isConnected) {
+            navigation.navigate("CategoryBasedMovies", {
+                title: item.category,
+                movies: item.Movies,
+            });
+        } else setShowNoInternet(true);
+    };
 
     return (
         <View style={{
@@ -90,11 +96,11 @@ export default function Home({ navigation, route }) {
                 source={require('../assets/images/stream4us/logo/stream4us.png')}
                 style={{
                     marginTop: windowHeight / 28,
-                    width: windowWidth / 4,
+                    width: windowWidth / 4.5,
                     padding: 0,
                     position: "absolute",
                     zIndex: 1,
-                    height: 64, resizeMode: "contain",
+                    height: 56, resizeMode: "contain",
                     opacity: iconOpacity, // 👈 animate visibility
                 }}
                 resizeMode="contain"
@@ -103,56 +109,80 @@ export default function Home({ navigation, route }) {
                 translucent backgroundColor="transparent"
                 barStyle="light-content"
             />
-
-            <Animated.FlatList
+            < Animated.FlatList
                 showsVerticalScrollIndicator={false}
-                // 🟢 TRACK SCROLL POSITION
+                data={jsonResponse}
                 onScroll={Animated.event(
                     [{ nativeEvent: { contentOffset: { y: scrollY } } }],
                     { useNativeDriver: false }
                 )}
-                data={jsonResponse || []}
                 keyExtractor={(item, index) => index.toString()}
-                ListHeaderComponent={() => (<TrendingMovies />
-                )}
-                renderItem={({ item }) => (
+                ListHeaderComponent={() => <TrendingMovies />}
+                renderItem={({ item, index }) => (
                     <View style={{ marginBottom: 16 }}>
                         <View style={Styles.cardContainer}>
+
+                            {/* Category Header */}
                             <View
                                 style={{
-                                    flexDirection: "row", alignItems: "center", justifyContent: "space-between",
-                                    paddingHorizontal: 10, marginBottom: 4,
-                                }}>
-                                <Text style={{
-                                    color: "white",
-                                    fontSize: 16,
-                                    fontWeight: "bold",
-                                    marginBottom: 10
-                                }}>
+                                    flexDirection: "row",
+                                    alignItems: "center",
+                                    justifyContent: "space-between",
+                                    paddingHorizontal: 10,
+                                    marginBottom: 8,
+                                }}
+                            >
+                                <Text
+                                    style={{
+                                        color: "#fff",
+                                        fontSize: 18,
+                                        fontFamily: FONTS["Roboto-Bold"],
+                                    }}
+                                >
                                     {item.category}
                                 </Text>
-                                <TouchableOpacity activeOpacity={1} onPress={() => onCategoryPress(item)}>
-                                    <FontAwesome name="angle-right" size={22} color="#fff"></FontAwesome>
-                                </TouchableOpacity>
+
+                                {/* {arrowIndex === index && ( */}
+                                    <TouchableOpacity
+                                        onPress={() => onCategoryPress(item)}
+                                        activeOpacity={0.8}
+                                    >
+                                        <FontAwesome name="angle-right" size={24} color="#fff" />
+                                    </TouchableOpacity>
+                                {/* )} */}
                             </View>
 
-                            <FlatList
+                            {/* Horizontal Movies */}
+                            <Animated.FlatList
                                 data={item?.Movies || []}
-                                keyExtractor={(movie, index) => movie.id?.toString() || index.toString()}
+                                keyExtractor={(movie, idx) =>
+                                    movie.id?.toString() || idx.toString()
+                                }
                                 horizontal
                                 showsHorizontalScrollIndicator={false}
+                                scrollEventThrottle={16}
+                                onScroll={({ nativeEvent }) => {
+                                    const offsetX = nativeEvent.contentOffset.x;
+
+                                    if (offsetX > 100) {
+                                        setArrowIndex(index);
+                                    } else {
+                                        setArrowIndex(null);
+                                    }
+                                }}
                                 renderItem={({ item }) => (
-                                    <TouchableOpacity activeOpacity={1}
-                                        onPress={() => onMoviePress(item)}>
+                                    <TouchableOpacity
+                                        onPress={() => onMoviePress(item)}
+                                        activeOpacity={0.8}
+                                    >
                                         <Image
                                             source={{ uri: item.seo.ogImage }}
                                             style={{
-                                                resizeMode: "cover",
                                                 height: 155,
-                                                width: windowWidth / 3.4,
+                                                width: cardWidth,
                                                 borderRadius: 8,
-                                                marginHorizontal: 3,
-                                                backgroundColor: "#333"
+                                                marginHorizontal: cardMargin,
+                                                backgroundColor: "#333",
                                             }}
                                         />
                                     </TouchableOpacity>
@@ -162,117 +192,17 @@ export default function Home({ navigation, route }) {
                     </View>
                 )}
             />
+
             <NoInternetModal
                 visible={showNoInternet}
                 onClose={() => setShowNoInternet(false)}
             />
         </View>
-    )
+    );
 }
+
 const Styles = StyleSheet.create({
-    preLoadingContainer: {
-        flex: 1,
-        justifyContent: 'center',
-        alignItems: 'center',
-    },
-    preLoadingImg: {
-        resizeMode: "contain"
-    },
-    screenContainer: {
-        flex: 1,
-        backgroundColor: "#0D0E10",
-        flexDirection: 'column',
-        flexWrap: 'nowrap'
-    },
-    statusBarBg: {
-        position: "absolute",
-        top: 0,
-        left: 0,
-        right: 0,
-        height: StatusBar.currentHeight || 40,
-        zIndex: 999,
-    },
     cardContainer: {
         margin: 6,
     },
-    container: {
-        flexDirection: 'row',
-        flexWrap: 'wrap',
-    },
-    cards: {
-        backgroundColor: "#696969",
-        height: 160,
-        width: windowWidth / 3.5,
-        borderRadius: 6,
-        padding: 0,
-        marginRight: 4
-    },
-    imgSize: {
-        borderRadius: 6,
-        height: "100%",
-        width: "100%",
-        resizeMode: "cover"
-    },
-    heading: {
-        color: "#ffffff",
-        fontWeight: "bold",
-        justifyContent: "flex-start",
-        textAlign: "left",
-        fontSize: 16
-    },
-    title: {
-        color: "#ffffff",
-        fontWeight: "bold",
-        alignItems: "flex-start",
-        fontSize: 4
-    },
-    leftContent: {
-        width: windowWidth / 1.2
-    },
-    moviesContent: {
-        width: windowWidth,
-        flexDirection: 'row',
-        flexWrap: 'nowrap',
-        display: "flex",
-        padding: windowWidth / 60
-
-    },
-    buttonWrapper: {
-        position: 'absolute',
-        bottom: 10,
-        left: 0,
-        right: 0,
-        alignItems: 'center',
-        zIndex: 2,        // ✅ ABOVE gradient
-    },
-    button: {
-        height: 36,
-        paddingHorizontal: 32,
-        borderRadius: 6,
-        justifyContent: 'center',
-        alignItems: 'center',
-        elevation: 0,
-        shadowColor: 'transparent',
-    },
-    buttonContent: {
-        flexDirection: 'row',
-        alignItems: 'center',
-    },
-
-    iconWrapper: {
-        width: 32,
-        height: 30,
-        borderRadius: 4,          // 👈 subtle radius
-        justifyContent: 'center',
-        alignItems: 'center',
-        marginRight: 4,
-    },
-    playIcon: {
-        marginRight: 6, // 👈 tight spacing like OTT apps
-    },
-    buttonText: {
-        color: '#fff',
-        fontSize: 18,
-        fontWeight: '600',
-    }
-})
+});
