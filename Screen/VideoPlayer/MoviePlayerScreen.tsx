@@ -4,6 +4,8 @@ import NetInfo from "@react-native-community/netinfo";
 import * as NavigationBar from "expo-navigation-bar";
 import * as ScreenOrientation from "expo-screen-orientation";
 import throttle from "lodash.throttle";
+import { FONTS } from "../../app/src/theme/fonts";
+
 import React, { useEffect, useRef, useState } from "react";
 import {
   ActivityIndicator,
@@ -543,9 +545,9 @@ const styles = StyleSheet.create({
     textAlign: "center",
     justifyContent: "space-between",
   },
-  mtitle: { color: "#FFF", fontWeight: "700", fontSize: 18 },
-  mline: { color: "#dcdcdc", fontSize: 13, paddingVertical: 10 },
-  contentDes: { color: "#dcdcdc", fontSize: 12, lineHeight: 18 },
+  mtitle: { color: "#FFF", fontFamily: FONTS["Roboto-Bold"], fontSize: 20 },
+  mline: { color: "#dcdcdc", fontSize: 13, fontFamily:FONTS["Roboto-Bold"], paddingVertical: 10 },
+  contentDes: { color: "#dcdcdc", fontSize: 12, fontFamily:FONTS["Roboto-Medium"], lineHeight: 18 },
   lsDurationTxt: { color: "white", backgroundColor: "rgba(0,0,0,0.5)", padding: 4, borderRadius: 5 }
 });
 

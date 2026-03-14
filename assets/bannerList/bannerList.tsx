@@ -1,67 +1,72 @@
 export const bannerList = [
   {
     id: "1",
-    line2: "Action • Drama • Thriller",
-    bannerInfo: "2024 • Action • Drama • Thriller",
-    durationFormatted: "2h 31m",
+    line2: "U/A 16+ (IN) • 2025 • Romance • Drama • Comedy",
+    bannerInfo: "2025 • Romance • Drama • Comedy",
+    durationFormatted: "2h 22m",
     seo: {
-              "page": "Vedaa",
-              "title": "Vedaa (2024)",
-              "description": "A court-marshalled soldier with a traumatic past helps a young girl from 'lower' caste and an aspiring boxer work towards her dreams despite her hostile environment.",
-              "ogImage": "https://image.tmdb.org/t/p/w780/qMneo4vk6e42lS8UqYIfG9xf7ol.jpg",
-              "ogVideo": "http://ftp.ctgfun.com/Indian/Hindi%20Movies/Vedaa%20%282024%29%20Hindi%20720p%20WEBRip%20x264%20ESub%20%5BDDN%5D/Vedaa%20%282024%29%20Hindi%20720p%20WEBRip%20x264%20ESub%20%5BDDN%5D.mp4"
-          }
+      "page": "Kis Kisko Pyaar Karoon 2",
+      "title": "Kis Kisko Pyaar Karoon 2",
+      "description": "Mohan wants to marry the love of his life, Sania, but destiny has a madcap plan! He ends up marrying three women of different religions and chaos follows.",
+      "ogImage": "https://media.themoviedb.org/t/p/w1066_and_h600_face/ggjK0Xg2Qc4MOppEpTroFBGhrM3.jpg",
+      "ogLogo": "https://raw.githubusercontent.com/shashank4425/Stream4Us/refs/heads/movies/bollywood/movielogo/kis_kis_ko_pyar_karoon2.png",
+      "ogVideo": ""
+    }
   },
   {
     id: "2",
-    line2: "Adventure, Family, Animation",
-    bannerInfo: "2024 • Adventure • Family • Animation",
-    durationFormatted: "1h 58m",
+    line2: "U/A 16+ (IN) • 2026 • Crime • Drama • Thriller",
+    bannerInfo: "2025 • Crime • Drama • Thriller",
+    durationFormatted: "2h 17m",
     seo: {
-              "page": "Mufasa: The Lion King",
-              "title": "Mufasa: The Lion King (2024)",
-              "description": "Mufasa, a cub lost and alone, meets a sympathetic lion named Taka, the heir to a royal bloodline. The chance meeting sets in motion an expansive journey of a group of misfits searching for their destiny.",
-              "ogImage": "https://media.themoviedb.org/t/p/w780/oHPoF0Gzu8xwK4CtdXDaWdcuZxZ.jpg",
-              "ogVvideo":""
-          }
+      "page": "Vadh 2",
+      "title": "Vadh 2",
+      "description": "A police officer's pursuit of truth in a shocking prison crime intertwines with the lives of a widowed prison guard and a soon to be released inmate, unravelling a web of morality and redemption.",
+      "ogImage": "https://media.themoviedb.org/t/p/w1066_and_h600_face/5z7eorMubo7nB11P8s5a0GMXf2D.jpg",
+      "ogLogo": "https://raw.githubusercontent.com/shashank4425/Stream4Us/refs/heads/movies/bollywood/movielogo/vadh2.png",
+      "ogVideo": ""
+    }
   },
   {
     id: "3",
-    line2: "Action • Drama",
-    bannerInfo: "2024 • Action • Drama",
-    durationFormatted: "2h 11m",
+    line2: "U/A 16+ (IN) • 2025 • Action • Crime",
+    bannerInfo: "2025 • Action • Crime",
+    durationFormatted: "2h 10m",
     seo: {
-              "page": "The Sabarmati Report",
-              "title": "The Sabarmati Report (2024)",
-              "description": "A riveting journey into the 2002 incident that left an indelible mark on the entire nation.",
-              "ogImage": "https://media.themoviedb.org/t/p/w780/s6WQSGAuZsYZ354VpA7HbQDmesA.jpg",
-              "ogVideo": "http://ftp.ctgfun.com/Indian/Hindi%20Movies/The%20Sabarmati%20Report%20%282024%29%20Hindi%20720p%20HDTS%20x264%20%5BDDN%5D/The%20Sabarmati%20Report%20%282024%29%20Hindi%20720p%20HDTS%20x264%20%5BDDN%5D.mp4"
-          }
+      "page": "Mardaani 3",
+      "title": "Mardaani 3",
+      "description": "Officer Shivani Shivaji Roy returns to hunt down those behind the disappearance of young girls, risking everything to bring them back alive.",
+      "ogImage": "https://media.themoviedb.org/t/p/w1066_and_h600_face/iqqnhMLaS94Fw4rpAQB6jHx0y9E.jpg",
+      "ogLogo": "https://raw.githubusercontent.com/shashank4425/Stream4Us/refs/heads/movies/bollywood/movielogo/mardani3.png",
+      "ogVideo": ""
+    }
   },
   {
     id: "4",
-    line2: "Action • Drama",
-    bannerInfo: "2024 • Action • Drama",
-    durationFormatted: "2h 15m",
+    ine2: "U/A 16+ (IN) • 2025 • Action • Crime • Thriller",
+    bannerInfo: "2025 • Action • Crime • Thriller",
+    durationFormatted: "3h 32m",
     seo: {
-              "page": "Bhaiyya Ji",
-              "title": "Bhaiyya Ji (2024)",
-              "description": "After his younger brother is tragically killed over a petty argument, a feared and retired criminal Bhaiyya Ji, sets out to seek justice against the powerful Gujjar responsible, mobilizing his loyal comrades and igniting a wave of vengeance that threatens to shake the criminal underworld.",
-              "ogImage": "https://media.themoviedb.org/t/p/w780/r5w8gRcrTwPlk25dOTIckltOSiT.jpg",
-              "ogVideo":""
-          }
+      "page": "Dhurandhar",
+      "title": "Dhurandhar",
+      "description": "A mysterious traveler slips into the heart of Karachi's underbelly and rises through its ranks with lethal precision, only to tear the notorious ISI-Underworld nexus apart from within.",
+      "ogImage": "https://media.themoviedb.org/t/p/w1066_and_h600_face/snYOXem8pUGOffnLbbGq4aB1pg4.jpg",
+      "ogLogo": "https://raw.githubusercontent.com/shashank4425/Stream4Us/refs/heads/movies/bollywood/movielogo/dhurandhar.png",
+      "ogVideo": ""
+    }
   },
   {
     id: "5",
-    line2: "Horror • Comedy",
-    bannerInfo: "2024 • Horror • Comedy",
-    durationFormatted: "2h 23m",
+    line2: "U/A 16+ (IN) • 2025 • Action • Adventure • Thriller",
+    bannerInfo: "2025 • Action • Adventure • Thriller",
+    durationFormatted: "2h 53m",
     seo: {
-              "page": "Stree 2",
-              "title": "Stree 2 (2024)",
-              "description": "After the events of Stree, the town of Chanderi is being haunted again. This time, women are mysteriously abducted by a terrifying headless entity. Once again, it's up to Vicky and his friends to save their town and loved ones.",
-              "ogImage": "https://media.themoviedb.org/t/p/w780/v0zWNLExxNzeqvAkaINtYE4o5rM.jpg",
-              "ogVideo":""
-          }
+      "page": "War 2",
+      "title": "War 2",
+      "description": "Years ago Agent Kabir went rogue, became India’s greatest villain ever. As he descends further into the deepest shadows... India sends its deadliest, most lethal agent after him, Agent Vikram A Special Units Officer who is more than Kabir’s equal and a relentless Terminator driven by his own demons, determined to put a bullet into Kabir’s skull.",
+      "ogImage": "https://media.themoviedb.org/t/p/w1066_and_h600_face/pKIRUTnwY3YYU9urSdsuobdcliP.jpg",
+      "ogLogo": "https://raw.githubusercontent.com/shashank4425/Stream4Us/refs/heads/movies/bollywood/movielogo/war2.png",
+      "ogVideo": ""
+    }
   }
 ];
